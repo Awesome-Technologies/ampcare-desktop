@@ -38,6 +38,7 @@ class SettingsDialogMac;
 class ShareDialog;
 class Application;
 class LogBrowser;
+class VideoWindow;
 class AccountState;
 
 /**
@@ -83,6 +84,7 @@ public slots:
     void slotFoldersChanged();
     void slotShowSettings();
     void slotShowSyncProtocol();
+    void slotShowVideo();
     void slotShutdown();
     void slotSyncStateChange(Folder *);
     void slotTrayClicked(QSystemTrayIcon::ActivationReason reason);
@@ -129,6 +131,7 @@ private:
     QPointer<SettingsDialog> _settingsDialog;
 #endif
     QPointer<LogBrowser> _logBrowser;
+    QPointer<VideoWindow> _videoWindow;
     // tray's menu
     QScopedPointer<QMenu> _contextMenu;
 

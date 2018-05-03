@@ -26,6 +26,7 @@
 #else
 #include "settingsdialog.h"
 #endif
+#include "videowindow.h"
 #include "logger.h"
 #include "logbrowser.h"
 #include "account.h"
@@ -364,6 +365,10 @@ void ownCloudGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *men
     auto actionOpenoC = menu->addAction(browserOpen);
     actionOpenoC->setProperty(propertyAccountC, QVariant::fromValue(accountState->account()));
     QObject::connect(actionOpenoC, &QAction::triggered, this, &ownCloudGui::slotOpenOwnCloud);
+
+    auto actionOpenVideo = menu->addAction(tr("Video"));
+    actionOpenVideo->setProperty(propertyAccountC, QVariant::fromValue(accountState->account()));
+    QObject::connect(actionOpenVideo, &QAction::triggered, this, &ownCloudGui::slotShowVideo);
 
     FolderMan *folderMan = FolderMan::instance();
     bool firstFolder = true;
@@ -996,6 +1001,18 @@ void ownCloudGui::slotShowSyncProtocol()
     _settingsDialog->showActivityPage();
 }
 
+void ownCloudGui::slotShowVideo()
+{
+//    if (auto account = qvariant_cast<AccountPtr>(sender()->property(propertyAccountC))) {
+
+
+	if (_videoWindow.isNull()) {
+		_videoWindow = new VideoWindow();
+		QUrl url("https://oo.awesome-technologies.de/apps/spreed/");
+		_videoWindow->setUrl(url);
+		_videoWindow->show();
+	}
+}
 
 void ownCloudGui::slotShutdown()
 {
@@ -1007,6 +1024,8 @@ void ownCloudGui::slotShutdown()
         _settingsDialog->close();
     if (!_logBrowser.isNull())
         _logBrowser->deleteLater();
+    if (!_videoWindow.isNull())
+    	_videoWindow->close();
 }
 
 void ownCloudGui::slotToggleLogBrowser()
