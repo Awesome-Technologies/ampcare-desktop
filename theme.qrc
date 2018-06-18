@@ -16,6 +16,16 @@
         <file alias="theme/colored/AMP-icon-64.png">theme/colored/64-AMP-icon.png</file>
         <file>theme/amp/wizard_logo.png</file>
         <file>theme/amp/wizard_logo@2x.png</file>
+        <file>theme/amp/icon_a_critical.png</file>
+        <file>theme/amp/icon_b_urgent.png</file>
+        <file>theme/amp/icon_c_good.png</file>
+        <file>theme/amp/icon_d_info.png</file>
+        <file>theme/amp/icon_a_empty.png</file>
+        <file>theme/amp/icon_b_sent.png</file>
+        <file>theme/amp/icon_c_read.png</file>
+        <file>theme/amp/icon_d_resent.png</file>
+        <file>theme/amp/icon_e_reread.png</file>
+        <file>theme/amp/icon_f_resolved.png</file>
         <file>theme/colored/state-amp-offline.svg</file>
         <file>theme/colored/state-amp-offline-16.png</file>
         <file>theme/colored/state-amp-offline-32.png</file>

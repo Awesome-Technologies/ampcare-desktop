@@ -27,6 +27,8 @@
 #include "settingsdialog.h"
 #endif
 #include "messages/videowindow.h"
+#include "messages/messageswindow.h"
+#include "sharee.h"
 #include "logger.h"
 #include "logbrowser.h"
 #include "account.h"
@@ -171,13 +173,13 @@ void ownCloudGui::slotTrayClicked(QSystemTrayIcon::ActivationReason reason)
         } else {
 #ifdef Q_OS_MAC
             // on macOS, a left click always opens menu.
-            // However if the video window is already visible but hidden
+            // However if the messages window is already visible but hidden
             // by other applications, this will bring it to the front.
-            if (!_videoWindow.isNull() && _videoWindow->isVisible()) {
-                raiseDialog(_videoWindow.data());
+            if (!_messagesWindow.isNull() && _messagesWindow->isVisible()) {
+                raiseDialog(_messagesWindow.data());
             }
 #else
-            slotShowVideo();
+            slotShowMessages();
 #endif
         }
     }
@@ -372,9 +374,14 @@ void ownCloudGui::slotComputeOverallSyncStatus()
 void ownCloudGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *menu, bool separateMenu)
 {
     // create a context menu entry for opening the video window
-    auto actionOpenVideo = menu->addAction(tr("Videotelefonie"));
+    auto actionOpenVideo = menu->addAction(tr("Videocall"));
     actionOpenVideo->setProperty(propertyAccountC, QVariant::fromValue(accountState->account()));
-    QObject::connect(actionOpenVideo, &QAction::triggered, this, &ownCloudGui::slotShowVideo);
+    QObject::connect(actionOpenVideo, SIGNAL(triggered()), this, SLOT(slotShowVideo()));
+
+    // create a context menu entry for opening the messages window
+    auto actionOpenMessages = menu->addAction(tr("Messages"));
+    actionOpenMessages->setProperty(propertyAccountC, QVariant::fromValue(accountState->account()));
+    QObject::connect(actionOpenMessages, &QAction::triggered, this, &ownCloudGui::slotShowMessages);
 
     FolderMan *folderMan = FolderMan::instance();
     bool firstFolder = true;
@@ -1074,6 +1081,45 @@ void ownCloudGui::slotShowVideo()
     }
 }
 
+// show the messages window
+void ownCloudGui::slotShowMessages()
+{
+    // if account is set up, show the messages window
+    if (!AccountManager::instance()->accounts().isEmpty()) {
+        if (_messagesWindow.isNull()) {
+            // get base path and account info
+            FolderMan *folderMan = FolderMan::instance();
+
+            // test if nextcloud instance is a singleSyncFolder instance
+            bool singleSyncFolder = folderMan->map().size() == 1;
+            if (!singleSyncFolder) {
+                QMessageBox messageBox;
+                messageBox.critical(0, tr("Error"), tr("The messages module doesn't support multifolder sync"));
+                messageBox.setFixedSize(500, 200);
+                qCWarning(lcApplication) << "Messages doesn't support multifolder sync";
+                return;
+            }
+            foreach (Folder *folder, folderMan->map()) {
+                const auto accountState = folder->accountState();
+                // check if client is connected otherwise fetching sharees will fail
+                if (accountState->connectionStatus() != OCC::ConnectionValidator::Connected || accountState->state() != OCC::AccountState::Connected) {
+                    // trigger login
+                    slotLogin();
+                    return;
+                } else {
+                    QSharedPointer<Sharee> _currentUser(new Sharee(accountState->account()->credentials()->user(), "", Sharee::Type::User));
+                    _messagesWindow = new MessagesWindow(_currentUser.data()->shareWith(), folder->cleanPath());
+                }
+            }
+        }
+        _messagesWindow->show();
+        raiseDialog(_messagesWindow);
+    } else {
+        qCInfo(lcApplication) << "No configured folders yet, starting setup wizard";
+        slotNewAccountWizard();
+    }
+}
+
 void ownCloudGui::slotShowSettings()
 {
     if (_settingsDialog.isNull()) {
@@ -1108,6 +1154,8 @@ void ownCloudGui::slotShutdown()
         _logBrowser->deleteLater();
     if (!_videoWindow.isNull())
         _videoWindow->close();
+    if (!_messagesWindow.isNull())
+        _messagesWindow->close();
 }
 
 void ownCloudGui::slotToggleLogBrowser()

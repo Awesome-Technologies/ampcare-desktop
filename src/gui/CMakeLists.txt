@@ -34,6 +34,7 @@ set(client_UI_SRCS
     addcertificatedialog.ui
     proxyauthdialog.ui
     mnemonicdialog.ui
+    messages/messageswindow.ui
     messages/videowindow.ui
     wizard/owncloudadvancedsetuppage.ui
     wizard/owncloudconnectionmethoddialog.ui
@@ -100,12 +101,16 @@ set(client_SRCS
     guiutility.cpp
     elidedlabel.cpp
     iconjob.cpp
-    messages/videowindow.cpp
     creds/credentialsfactory.cpp
     creds/httpcredentialsgui.cpp
     creds/oauth.cpp
     creds/webflowcredentials.cpp
     creds/webflowcredentialsdialog.cpp
+    messages/messagemodel.cpp
+    messages/messageobject.cpp
+    messages/messageswindow.cpp
+    messages/styledhtmldelegate.cpp
+    messages/videowindow.cpp
     wizard/postfixlineedit.cpp
     wizard/abstractcredswizardpage.cpp
     wizard/owncloudadvancedsetuppage.cpp

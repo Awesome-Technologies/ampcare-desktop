@@ -73,6 +73,11 @@ owncloud_add_test(FolderMan "${FolderMan_SRC}")
 
 owncloud_add_test(OAuth "syncenginetestutils.h;../src/gui/creds/oauth.cpp")
 
+SET(MessageModel_SRC ../src/gui/messages/messagemodel.cpp)
+list(APPEND MessageModel_SRC ../src/gui/messages/messageobject.cpp )
+owncloud_add_test(MessageModel "${MessageModel_SRC}")
+owncloud_add_test(MessageObject ../src/gui/messages/messageobject.cpp)
+
 configure_file(test_journal.db "${PROJECT_BINARY_DIR}/bin/test_journal.db" COPYONLY)
 
 find_package(CMocka)

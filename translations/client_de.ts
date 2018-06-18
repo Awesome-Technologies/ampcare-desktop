@@ -3727,6 +3727,26 @@ Es ist nicht ratsam, diese zu benutzen.</translation>
         <source>Up to date</source>
         <translation>Aktuell</translation>
     </message>
+    <message>
+        <location filename="../src/gui/owncloudgui.cpp" line="377"/>
+        <source>Videocall</source>
+        <translation>Videotelefonie</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/owncloudgui.cpp" line="382"/>
+        <source>Messages</source>
+        <translation>Nachrichten</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/owncloudgui.cpp" line="1097"/>
+        <source>Error</source>
+        <translation>Fehler</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/owncloudgui.cpp" line="1097"/>
+        <source>The messages module doesn&apos;t support multifolder sync</source>
+        <translation>Das Nachrichten-Modul unterstützt keine Multiverzeichnis-Synchronisation</translation>
+    </message>
 </context>
 <context>
     <name>OCC::ownCloudTheme</name>
@@ -3952,6 +3972,142 @@ Es ist nicht ratsam, diese zu benutzen.</translation>
         <source>%1: %2</source>
         <extracomment>this displays an error string (%2) for a file %1</extracomment>
         <translation>%1: %2</translation>
+    </message>
+    <message>
+        <source>Created</source>
+        <translation>Erstellt am</translation>
+    </message>
+    <message>
+        <source>o&apos;clock</source>
+        <translation>Uhr</translation>
+    </message>
+    <message>
+        <source>Birthdate</source>
+        <translation>Geburtsdatum</translation>
+    </message>
+    <message>
+        <source>Messages</source>
+        <translation>Nachrichten</translation>
+    </message>
+    <message>
+        <source>Images</source>
+        <translation>Bilder</translation>
+    </message>
+    <message>
+        <source>Vital parameter</source>
+        <translation>Vitalparameter</translation>
+    </message>
+    <message>
+        <source>Parameter</source>
+        <translation>Parameter</translation>
+    </message>
+    <message>
+        <source>Value</source>
+        <translation>Wert</translation>
+    </message>
+    <message>
+        <source>Timestamp</source>
+        <translation>gemessen am</translation>
+    </message>
+    <message>
+        <source>Bloodpressure</source>
+        <translation>Blutdruck</translation>
+    </message>
+    <message>
+        <source>Pulse</source>
+        <translation>Puls</translation>
+    </message>
+    <message>
+        <source>Body temperature</source>
+        <translation>Temperatur</translation>
+    </message>
+    <message>
+        <source>Blood sugar</source>
+        <translation>Blutzucker</translation>
+    </message>
+    <message>
+        <source>Weight</source>
+        <translation>Gewicht</translation>
+    </message>
+    <message>
+        <source>Observations</source>
+        <translation>Befunde</translation>
+    </message>
+    <message>
+        <source>Responsiveness</source>
+        <translation>Ansprechbarkeit</translation>
+    </message>
+    <message>
+        <source>Pain</source>
+        <translation>Schmerzen</translation>
+    </message>
+    <message>
+        <source>Last defecation</source>
+        <translation>letzter Stuhlgang</translation>
+    </message>
+    <message>
+        <source>Other</source>
+        <translation>Sonstiges</translation>
+    </message>
+    <message>
+        <source>Medication</source>
+        <translation>Medikation</translation>
+    </message>
+    <message>
+        <source>Active ingredient</source>
+        <translation>Wirkstoff</translation>
+    </message>
+    <message>
+        <source>Brand</source>
+        <translation>Handelsname</translation>
+    </message>
+    <message>
+        <source>Strength</source>
+        <translation>Stärke</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation>Form</translation>
+    </message>
+    <message>
+        <source>mo</source>
+        <translation>mo</translation>
+    </message>
+    <message>
+        <source>no</source>
+        <translation>mi</translation>
+    </message>
+    <message>
+        <source>ev</source>
+        <translation>ab</translation>
+    </message>
+    <message>
+        <source>ni</source>
+        <translation>na</translation>
+    </message>
+    <message>
+        <source>Unit</source>
+        <translation>Einheit</translation>
+    </message>
+    <message>
+        <source>Note</source>
+        <translation>Hinweis</translation>
+    </message>
+    <message>
+        <source>Patient instruction</source>
+        <translation>Grund</translation>
+    </message>
+    <message>
+        <source>Error on creating folder for messages!</source>
+        <translation>Fehler beim Erstellen des Verzeichnisses für die Nachrichten!</translation>
+    </message>
+    <message>
+        <source>Error on creating folder for assets!</source>
+        <translation>Fehler beim Erstellen des Verzeichnisses für die Anhänge!</translation>
+    </message>
+    <message>
+        <source>Error on copying assets!</source>
+        <translation>Fehler beim Kopieren der Anhänge!</translation>
     </message>
 </context>
 <context>
@@ -4197,6 +4353,47 @@ Es ist nicht ratsam, diese zu benutzen.</translation>
         <location filename="../src/gui/guiutility.cpp" line="56"/>
         <source>There was an error when launching the email client to create a new message. Maybe no default email client is configured?</source>
         <translation>Es ist ein Fehler beim Öffnen der E-Mail Anwendung, zum Erstellen einer neuen Nachricht, aufgetreten. Vielleicht ist keine standardmäßige E-Mail Anwendung konfiguriert?</translation>
+    </message>
+</context>
+<context>
+    <name>OCC::VideoWindow</name>
+    <message>
+        <source>Video</source>
+        <translation>Video</translation>
+    </message>
+</context>
+<context>
+    <name>OCC::MessageModel</name>
+    <message>
+        <source>Title</source>
+        <translation>Titel</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Datum</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+</context>
+<context>
+    <name>OCC::MessagesWindow</name>
+    <message>
+        <source>Messages</source>
+        <translation>Nachrichten</translation>
+    </message>
+    <message>
+        <source>New message</source>
+        <translation>Neue Nachricht</translation>
+    </message>
+    <message>
+        <source>Resolved</source>
+        <translation>Erledigt</translation>
+    </message>
+    <message>
+        <source>Archive</source>
+        <translation>Archivieren</translation>
     </message>
 </context>
 </TS>

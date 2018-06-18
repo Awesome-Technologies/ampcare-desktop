@@ -1,0 +1,406 @@
+{
+    "authoredOn": "2018-10-17T13:34:15",
+    "id": "{13e29128-5130-40ad-909c-e7f7c36ac69f}",
+    "note": "<tr><td><div class='messageSender'>Pflegeheim/Hans</div></td><td class='messageBody'><tr><td><div class='messageSender'>Pflegeheim/Hans</div></td><td class='messageBody'>lsdkajf</td><td class='messageDate'>17.10.2018 13:33:49</td></tr></td><td class='messageDate'>17.10.2018 13:34:15</td></tr>",
+    "payload": {
+        "media": [
+        ],
+        "medicationRequests": [
+        ],
+        "observations": [
+            {
+                "category": {
+                    "coding": {
+                        "code": "vital-signs",
+                        "display": "Vital Signs",
+                        "system": "http://hl7.org/fhir/observation-category",
+                        "text": "Vital Signs"
+                    }
+                },
+                "code": {
+                    "coding": {
+                        "code": "85354-9",
+                        "display": "Blood pressure panel with all children optional",
+                        "system": "http://loinc.org"
+                    },
+                    "text": "Blood pressure systolic & diastolic"
+                },
+                "component": [
+                    {
+                        "code": {
+                            "coding": {
+                                "code": "8480-6",
+                                "display": "Systolic blood pressure",
+                                "system": "http://loinc.org"
+                            },
+                            "text": "Systolic blood pressure"
+                        },
+                        "valueQuantity": {
+                            "code": "mm[Hg]",
+                            "system": "http://unitsofmeasure.org",
+                            "unit": "mmHg",
+                            "value": 0
+                        }
+                    },
+                    {
+                        "code": {
+                            "coding": {
+                                "code": "8462-4",
+                                "display": "Diastolic blood pressure",
+                                "system": "http://loinc.org"
+                            },
+                            "text": "Diastolic blood pressure"
+                        },
+                        "valueQuantity": {
+                            "code": "mm[Hg]",
+                            "system": "http://unitsofmeasure.org",
+                            "unit": "mmHg",
+                            "value": 0
+                        }
+                    }
+                ],
+                "effectiveDateTime": "2018-10-17T00:00:00",
+                "id": "blood-pressure",
+                "meta": {
+                    "profile": "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+                },
+                "resourceType": "Observation",
+                "subject": ""
+            },
+            {
+                "category": {
+                    "coding": {
+                        "code": "vital-signs",
+                        "display": "Vital Signs",
+                        "system": "http://hl7.org/fhir/observation-category",
+                        "text": "Vital Signs"
+                    }
+                },
+                "code": {
+                    "coding": {
+                        "code": "8867-4",
+                        "display": "Heart rate",
+                        "system": "http://loinc.org"
+                    },
+                    "text": "Heart rate"
+                },
+                "component": [
+                    {
+                        "code": {
+                            "coding": {
+                                "code": "8480-6",
+                                "display": "Systolic blood pressure",
+                                "system": "http://loinc.org"
+                            },
+                            "text": "Systolic blood pressure"
+                        },
+                        "valueQuantity": {
+                            "code": "mm[Hg]",
+                            "system": "http://unitsofmeasure.org",
+                            "unit": "mmHg",
+                            "value": 0
+                        }
+                    },
+                    {
+                        "code": {
+                            "coding": {
+                                "code": "8462-4",
+                                "display": "Diastolic blood pressure",
+                                "system": "http://loinc.org"
+                            },
+                            "text": "Diastolic blood pressure"
+                        },
+                        "valueQuantity": {
+                            "code": "mm[Hg]",
+                            "system": "http://unitsofmeasure.org",
+                            "unit": "mmHg",
+                            "value": 0
+                        }
+                    }
+                ],
+                "effectiveDateTime": "2018-10-17T00:00:00",
+                "id": "heart-rate",
+                "meta": {
+                    "profile": "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+                },
+                "resourceType": "Observation",
+                "subject": "",
+                "valueQuantity": {
+                    "code": "/min",
+                    "system": "http://unitsofmeasure.org",
+                    "unit": "beats/minute",
+                    "value": 0
+                }
+            },
+            {
+                "category": {
+                    "coding": {
+                        "code": "vital-signs",
+                        "display": "Vital Signs",
+                        "system": "http://hl7.org/fhir/observation-category",
+                        "text": "Vital Signs"
+                    }
+                },
+                "code": {
+                    "coding": {
+                        "code": "8310-5",
+                        "display": "Body temperature",
+                        "system": "http://loinc.org"
+                    },
+                    "text": "Body temperature"
+                },
+                "component": [
+                    {
+                        "code": {
+                            "coding": {
+                                "code": "8480-6",
+                                "display": "Systolic blood pressure",
+                                "system": "http://loinc.org"
+                            },
+                            "text": "Systolic blood pressure"
+                        },
+                        "valueQuantity": {
+                            "code": "mm[Hg]",
+                            "system": "http://unitsofmeasure.org",
+                            "unit": "mmHg",
+                            "value": 0
+                        }
+                    },
+                    {
+                        "code": {
+                            "coding": {
+                                "code": "8462-4",
+                                "display": "Diastolic blood pressure",
+                                "system": "http://loinc.org"
+                            },
+                            "text": "Diastolic blood pressure"
+                        },
+                        "valueQuantity": {
+                            "code": "mm[Hg]",
+                            "system": "http://unitsofmeasure.org",
+                            "unit": "mmHg",
+                            "value": 0
+                        }
+                    }
+                ],
+                "effectiveDateTime": "2018-10-17T00:00:00",
+                "id": "body-temperature",
+                "meta": {
+                    "profile": "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+                },
+                "resourceType": "Observation",
+                "subject": "",
+                "valueQuantity": {
+                    "code": "Cel",
+                    "system": "http://unitsofmeasure.org",
+                    "unit": "C",
+                    "value": 0
+                }
+            },
+            {
+                "category": {
+                    "coding": {
+                        "code": "vital-signs",
+                        "display": "Vital Signs",
+                        "system": "http://hl7.org/fhir/observation-category",
+                        "text": "Vital Signs"
+                    }
+                },
+                "code": {
+                    "coding": {
+                        "code": "15074-8",
+                        "display": "Glucose [Milligramm/volume] in Blood",
+                        "system": "http://loinc.org"
+                    },
+                    "text": "Glucose"
+                },
+                "component": [
+                    {
+                        "code": {
+                            "coding": {
+                                "code": "8480-6",
+                                "display": "Systolic blood pressure",
+                                "system": "http://loinc.org"
+                            },
+                            "text": "Systolic blood pressure"
+                        },
+                        "valueQuantity": {
+                            "code": "mm[Hg]",
+                            "system": "http://unitsofmeasure.org",
+                            "unit": "mmHg",
+                            "value": 0
+                        }
+                    },
+                    {
+                        "code": {
+                            "coding": {
+                                "code": "8462-4",
+                                "display": "Diastolic blood pressure",
+                                "system": "http://loinc.org"
+                            },
+                            "text": "Diastolic blood pressure"
+                        },
+                        "valueQuantity": {
+                            "code": "mm[Hg]",
+                            "system": "http://unitsofmeasure.org",
+                            "unit": "mmHg",
+                            "value": 0
+                        }
+                    }
+                ],
+                "effectiveDateTime": "2018-10-17T00:00:00",
+                "id": "glucose",
+                "meta": {
+                    "profile": "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+                },
+                "resourceType": "Observation",
+                "subject": "",
+                "valueQuantity": {
+                    "code": "mg/dl",
+                    "system": "http://unitsofmeasure.org",
+                    "unit": "mg/dl",
+                    "value": 0
+                }
+            },
+            {
+                "category": {
+                    "coding": {
+                        "code": "vital-signs",
+                        "display": "Vital Signs",
+                        "system": "http://hl7.org/fhir/observation-category",
+                        "text": "Vital Signs"
+                    }
+                },
+                "code": {
+                    "coding": {
+                        "code": "29463-7",
+                        "display": "Body Weight",
+                        "system": "http://loinc.org"
+                    },
+                    "text": "Body Weight"
+                },
+                "component": [
+                    {
+                        "code": {
+                            "coding": {
+                                "code": "8480-6",
+                                "display": "Systolic blood pressure",
+                                "system": "http://loinc.org"
+                            },
+                            "text": "Systolic blood pressure"
+                        },
+                        "valueQuantity": {
+                            "code": "mm[Hg]",
+                            "system": "http://unitsofmeasure.org",
+                            "unit": "mmHg",
+                            "value": 0
+                        }
+                    },
+                    {
+                        "code": {
+                            "coding": {
+                                "code": "8462-4",
+                                "display": "Diastolic blood pressure",
+                                "system": "http://loinc.org"
+                            },
+                            "text": "Diastolic blood pressure"
+                        },
+                        "valueQuantity": {
+                            "code": "mm[Hg]",
+                            "system": "http://unitsofmeasure.org",
+                            "unit": "mmHg",
+                            "value": 0
+                        }
+                    }
+                ],
+                "effectiveDateTime": "2018-10-17T00:00:00",
+                "id": "body-weight",
+                "meta": {
+                    "profile": "http://hl7.org/fhir/StructureDefinition/vitalsigns"
+                },
+                "resourceType": "Observation",
+                "subject": "",
+                "valueQuantity": {
+                    "code": "kg",
+                    "system": "http://unitsofmeasure.org",
+                    "unit": "kg",
+                    "value": 0
+                }
+            },
+            {
+                "id": "responsiveness",
+                "resourceType": "Observation",
+                "subject": "",
+                "valueQuantity": {
+                    "value": ""
+                }
+            },
+            {
+                "code": {
+                    "coding": {
+                        "code": "28319-2",
+                        "display": "Pain status",
+                        "system": "http://loinc.org"
+                    },
+                    "text": "Pain status"
+                },
+                "id": "pain",
+                "resourceType": "Observation",
+                "subject": "",
+                "valueQuantity": {
+                    "value": ""
+                }
+            },
+            {
+                "effectiveDateTime": "2018-10-17T00:00:00",
+                "id": "last-defecation",
+                "resourceType": "Observation",
+                "subject": ""
+            },
+            {
+                "id": "misc",
+                "resourceType": "Observation",
+                "valueQuantity": {
+                    "value": ""
+                }
+            }
+        ],
+        "patient": {
+            "Patient": null,
+            "active": true,
+            "birthDate": "2018-10-17",
+            "gender": "female",
+            "generalPractitioner": {
+                "reference": "Arzt 1"
+            },
+            "id": 1,
+            "managingOrganization": {
+                "reference": "Pflegeheim"
+            },
+            "meta": {
+                "profile": "http://fhir.de/StructureDefinition/patient-de-basis"
+            },
+            "name": {
+                "family": "",
+                "given": "",
+                "text": "",
+                "use": "official"
+            }
+        }
+    },
+    "priority": 0,
+    "requester": {
+        "agent": {
+            "reference": "Pflegeheim/Hans"
+        },
+        "onBehalfOf": {
+            "reference": "Arzt 1"
+        }
+    },
+    "resourceType": "Message",
+    "status": "sent",
+    "subject": {
+        "reference": ""
+    },
+    "title": "Ich hab nur ne Frage"
+}
