@@ -133,6 +133,10 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
     // message object
     case MessageObjectRole:
         return QVariant::fromValue<MessageObject>(_messageItem);
+
+    // dont show archived messages
+    case ArchivedForRole:
+        return QVariant(_messageItem.isArchivedFor(_currentUser.shareWith()));
     }
 
     return QVariant();
@@ -166,6 +170,17 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
         }
         // a message should be either from the sender or the recipient
         return false;
+
+    // set new status - message was resolved
+    case MessageResolvedRole:
+        _messageItem.status = MessageObject::ResolvedStatus;
+        break;
+
+    // set new status - message was archived
+    case MessageArchivedRole:
+        _messageItem.archivedFor.append({ _currentUser.shareWith(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss") });
+        _messageItem.status = MessageObject::ArchivedStatus;
+        break;
     }
 
     if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {

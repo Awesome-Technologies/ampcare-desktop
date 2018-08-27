@@ -331,6 +331,12 @@ void MessageObject::setJson(const QJsonObject &json)
         }
     }
 
+    if (json.contains("archivedFor") && json["archivedFor"].isArray()) {
+        foreach (const QJsonValue &v, json["archivedFor"].toArray()) {
+            archivedFor.append({ v.toObject().value("user").toString(), v.toObject().value("date").toString() });
+        }
+    }
+
     if (json.contains("authoredOn") && json["authoredOn"].isString())
         authoredOn = QDateTime::fromString(json["authoredOn"].toString(), DATETIMEFORMAT);
 
@@ -497,6 +503,19 @@ void MessageObject::buildJson(QJsonObject &json, Sharee &currentUser, bool isDra
     json["requester"] = requester;
     json["note"] = note;
     json["priority"] = priority;
+
+    if (!archivedFor.empty()) {
+        QJsonArray _archivedFor;
+        QJsonObject _archived;
+
+        for (int i = 0; i < archivedFor.length(); i++) {
+            _archived["user"] = archivedFor.at(i).at(0);
+            _archived["date"] = archivedFor.at(i).at(1);
+            _archivedFor.append(_archived);
+        }
+
+        json["archivedFor"] = _archivedFor;
+    }
 
     QJsonObject payload;
 
@@ -966,6 +985,19 @@ bool MessageObject::saveMessage(const QString &basePath, Sharee &currentUser, bo
         return true;
     }
     return false;
+}
+
+QString MessageObject::isArchivedFor(const QString &user) const
+{
+    if (status == MessageObject::ArchivedStatus) {
+        for (int i = 0; i < archivedFor.length(); i++) {
+            if (archivedFor.at(i).contains(user)) {
+                return "true";
+            }
+        }
+    }
+
+    return "false";
 }
 
 } // end namespace

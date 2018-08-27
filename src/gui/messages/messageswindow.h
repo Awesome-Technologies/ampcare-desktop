@@ -64,6 +64,8 @@ private slots:
 
     /** show dialog to create a new message */
     void on_createMessageButton_clicked();
+    void on_resolvedButton_clicked();
+    void on_archiveButton_clicked();
 };
 
 } // namespace OCC

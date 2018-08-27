@@ -20,6 +20,8 @@
 #include "ui_messageswindow.h"
 
 #include <QSortFilterProxyModel>
+#include <QFileDialog>
+#include <QFileInfo>
 
 namespace OCC {
 
@@ -44,6 +46,8 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     filterProxy->setSourceModel(messageModel);
     filterProxy->setSortRole(MessageModel::SortRole);
     filterProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
+    filterProxy->setFilterRole(MessageModel::ArchivedForRole);
+    filterProxy->setFilterRegExp(QRegExp("false", Qt::CaseInsensitive, QRegExp::FixedString));
 
     // set message delegate to listview
     QTableView *msgList = ui->messageList;
@@ -68,10 +72,25 @@ MessagesWindow::~MessagesWindow()
 
 void MessagesWindow::slotShowDetails(const QModelIndex &current, const QModelIndex &)
 {
+    // selection has changed -> disable resolved and archive button
+    ui->resolvedButton->setEnabled(false);
+    ui->archiveButton->setEnabled(false);
+
     ui->detailView->setHtml(filterProxy->data(current, MessageModel::DetailRole).toString().toUtf8(), QUrl("qrc:/"));
 
     // set message status to 'read'
     filterProxy->setData(current, currentUser.shareWith(), MessageModel::StatusRole);
+
+    // is message 'read' and the user == receiver
+    MessageObject _messageItem(filterProxy->data(current, MessageModel::MessageObjectRole).value<MessageObject>());
+    if ((_messageItem.status == MessageObject::ReadStatus || _messageItem.status == MessageObject::RereadStatus) && _messageItem.recipient == currentUser.shareWith()) {
+        ui->resolvedButton->setEnabled(true);
+    }
+
+    // is message 'resolved' ?
+    if (_messageItem.status == MessageObject::ResolvedStatus) {
+        ui->archiveButton->setEnabled(true);
+    }
 }
 
 void MessagesWindow::on_messageList_doubleClicked(const QModelIndex &index)
@@ -98,5 +117,27 @@ void MessagesWindow::on_createMessageButton_clicked()
     _createMessageDialog->reset();
     _createMessageDialog->show();
 }
+
+void MessagesWindow::on_archiveButton_clicked()
+{
+    // get filename and path for export
+    QString fileName = QFileDialog::getSaveFileName((QWidget *)0, "Export PDF", QString(), "*.pdf");
+    if (QFileInfo(fileName).suffix().isEmpty()) {
+        fileName.append(".pdf");
+    }
+
+    // print content of detailView to pdf
+    ui->detailView->page()->printToPdf(fileName);
+
+    // set message status to 'archived'
+    filterProxy->setData(ui->messageList->currentIndex(), "", MessageModel::MessageArchivedRole);
+}
+
+void MessagesWindow::on_resolvedButton_clicked()
+{
+    // set message status to 'resolved'
+    filterProxy->setData(ui->messageList->currentIndex(), "", MessageModel::MessageResolvedRole);
+}
+
 
 } // end namespace

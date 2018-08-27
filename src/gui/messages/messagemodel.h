@@ -46,6 +46,9 @@ public:
         DetailRole,
         StatusRole,
         MessageObjectRole,
+        MessageResolvedRole,
+        MessageArchivedRole,
+        ArchivedForRole
     };
 
     MessageModel(const QString &rootPath, const Sharee &currentUser, QObject *parent = 0);

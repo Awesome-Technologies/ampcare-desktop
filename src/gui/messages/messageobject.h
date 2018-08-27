@@ -49,6 +49,7 @@ public:
         ResentStatus,
         RereadStatus,
         ResolvedStatus,
+        ArchivedStatus,
     };
 
     enum Gender {
@@ -107,6 +108,7 @@ public:
 
     QList<ImageDetails> imagesList;
     QList<QStringList> medicationList;
+    QList<QStringList> archivedFor;
 
     /** returns HTML of a summary of the message */
     QString longTitle() const;
@@ -131,6 +133,9 @@ public:
 
     /** writes message to file */
     bool saveMessage(const QString &basePath, Sharee &currentUser, bool isDraft);
+
+    /** isArchivedFor for @p user */
+    QString isArchivedFor(const QString &user) const;
 };
 
 } // end namespace
