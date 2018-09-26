@@ -553,6 +553,58 @@
     </message>
 </context>
 <context>
+    <name>OCC::AnswerMessageDialog</name>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="14"/>
+        <source>Answer message</source>
+        <translation>Antwort</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="31"/>
+        <source>Message text</source>
+        <translation>Nachrichtentext</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="59"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.SF NS Text&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="78"/>
+        <source>Employee</source>
+        <translation>Mitarbeitername</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="85"/>
+        <source>TextLabel</source>
+        <translation type="unfinished">TextLabel</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="92"/>
+        <source>/</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="128"/>
+        <source>Answer text</source>
+        <translation>Antworttext</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.cpp" line="33"/>
+        <source>Save</source>
+        <translation>Speichern</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.cpp" line="34"/>
+        <source>Don&apos;t save</source>
+        <translation>Nicht speichern</translation>
+    </message>
+</context>
+<context>
     <name>OCC::Application</name>
     <message>
         <location filename="../src/gui/application.cpp" line="164"/>

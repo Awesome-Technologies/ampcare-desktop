@@ -22,6 +22,7 @@ class QSortFilterProxyModel;
 
 namespace OCC {
 
+class AnswerMessageDialog;
 class CreateMessageDialog;
 class MessageModel;
 
@@ -48,6 +49,7 @@ private:
     Ui::MessagesWindow *ui;
     MessageModel *messageModel;
     QSortFilterProxyModel *filterProxy;
+    AnswerMessageDialog *_answerMessageDialog;
     CreateMessageDialog *_createMessageDialog;
 
     const Sharee currentUser;

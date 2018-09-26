@@ -12,6 +12,7 @@
  * for more details.
  */
 
+#include "answermessagedialog.h"
 #include "createmessagedialog.h"
 #include "messagemodel.h"
 #include "messageswindow.h"
@@ -30,12 +31,16 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     , ui(new Ui::MessagesWindow)
     , messageModel(new MessageModel(localPath + "/AMP", _currentUser, this))
     , filterProxy(new QSortFilterProxyModel(this))
+    , _answerMessageDialog(new AnswerMessageDialog(_currentUser, localPath + "/AMP", filterProxy, this))
     , _createMessageDialog(new CreateMessageDialog(recipientList, localPath + "/AMP", _currentUser, this))
     , currentUser(_currentUser)
     , localPath(localPath)
+
 {
     ui->setupUi(this);
 
+    // dialog for creating new messages
+    connect(ui->createMessageButton, SIGNAL(clicked()), this, SLOT(on_createMessageButton_clicked()));
     filterProxy->setSourceModel(messageModel);
     filterProxy->setSortRole(MessageModel::SortRole);
     filterProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
@@ -71,11 +76,20 @@ void MessagesWindow::slotShowDetails(const QModelIndex &current, const QModelInd
 
 void MessagesWindow::on_messageList_doubleClicked(const QModelIndex &index)
 {
-    // load values into dialog
-    _createMessageDialog->reset();
+    int _currentStatus = filterProxy->data(index, MessageModel::StatusRole).toInt();
     MessageObject _messageItem(filterProxy->data(index, MessageModel::MessageObjectRole).value<MessageObject>());
-    _createMessageDialog->setValues(_messageItem);
-    _createMessageDialog->show();
+
+    if (_currentStatus == MessageObject::DraftStatus) { // message is a draft
+        // load values into dialog
+        _createMessageDialog->reset();
+        _createMessageDialog->setValues(_messageItem);
+        _createMessageDialog->show();
+    } else { // message was sent, only answers are allowed
+        _answerMessageDialog->reset();
+        _answerMessageDialog->setMessageObject(_messageItem);
+        _answerMessageDialog->setValues(filterProxy->data(index, MessageModel::DetailRole).toString());
+        _answerMessageDialog->show();
+    }
 }
 
 void MessagesWindow::on_createMessageButton_clicked()
