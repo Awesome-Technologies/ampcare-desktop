@@ -7,6 +7,21 @@
         <file alias="theme/colored/Nextcloud-icon-32.png">theme/colored/32-Nextcloud-icon.png</file>
         <file alias="theme/colored/Nextcloud-icon-48.png">theme/colored/48-Nextcloud-icon.png</file>
         <file alias="theme/colored/Nextcloud-icon-64.png">theme/colored/64-Nextcloud-icon.png</file>
+        <file alias="theme/colored/AMP-icon-512.png">theme/colored/512-AMP-icon.png</file>
+        <file alias="theme/colored/AMP-icon-256.png">theme/colored/256-AMP-icon.png</file>
+        <file alias="theme/colored/AMP-icon-128.png">theme/colored/128-AMP-icon.png</file>
+        <file alias="theme/colored/AMP-icon-22.png">theme/colored/22-AMP-icon.png</file>
+        <file alias="theme/colored/AMP-icon-32.png">theme/colored/32-AMP-icon.png</file>
+        <file alias="theme/colored/AMP-icon-48.png">theme/colored/48-AMP-icon.png</file>
+        <file alias="theme/colored/AMP-icon-64.png">theme/colored/64-AMP-icon.png</file>
+        <file>theme/amp/wizard_logo.png</file>
+        <file>theme/amp/wizard_logo@2x.png</file>
+        <file>theme/colored/state-amp-offline.svg</file>
+        <file>theme/colored/state-amp-offline-16.png</file>
+        <file>theme/colored/state-amp-offline-32.png</file>
+        <file>theme/colored/state-amp-offline-64.png</file>
+        <file>theme/colored/state-amp-offline-128.png</file>
+        <file>theme/colored/state-amp-offline-256.png</file>
         <file>theme/colored/state-error-32.png</file>
         <file>theme/colored/state-error-64.png</file>
         <file>theme/colored/state-error-128.png</file>
