@@ -1,50 +1,111 @@
-version: '{build}-{branch}'
-
-branches:
-  only:
-    - master
-
-clone_depth: 50
-
-
+version: '{branch}-{build}'
+image: Visual Studio 2017
+clone_depth: 10
+clone_folder: C:\projects\ampcare\desktop
 init:
 - ps: |
-    function craft($target) {
-        & C:\Python36\python.exe "C:\CraftMaster\CraftMaster\CraftMaster.py" --config "$env:APPVEYOR_BUILD_FOLDER\appveyor.ini" --variables "APPVEYOR_BUILD_FOLDER=$env:APPVEYOR_BUILD_FOLDER" --target $target -c $args
-        if($LASTEXITCODE -ne 0) {exit $LASTEXITCODE}
+    # If triggered by a new tag use tag name as BUILD_VERSION
+    if ($env:APPVEYOR_REPO_TAG -eq "true") {
+      Update-AppveyorBuild -Version "$env:APPVEYOR_REPO_TAG_NAME"
+    } else {
+      Update-AppveyorBuild -Version "$env:APPVEYOR_REPO_BRANCH-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))"
     }
-
+environment:
+  COMPILER: msvc2017_64
+  QT_VER: 5.11.1
+  QT_PATH: C:\Qt\$(QT_VER)\$(COMPILER)
+  CMAKE_BUILD_TYPE: Release
+  PROJECT_PATH: C:\projects\ampcare
+  PNG2IMG_ROOT_DIR: C:\projects\png2img
+  QT_KEYCHAIN_URL: https://codeload.github.com/frankosterfeld/qtkeychain/zip/v0.9.1
+  QT_KEYCHAIN_ROOT_DIR: C:\projects\qtkeychain
+  QTKEYCHAIN_LIBRARY: C:\projects\qtkeychain\install\lib\qt5keychain.lib
+  QTKEYCHAIN_INCLUDE_DIR: C:\projects\qtkeychain\install\include\qt5keychain
+  OPENSSL10_PATH: C:\OpenSSL-Win64
+  OPENSSL11_PATH: C:\OpenSSL-v11-Win64
+  NINJA_URL: https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-win.zip
+  NINJA_ROOT_DIR: C:\projects\deps\ninja
+  ZLIB_URL: http://www.samsonov.net/wp?kcccount=http://www.samsonov.net/wp/assets/Dist_zlib/X64-release/zlib.7z
+  ZLIB_ROOT_DIR: C:\projects\zlib
 install:
 - ps: |
-    #use cmd to silence powershell behaviour for stderr
-    & cmd /C "git clone -q --depth=1 git://anongit.kde.org/craftmaster.git C:\CraftMaster\CraftMaster 2>&1"
+    md C:\downloads | out-null
 
-    craft $env:TARGET -i craft
-    craft $env:TARGET --install-deps owncloud-client
+    # Install png2ico.exe
+    #choco install png2ico
+    appveyor DownloadFile "https://github.com/hiiamok/png2ImageMagickICO/releases/download/v1.0/x64.zip" -FileName C:\downloads\png2img.zip
+    7z x C:\downloads\png2img.zip -o"$env:PNG2IMG_ROOT_DIR" | out-null
 
+    # Download ninja
+    appveyor DownloadFile "$env:NINJA_URL" -FileName C:\downloads\ninja.zip
+    7z x C:\downloads\ninja.zip -o"$env:NINJA_ROOT_DIR" | out-null
+
+    # Download qtkeychain
+    appveyor DownloadFile "$env:QT_KEYCHAIN_URL" -FileName C:\downloads\qtkeychain.zip
+    7z x -oC:\projects\qtkeychain C:\downloads\qtkeychain.zip | out-null
+    move $env:QT_KEYCHAIN_ROOT_DIR/qtkeychain*/* $env:QT_KEYCHAIN_ROOT_DIR
+
+    # Download zlib
+    appveyor DownloadFile "$env:ZLIB_URL" -FileName C:\downloads\zlib.7z
+    7z x C:\downloads\zlib.7z -o"$env:ZLIB_ROOT_DIR" | out-null
+
+    # Install NSIS plugins
+    appveyor DownloadFile "http://nsis.sourceforge.net/mediawiki/images/8/8f/UAC.zip" -FileName C:\downloads\UAC.zip
+    7z x C:\downloads\UAC.zip -oC:\downloads\UAC | out-null
+    copy C:\downloads\UAC\Plugins\x86-ansi\UAC.dll "C:\Program Files (x86)\NSIS\Plugins\x86-ansi"
+    copy C:\downloads\UAC\Plugins\x86-unicode\UAC.dll "C:\Program Files (x86)\NSIS\Plugins\x86-unicode"
+    copy C:\downloads\UAC\UAC.nsh "C:\Program Files (x86)\NSIS\Include"
+
+    appveyor DownloadFile "http://nsis.sourceforge.net/mediawiki/images/1/18/NsProcess.zip" -FileName C:\downloads\NsProcess.7z
+    7z e C:\downloads\NsProcess.7z -o"C:\Program Files (x86)\NSIS\Plugins\x86-ansi" nsProcess.dll -r | out-null
+    7z e C:\downloads\NsProcess.7z -o"C:\Program Files (x86)\NSIS\Plugins\x86-unicode" nsProcessW.dll -r | out-null
+    7z e C:\downloads\NsProcess.7z -o"C:\Program Files (x86)\NSIS\Include" nsProcess.nsh -r | out-null
 build_script:
-- ps: |
-    craft $env:TARGET --no-cache --src-dir $env:APPVEYOR_BUILD_FOLDER owncloud-client
+- cmd: |
+    REM Setup QT and MSVC compiler
+    echo "%QT_PATH%"
+    %QT_PATH%\bin\qtenv2.bat
+    "%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" amd64
 
-after_build:
-- ps: |
-    craft $env:TARGET --src-dir $env:APPVEYOR_BUILD_FOLDER --package owncloud-client
+    REM Set additional paths
+    set PATH=%PATH%;%NINJA_ROOT_DIR%;%PNG2IMG_ROOT_DIR%\x64
+    ninja --version
+    cmake --version
 
+    REM Build qtkeychain
+    mkdir %QT_KEYCHAIN_ROOT_DIR%\build
+    mkdir %QT_KEYCHAIN_ROOT_DIR%\install
+    cd %QT_KEYCHAIN_ROOT_DIR%\build
+    cmake -G"Ninja" .. -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% -DCMAKE_INSTALL_PREFIX="%QT_KEYCHAIN_ROOT_DIR%\install"
+    cmake --build . --config Release --target install
 
-on_finish:
-- ps: |
-    Get-ChildItem $env:USERPROFILE\.craft\* | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name }
+    REM Configure AMPcare
+    cd %APPVEYOR_BUILD_FOLDER%
+    git submodule update --init --recursive
+    mkdir %APPVEYOR_BUILD_FOLDER%\build
+    mkdir %PROJECT_PATH%\install
+    cd %APPVEYOR_BUILD_FOLDER%\build
 
-test_script:
-- ps: |
-   craft $env:TARGET --src-dir $env:APPVEYOR_BUILD_FOLDER --test owncloud-client
+    cmake -G"Ninja" %APPVEYOR_BUILD_FOLDER% -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% -DCMAKE_INSTALL_PREFIX="%PROJECT_PATH%\install" -DAPPLICATION_UPDATE_URL="https://updates.amp.care/client" -DOEM_THEME_DIR="%APPVEYOR_BUILD_FOLDER%/theme/amp" -DWITH_CRASHREPORTER=OFF -DMIRALL_VERSION_BUILD=%APPVEYOR_BUILD_NUMBER% -DNO_SHIBBOLETH=1 -DQTKEYCHAIN_LIBRARY=%QTKEYCHAIN_LIBRARY% -DQTKEYCHAIN_INCLUDE_DIR=%QTKEYCHAIN_INCLUDE_DIR% -DOPENSSL_ROOT_DIR=%OPENSSL11_PATH% -DZLIB_INCLUDE_DIR="%ZLIB_ROOT_DIR%/include" -DZLIB_LIBRARY="%ZLIB_ROOT_DIR%/lib/zlib.lib"
 
-environment:
-    matrix:
-    - TARGET: windows-msvc2017_32-cl
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
-    - TARGET: windows-msvc2017_64-cl
-      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+    REM Run cmake to compile and install
+    cmake --build . --config Release --target install
 
+    REM There must be a better way than this:
+    copy "%QT_KEYCHAIN_ROOT_DIR%\install\bin\qt5keychain.dll" "%QT_PATH%\bin"
+
+    REM Run windeployqt to collect all ampcare.exe dependencies
+    windeployqt.exe --release "%PROJECT_PATH%\install\bin\ampcare.exe" --dir %PROJECT_PATH%\libs
+
+    REM Download NSIS scripts
+    cd %PROJECT_PATH%
+    copy "%APPVEYOR_BUILD_FOLDER%\admin\win\nsi\ampcare.nsi" ampcare.nsi
+    copy "%APPVEYOR_BUILD_FOLDER%\admin\win\nsi\NSIS.InstallOptions.ini" NSIS.InstallOptions.ini
+
+    REM Run NSIS script to create installer
+    makensis.exe /DBUILD_TYPE=Release /DMIRALL_VERSION_SUFFIX=appveyor /DGIT_REVISION=%APPVEYOR_REPO_COMMIT:~0,6% ampcare.nsi
+
+    dir install
+    move install desktop
 artifacts:
-  - path: binaries/*
+- path: install/AMP*.exe
