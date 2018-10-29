@@ -1,0 +1,32 @@
+os: osx
+language: cpp
+addons:
+  homebrew:
+    packages:
+      - qt5
+      - qtkeychain
+install:
+  - curl http://s.sudre.free.fr/Software/files/Packages.dmg -o $HOME/Packages.dmg
+  - sudo sh -c 'hdiutil attach $HOME/Packages.dmg && installer -package "/Volumes/Packages 1.2.4/Install Packages.pkg" -target /; hdiutil detach "/Volumes/Packages 1.2.4"'
+script:
+  - mkdir $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build
+  - PATH="/usr/local/opt/qt/bin:$PATH" cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install
+    -DAPPLICATION_UPDATE_URL="https://updates.amp.care/client"
+    -DOEM_THEME_DIR="$TRAVIS_BUILD_DIR/theme/amp"
+    -DWITH_CRASHREPORTER=OFF -DMIRALL_VERSION_BUILD=$TRAVIS_BUILD_NUMBER -DNO_SHIBBOLETH=1
+    -DQTKEYCHAIN_LIBRARY=/usr/local/opt/qtkeychain/lib/libqt5keychain.dylib
+    -DQTKEYCHAIN_INCLUDE_DIR=/usr/local/opt/qtkeychain/include/qt5keychain
+    -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl@1.1
+  - cmake --build . --config Release --target all
+  - cmake --build . --config Release --target install
+  - cd $TRAVIS_BUILD_DIR && ./build/admin/osx/create_mac.sh ./install ./build
+  - ls install
+deploy:
+  provider: releases
+  api_key:
+    secure: H/6jq30IYCWQSh3jUdF3OJd1LFQtHlX0v/u8kLMFT1mKrNj4MF1mSxPYnlo78MWcMi2ehqBbV0n8rW/XhreUdbrtQG4IB+nJfoS//RihSSPXJT9Xt9pErwwugAWYf6400mVCsYD/y7ODPPf8AKOHATgupaWx/tT7BPpo0ejzs2nMHrifgoUmYtJkvvCw9fsOvULVeBAcbvhmbMO0GvzOBQRi22KYmfbtyWoWTAokd3YDZhTiR4w00n7ATBFJjGi4SxKvXs+M72OufBQTulIcE865TxWCc6F8M2z8Jq/ckDQbSTzCMlkiEFiC3Y7CCWlVIlEjkVN5eP/NiXC6RkEgRDm0MnJHoqR5CRO+nFwflzCxahlVsO4oujkZs3D3zlD6lcf2HC8rx5eXNEzO0DATCfI4bP6qFE+3eHwhDck6YzBhrNheWT4cFAX5oRy1bngrdGZonQcXdMdxis1pQkITy1lnFetLpUrIt4s+tSMgNLanq3m3F3MWezzunZ7Z6N/Cv5GqwJyfH3EJHwBtsrtN+5x6LVYYDbW4b2U612cAGFxKCnpzHK049+c2wFgqyjKN2MsUfwWgAgRdhYJg5LtJY6tj8oeX1P550tqXgw62XC+VgoQgjs1p+rfN/xrEJYGC7LJWXjOREZWyILCcofYd8FloDp+muVi1hCLRJnwHsdY=
+  skip_cleanup: true
+  file_glob: true
+  file: ./**/AMPcare-*.pkg
+  on:
+    tags: true

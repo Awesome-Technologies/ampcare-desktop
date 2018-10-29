@@ -35,7 +35,7 @@ installer_file_tbz="$installer.pkg.tbz"
 # The command line tool of the "Packages" tool, see link above.
 pkgbuild=/usr/local/bin/packagesbuild
 
-$pkgbuild -F $install_path $prjfile
+$pkgbuild --verbose -F $install_path $prjfile
 rc=$?
 
 if [ $rc == 0 ]; then

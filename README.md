@@ -1,5 +1,7 @@
 # AMPcare Desktop Client
 
+Travis OSX build: [![Build Status](https://travis-ci.org/Awesome-Technologies/ampcare-desktop.svg?branch=master)](https://travis-ci.org/Awesome-Technologies/ampcare-desktop)
+
 The :computer: AMPcare Desktop Client is a tool for nursing staff to get medical assistance from a doctor.
 
 ![Desktop Client on Mac OS](https://cloud.awesome-technologies.de/s/KeSWLNbeLocqc8D/preview)
