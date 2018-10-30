@@ -1076,19 +1076,20 @@ void ownCloudGui::slotShowGuiMessage(const QString &title, const QString &messag
 void ownCloudGui::slotShowVideo()
 {
     // if account is set up, show the video window
-    if (!AccountManager::instance()->accounts().isEmpty()) {
+    auto accountList = AccountManager::instance()->accounts();
+    if (!accountList.isEmpty()) {
         // create only one window
         if (_videoWindow.isNull()) {
             _videoWindow = new VideoWindow();
         }
 
-        // show video window with default url
-        if (auto account = qvariant_cast<AccountPtr>(sender()->property(propertyAccountC))) {
-            QString _completeUrl = account->url().toString() + "/apps/spreed/";
-            QUrl url(_completeUrl);
-            _videoWindow->setUrl(url);
-            _videoWindow->show();
-        }
+        // show video window with default url of first account
+        // TODO This is OK since we only support a single account
+        QString _completeUrl = accountList.first()->account()->url().toString() + "/apps/spreed/";
+        QUrl url(_completeUrl);
+        _videoWindow->setUrl(url);
+        _videoWindow->show();
+        raiseDialog(_videoWindow);
     } else {
         qCInfo(lcApplication) << "No configured folders yet, starting setup wizard";
         slotNewAccountWizard();
