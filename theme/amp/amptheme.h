@@ -56,7 +56,10 @@ public:
     }
 #endif
 
-    QIcon folderOfflineIcon(bool sysTray, bool sysTrayMenuVisible) const { return themeIcon(QLatin1String("state-amp-offline"), sysTray, sysTrayMenuVisible); }
+    QIcon folderOfflineIcon(bool sysTray, bool sysTrayMenuVisible) const Q_DECL_OVERRIDE
+    {
+        return themeIcon(QLatin1String("state-amp-offline"), sysTray, sysTrayMenuVisible);
+    }
 
     // the client only supports one folder to sync. The Add-Button is removed
     // accordingly.
