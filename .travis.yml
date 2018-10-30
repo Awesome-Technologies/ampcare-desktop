@@ -17,6 +17,7 @@ script:
     -DMIRALL_VERSION_SUFFIX="alpha"
     -DWITH_CRASHREPORTER=OFF
     -DNO_SHIBBOLETH=1
+    -DBUILD_SHELL_INTEGRATION=OFF
     -DQTKEYCHAIN_LIBRARY=/usr/local/opt/qtkeychain/lib/libqt5keychain.dylib
     -DQTKEYCHAIN_INCLUDE_DIR=/usr/local/opt/qtkeychain/include/qt5keychain
     -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl@1.1
