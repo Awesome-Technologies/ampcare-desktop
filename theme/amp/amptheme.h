@@ -91,11 +91,13 @@ public:
                         .arg("http://" MIRALL_STRINGIFY(APPLICATION_DOMAIN))
                         .arg(MIRALL_STRINGIFY(APPLICATION_DOMAIN));
 
-        devString += tr("<p><small>By Klaas Freitag, Daniel Molkentin, "
-                        "Jan-Christoph Borchardt, "
+        devString += tr("<p><small>By Michael Albert, Manuel Stahl, Klaas Freitag, "
+                        "Daniel Molkentin, Jan-Christoph Borchardt, "
                         "Olivier Goffart, Markus Götz and others.</small></p>");
 
         devString += tr("<p>This release was supplied by the Awesome Technologies"
+                        " Innovationslabor GmbH<br />"
+                        "Copyright 2018 Awesome Technologies"
                         " Innovationslabor GmbH<br />"
                         "Copyright 2017-2018 Nextcloud GmbH<br />"
                         "Copyright 2012-2018 ownCloud GmbH</p>");
