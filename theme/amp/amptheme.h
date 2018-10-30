@@ -70,9 +70,8 @@ public:
 
     QString helpUrl() const Q_DECL_OVERRIDE
     {
-        return QString::fromLatin1("https://docs.amp.care/desktop/%1.%2/")
-            .arg(MIRALL_VERSION_MAJOR)
-            .arg(MIRALL_VERSION_MINOR);
+        return QString::fromLatin1("https://docs.amp.care/desktop/%1/")
+            .arg(MIRALL_VERSION_STRING);
     }
     QString overrideServerUrl() const Q_DECL_OVERRIDE
     {
