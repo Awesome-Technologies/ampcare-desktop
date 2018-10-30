@@ -39,6 +39,7 @@ class ShareDialog;
 class Application;
 class LogBrowser;
 class AccountState;
+class VideoWindow;
 
 enum class ShareDialogStartPage {
     UsersAndGroups,
@@ -88,6 +89,7 @@ public slots:
     void slotFoldersChanged();
     void slotShowSettings();
     void slotShowSyncProtocol();
+    void slotShowVideo();
     void slotShutdown();
     void slotSyncStateChange(Folder *);
     void slotTrayClicked(QSystemTrayIcon::ActivationReason reason);
@@ -136,6 +138,7 @@ private:
 #else
     QPointer<SettingsDialog> _settingsDialog;
 #endif
+    QPointer<VideoWindow> _videoWindow;
     QPointer<LogBrowser> _logBrowser;
     // tray's menu
     QScopedPointer<QMenu> _contextMenu;

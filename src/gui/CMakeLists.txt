@@ -34,6 +34,7 @@ set(client_UI_SRCS
     addcertificatedialog.ui
     proxyauthdialog.ui
     mnemonicdialog.ui
+    messages/videowindow.ui
     wizard/owncloudadvancedsetuppage.ui
     wizard/owncloudconnectionmethoddialog.ui
     wizard/owncloudhttpcredspage.ui
@@ -99,6 +100,7 @@ set(client_SRCS
     guiutility.cpp
     elidedlabel.cpp
     iconjob.cpp
+    messages/videowindow.cpp
     creds/credentialsfactory.cpp
     creds/httpcredentialsgui.cpp
     creds/oauth.cpp
