@@ -371,16 +371,6 @@ void ownCloudGui::slotComputeOverallSyncStatus()
 
 void ownCloudGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *menu, bool separateMenu)
 {
-    // Only show the name in the action if it's not part of an
-    // account sub menu.
-    QString browserOpen = tr("Open in browser");
-    if (!separateMenu) {
-        browserOpen = tr("Open %1 in browser").arg(Theme::instance()->appNameGUI());
-    }
-    auto actionOpenoC = menu->addAction(browserOpen);
-    actionOpenoC->setProperty(propertyAccountC, QVariant::fromValue(accountState->account()));
-    QObject::connect(actionOpenoC, &QAction::triggered, this, &ownCloudGui::slotOpenOwnCloud);
-
     // create a context menu entry for opening the video window
     auto actionOpenVideo = menu->addAction(tr("Videotelefonie"));
     actionOpenVideo->setProperty(propertyAccountC, QVariant::fromValue(accountState->account()));
@@ -401,16 +391,6 @@ void ownCloudGui::addAccountContextMenu(AccountStatePtr accountState, QMenu *men
         } else {
             allPaused = false;
         }
-
-        if (firstFolder && !singleSyncFolder) {
-            firstFolder = false;
-            menu->addSeparator();
-            menu->addAction(tr("Managed Folders:"))->setDisabled(true);
-        }
-
-        QAction *action = menu->addAction(tr("Open folder '%1'").arg(folder->shortGuiLocalPath()));
-        auto alias = folder->alias();
-        connect(action, &QAction::triggered, this, [this, alias] { this->slotFolderOpenAction(alias); });
     }
 
     menu->addSeparator();
@@ -665,11 +645,9 @@ void ownCloudGui::updateContextMenu()
             _contextMenu->addMenu(accountMenu);
 
             addAccountContextMenu(account, accountMenu, true);
-            fetchNavigationApps(account);
         }
     } else if (accountList.count() == 1) {
         addAccountContextMenu(accountList.first(), _contextMenu.data(), false);
-        fetchNavigationApps(accountList.first());
     }
 
     _contextMenu->addSeparator();
