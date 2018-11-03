@@ -342,9 +342,9 @@ void MessageObject::setJson(const QJsonObject &json)
         QStringList requester = json["requester"].toObject().value("agent").toObject().value("reference").toString().split("/");
         initials = requester.value(1);
         sender = requester.value(0);
-        // TODO search user and write his displayName() to senderName
-        senderName = sender;
+        senderName = json["requester"].toObject().value("agent").toObject().value("display").toString();
         recipient = json["requester"].toObject().value("onBehalfOf").toObject().value("reference").toString();
+        recipientName = json["requester"].toObject().value("onBehalfOf").toObject().value("display").toString();
     }
 
     // message payload
@@ -445,9 +445,13 @@ void MessageObject::setJson(const QJsonObject &json)
     }
 }
 
-void MessageObject::buildJson(QJsonObject &json, QString &currentUser, bool isDraft) const
+void MessageObject::buildJson(QJsonObject &json, Sharee &currentUser, bool isDraft) const
 {
     // TODO sanitize inputs
+
+    // message metadata
+    QString _note = "<tr><td><div class='messageSender'>" + currentUser.displayName() + "/" + initials + "</div></td><td class='messageBody'>"
+        + messageBody + "</td><td class='messageDate'>" + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss") + "</td></tr>";
 
     // message metadata
     json["resourceType"] = "Message";
@@ -483,9 +487,11 @@ void MessageObject::buildJson(QJsonObject &json, QString &currentUser, bool isDr
     QJsonObject requester;
     QJsonObject agent;
     QJsonObject onBehalfOf;
-    QString requesterReference = currentUser + "/" + initials;
+    QString requesterReference = currentUser.shareWith() + "/" + initials;
     agent["reference"] = requesterReference;
+    agent["display"] = currentUser.displayName();
     onBehalfOf["reference"] = recipient;
+    onBehalfOf["display"] = recipientName;
     requester.insert("agent", agent);
     requester.insert("onBehalfOf", onBehalfOf);
     json["requester"] = requester;
@@ -514,7 +520,7 @@ void MessageObject::buildJson(QJsonObject &json, QString &currentUser, bool isDr
     generalPractitioner["reference"] = recipient;
     patient["generalPractitioner"] = generalPractitioner;
     QJsonObject managingOrganization;
-    managingOrganization["reference"] = currentUser;
+    managingOrganization["reference"] = currentUser.shareWith();
     patient["managingOrganization"] = managingOrganization;
     payload.insert("patient", patient);
 
@@ -769,7 +775,7 @@ void MessageObject::buildJson(QJsonObject &json, QString &currentUser, bool isDr
         QJsonObject requester;
         QJsonObject agent;
         QJsonObject onBehalfOf;
-        agent["reference"] = currentUser;
+        agent["reference"] = currentUser.shareWith();
         onBehalfOf["reference"] = recipient;
         requester.insert("agent", agent);
         requester.insert("onBehalfOf", onBehalfOf);
@@ -866,23 +872,22 @@ void MessageObject::buildJson(QJsonObject &json, QString &currentUser, bool isDr
         json["payload"] = payload;
 }
 
-bool MessageObject::saveMessage(const QString &basePath, QString &currentUser, bool isDraft)
+bool MessageObject::saveMessage(const QString &basePath, Sharee &currentUser, bool isDraft)
 {
+    bool wasDraft = false;
     // create new uuid if none is set
     if (messageId.isNull()) {
         messageId = messageId.createUuid();
     } else {
         // if the message was a draft, delete it
         if (!isDraft) {
-            QString filePath = basePath + "/drafts/" + messageId.toString() + ".json";
+            QString filePath = basePath + "/drafts/messages/" + messageId.toString() + ".json";
             if (QFileInfo::exists(filePath) && QFileInfo(filePath).isFile()) {
                 QFile::remove(filePath);
+                wasDraft = true;
             }
         }
     }
-
-    QJsonObject content;
-    buildJson(content, currentUser, isDraft);
 
     // create filename and correct path
     // complete path: <basePath>/<recipientid>/messages/<messageId>.json
@@ -903,7 +908,7 @@ bool MessageObject::saveMessage(const QString &basePath, QString &currentUser, b
     }
 
     // process images list
-    for (const ImageDetails &image : imagesList) {
+    for (ImageDetails &image : imagesList) {
         // get full file path
         if (!image.path.isEmpty()) {
             QString fullFilePath = image.path;
@@ -920,19 +925,36 @@ bool MessageObject::saveMessage(const QString &basePath, QString &currentUser, b
                 }
             }
 
-            // TODO check if filename is unique
-
-            // copy file to assets folder
-            //TODO move assets belonging to draft
-            if (!QFile::copy(fullFilePath, dirPath + "/assets/" + image.name)) {
-                // display error
-                QMessageBox msgBox;
-                msgBox.setText(QObject::tr("Error on copying assets!"));
-                msgBox.exec();
-                return false;
+            if (wasDraft) { // move assets belonging to draft to new assets folder
+                // assure filename is unique
+                while (QFileInfo::exists(dirPath + "/assets/" + image.name)) {
+                    image.name = QUuid::createUuid().toString() + image.name;
+                }
+                if (!QFile::rename(fullFilePath, dirPath + "/assets/" + image.name)) {
+                    // display error
+                    QMessageBox msgBox;
+                    msgBox.setText(QObject::tr("Error on moving assets!"));
+                    msgBox.exec();
+                    return false;
+                }
+            } else { // copy file to assets folder
+                // assure filename is unique
+                while (QFileInfo::exists(dirPath + "/assets/" + image.name)) {
+                    image.name = QUuid::createUuid().toString() + image.name;
+                }
+                if (!QFile::copy(fullFilePath, dirPath + "/assets/" + image.name)) {
+                    // display error
+                    QMessageBox msgBox;
+                    msgBox.setText(QObject::tr("Error on copying assets!"));
+                    msgBox.exec();
+                    return false;
+                }
             }
         }
     }
+
+    QJsonObject content;
+    buildJson(content, currentUser, isDraft);
 
     // write contents to file
     QString filePath = dirPath + "/messages/" + messageId.toString() + ".json";

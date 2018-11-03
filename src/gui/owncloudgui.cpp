@@ -29,6 +29,7 @@
 #include "messages/videowindow.h"
 #include "messages/messageswindow.h"
 #include "sharee.h"
+#include "ocsshareejob.h"
 #include "logger.h"
 #include "logbrowser.h"
 #include "account.h"
@@ -1107,17 +1108,52 @@ void ownCloudGui::slotShowMessages()
                     slotLogin();
                     return;
                 } else {
-                    QSharedPointer<Sharee> _currentUser(new Sharee(accountState->account()->credentials()->user(), "", Sharee::Type::User));
-                    _messagesWindow = new MessagesWindow(_currentUser.data()->shareWith(), folder->cleanPath());
+                    // start searching for possible recipients, when finished a messagesWindow will be created
+
+                    // filter for users, ignore groups and externs
+                    QString _search = "";
+                    QString _type = "User";
+
+                    OcsShareeJob *job = new OcsShareeJob(accountState->account());
+                    connect(job, &OcsShareeJob::shareeJobFinished, this, &ownCloudGui::recipientsFetched);
+                    job->getSharees(_search, _type, 1, 50);
+                    return;
                 }
             }
+        } else {
+            _messagesWindow->show();
+            raiseDialog(_messagesWindow);
         }
-        _messagesWindow->show();
-        raiseDialog(_messagesWindow);
     } else {
         qCInfo(lcApplication) << "No configured folders yet, starting setup wizard";
         slotNewAccountWizard();
     }
+}
+
+void ownCloudGui::recipientsFetched(const QJsonDocument &reply)
+{
+    // search for users (possible recipients), ignore groups and externs
+    auto data = reply.object().value("ocs").toObject().value("data").toObject();
+
+    QVector<QSharedPointer<Sharee>> newSharees;
+
+    auto users = data.value("users").toArray();
+    for (const auto &user : users) {
+        const QString displayName = user.toObject().value("label").toString();
+        const QString shareWith = user.toObject().value("value").toObject().value("shareWith").toString();
+        Sharee::Type type = (Sharee::Type)user.toObject().value("value").toObject().value("shareType").toInt();
+
+        newSharees.append(QSharedPointer<Sharee>(new Sharee(shareWith, displayName, type)));
+    }
+
+    // set current user
+    QSharedPointer<Sharee> _currentUser(new Sharee(FolderMan::instance()->map().first()->accountState()->account()->credentials()->user(), FolderMan::instance()->map().first()->accountState()->account()->davDisplayName(), Sharee::Type::User));
+
+    // create messagesWindow
+    if (_messagesWindow) _messagesWindow->deleteLater();
+    _messagesWindow = new MessagesWindow(*_currentUser.data(), FolderMan::instance()->map().first()->cleanPath(), newSharees);
+    _messagesWindow->show();
+    raiseDialog(_messagesWindow);
 }
 
 void ownCloudGui::slotShowSettings()

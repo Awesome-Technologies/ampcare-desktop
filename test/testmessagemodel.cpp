@@ -48,7 +48,7 @@ public:
 private slots:
     void init()
     {
-        model = new MessageModel(rootPath + "/AMP", "myself");
+        model = new MessageModel(rootPath + "/AMP", Sharee("myself", "myself", Sharee::User));
     }
 
     void cleanup()

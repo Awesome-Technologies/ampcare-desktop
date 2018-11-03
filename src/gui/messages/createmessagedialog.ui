@@ -1,0 +1,1069 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OCC::CreateMessageDialog</class>
+ <widget class="QDialog" name="OCC::CreateMessageDialog">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1019</width>
+    <height>666</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>New message</string>
+  </property>
+  <property name="locale">
+   <locale language="German" country="Germany"/>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_14">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_6">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_9">
+       <item>
+        <widget class="QLabel" name="label_15">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="locale">
+          <locale language="German" country="Germany"/>
+         </property>
+         <property name="text">
+          <string>Message title</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="lineEdit_messageTitle">
+         <property name="locale">
+          <locale language="German" country="Germany"/>
+         </property>
+         <property name="text">
+          <string/>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_8">
+       <item>
+        <widget class="QLabel" name="label_16">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="locale">
+          <locale language="German" country="Germany"/>
+         </property>
+         <property name="text">
+          <string>Recipient</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_recipient">
+         <property name="locale">
+          <locale language="German" country="Germany"/>
+         </property>
+         <item>
+          <property name="text">
+           <string comment="1">Dr. Max Mustermann</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_7">
+       <item>
+        <widget class="QLabel" name="label_22">
+         <property name="font">
+          <font>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="locale">
+          <locale language="German" country="Germany"/>
+         </property>
+         <property name="text">
+          <string>Severity</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="comboBox_severity">
+         <property name="locale">
+          <locale language="German" country="Germany"/>
+         </property>
+         <item>
+          <property name="text">
+           <string>Info</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../../../theme.qrc">
+            <normaloff>:/client/theme/amp/icon_d_info.png</normaloff>:/client/theme/amp/icon_d_info.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Request</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../../../theme.qrc">
+            <normaloff>:/client/theme/amp/icon_c_good.png</normaloff>:/client/theme/amp/icon_c_good.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Urgent</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../../../theme.qrc">
+            <normaloff>:/client/theme/amp/icon_b_urgent.png</normaloff>:/client/theme/amp/icon_b_urgent.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Critical</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../../../theme.qrc">
+            <normaloff>:/client/theme/amp/icon_a_critical.png</normaloff>:/client/theme/amp/icon_a_critical.png</iconset>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_16">
+     <item>
+      <widget class="QLabel" name="label_28">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>Employee</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_requester">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_29">
+       <property name="text">
+        <string>/</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_initials"/>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_9">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_7">
+     <item>
+      <widget class="QLabel" name="label_14">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="locale">
+        <locale language="German" country="Germany"/>
+       </property>
+       <property name="text">
+        <string>Message content</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QPlainTextEdit" name="plainTextEdit_messageBody">
+     <property name="locale">
+      <locale language="German" country="Germany"/>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="spacing">
+      <number>23</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="label_25">
+       <property name="locale">
+        <locale language="German" country="Germany"/>
+       </property>
+       <property name="text">
+        <string>Patient name</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="lineEdit_patientName">
+       <property name="locale">
+        <locale language="German" country="Germany"/>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_27">
+       <property name="text">
+        <string>Gender</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboBox_gender">
+       <item>
+        <property name="text">
+         <string>male</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>female</string>
+        </property>
+       </item>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_26">
+       <property name="locale">
+        <locale language="German" country="Germany"/>
+       </property>
+       <property name="text">
+        <string>Day of birth</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDateEdit" name="dateEditBirthday">
+       <property name="displayFormat">
+        <string>dd.MM.yyyy</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_13">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_12" stretch="0,0,4">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_11">
+         <item>
+          <widget class="QLabel" name="label_Vitaldaten">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="locale">
+            <locale language="German" country="Germany"/>
+           </property>
+           <property name="text">
+            <string>Current vital data</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_12">
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label">
+           <property name="locale">
+            <locale language="German" country="Germany"/>
+           </property>
+           <property name="text">
+            <string>Value</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_7">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_2">
+           <property name="locale">
+            <locale language="German" country="Germany"/>
+           </property>
+           <property name="text">
+            <string>measured</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout">
+           <item>
+            <widget class="QLabel" name="label_3">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>Blood pressure</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_4">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>Pulse</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_5">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>Temperature</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_6">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>Blood sugar</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_23">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>Weight</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_2">
+           <property name="spacing">
+            <number>-1</number>
+           </property>
+           <item>
+            <layout class="QHBoxLayout" name="horizontalLayout" stretch="10,1,10">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLineEdit" name="lineEdit_bpSys">
+               <property name="locale">
+                <locale language="German" country="Germany"/>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string>/</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLineEdit" name="lineEdit_bpDia">
+               <property name="locale">
+                <locale language="German" country="Germany"/>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_pulse">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_temperature">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_bloodsugar">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_bodyweight">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_4">
+           <item>
+            <widget class="QLabel" name="label_11">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>mmHg</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_10">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>bpm</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_9">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>°C</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_8">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>mg/dl</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_24">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>kg</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_3">
+           <item>
+            <widget class="QDateTimeEdit" name="dateTime_bloodpressure">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="date">
+              <date>
+               <year>2018</year>
+               <month>6</month>
+               <day>15</day>
+              </date>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDateTimeEdit" name="dateTime_pulse">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="date">
+              <date>
+               <year>2018</year>
+               <month>6</month>
+               <day>15</day>
+              </date>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDateTimeEdit" name="dateTime_temperature">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="date">
+              <date>
+               <year>2018</year>
+               <month>6</month>
+               <day>15</day>
+              </date>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDateTimeEdit" name="dateTime_bloodsugar">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="date">
+              <date>
+               <year>2018</year>
+               <month>6</month>
+               <day>15</day>
+              </date>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDateTimeEdit" name="dateTime_bodyweight">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="date">
+              <date>
+               <year>2018</year>
+               <month>6</month>
+               <day>15</day>
+              </date>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_11" stretch="0,0,1">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_8">
+         <item>
+          <widget class="QLabel" name="label_13">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="locale">
+            <locale language="German" country="Germany"/>
+           </property>
+           <property name="text">
+            <string>Anamnesis</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_3">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_5">
+           <item>
+            <widget class="QLabel" name="label_18">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>Responsiveness</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_19">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>Pain</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_20">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>Last defecation</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_21">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="text">
+              <string>Other</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+         <item>
+          <layout class="QVBoxLayout" name="verticalLayout_6">
+           <item>
+            <widget class="QLineEdit" name="lineEdit_responsiveness">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_pain">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDateTimeEdit" name="dateTime_lastDefecation">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+             <property name="date">
+              <date>
+               <year>2018</year>
+               <month>6</month>
+               <day>13</day>
+              </date>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_misc">
+             <property name="locale">
+              <locale language="German" country="Germany"/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_10">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_9">
+         <item>
+          <widget class="QLabel" name="label_17">
+           <property name="font">
+            <font>
+             <weight>75</weight>
+             <bold>true</bold>
+            </font>
+           </property>
+           <property name="locale">
+            <locale language="German" country="Germany"/>
+           </property>
+           <property name="text">
+            <string>Attached images</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QListWidget" name="listWidget_images">
+         <property name="locale">
+          <locale language="German" country="Germany"/>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_10">
+         <item>
+          <widget class="QPushButton" name="button_addImage">
+           <property name="locale">
+            <locale language="German" country="Germany"/>
+           </property>
+           <property name="text">
+            <string>Attach image</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="button_deleteImage">
+           <property name="locale">
+            <locale language="German" country="Germany"/>
+           </property>
+           <property name="text">
+            <string>Delete image</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_14">
+     <item>
+      <widget class="QLabel" name="label_12">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="locale">
+        <locale language="German" country="Germany"/>
+       </property>
+       <property name="text">
+        <string>Current medication</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_8">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_15" stretch="1,0">
+     <item>
+      <widget class="QTableWidget" name="tableWidget">
+       <column>
+        <property name="text">
+         <string>Active agent</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Brand</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Strength</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Form</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>mo</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>no</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>ev</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>ni</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Unit</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Note</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Patient instruction</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout_13">
+       <item>
+        <widget class="QToolButton" name="addRow">
+         <property name="text">
+          <string>+</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QToolButton" name="deleteRow">
+         <property name="text">
+          <string>-</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="locale">
+        <locale language="German" country="Germany"/>
+       </property>
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Discard|QDialogButtonBox::Ok|QDialogButtonBox::Save</set>
+       </property>
+       <property name="centerButtons">
+        <bool>false</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>lineEdit_messageTitle</tabstop>
+  <tabstop>comboBox_recipient</tabstop>
+  <tabstop>comboBox_severity</tabstop>
+  <tabstop>lineEdit_initials</tabstop>
+  <tabstop>plainTextEdit_messageBody</tabstop>
+  <tabstop>lineEdit_patientName</tabstop>
+  <tabstop>comboBox_gender</tabstop>
+  <tabstop>dateEditBirthday</tabstop>
+  <tabstop>lineEdit_bpSys</tabstop>
+  <tabstop>lineEdit_bpDia</tabstop>
+  <tabstop>dateTime_bloodpressure</tabstop>
+  <tabstop>lineEdit_pulse</tabstop>
+  <tabstop>dateTime_pulse</tabstop>
+  <tabstop>lineEdit_temperature</tabstop>
+  <tabstop>dateTime_temperature</tabstop>
+  <tabstop>lineEdit_bloodsugar</tabstop>
+  <tabstop>dateTime_bloodsugar</tabstop>
+  <tabstop>lineEdit_bodyweight</tabstop>
+  <tabstop>dateTime_bodyweight</tabstop>
+  <tabstop>lineEdit_responsiveness</tabstop>
+  <tabstop>lineEdit_pain</tabstop>
+  <tabstop>dateTime_lastDefecation</tabstop>
+  <tabstop>lineEdit_misc</tabstop>
+  <tabstop>listWidget_images</tabstop>
+  <tabstop>button_addImage</tabstop>
+  <tabstop>button_deleteImage</tabstop>
+  <tabstop>tableWidget</tabstop>
+  <tabstop>addRow</tabstop>
+  <tabstop>deleteRow</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../../theme.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>OCC::CreateMessageDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>248</x>
+     <y>254</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>OCC::CreateMessageDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>316</x>
+     <y>260</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

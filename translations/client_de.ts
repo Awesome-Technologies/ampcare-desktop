@@ -635,6 +635,29 @@
     </message>
 </context>
 <context>
+    <name>OCC::CreateMessageDialog</name>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.cpp" line="199"/>
+        <source>Attach image</source>
+        <translation>Bild anhängen</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.cpp" line="48"/>
+        <source>Send</source>
+        <translation>Senden</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.cpp" line="49"/>
+        <source>Save as draft</source>
+        <translation>Entwurf speichern</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.cpp" line="50"/>
+        <source>Don&apos;t save</source>
+        <translation>Nicht speichern</translation>
+    </message>
+</context>
+<context>
     <name>OCC::DiscoveryMainThread</name>
     <message>
         <location filename="../src/libsync/discoveryphase.cpp" line="613"/>
@@ -1527,6 +1550,331 @@ Objekte, bei denen Löschen erlaubt ist, werden gelöscht, wenn diese die Lösch
         <location filename="../src/libsync/logger.cpp" line="196"/>
         <source>&lt;nobr&gt;File &apos;%1&apos;&lt;br/&gt;cannot be opened for writing.&lt;br/&gt;&lt;br/&gt;The log output can &lt;b&gt;not&lt;/b&gt; be saved!&lt;/nobr&gt;</source>
         <translation>&lt;nobr&gt;Datei »%1«&lt;br/&gt;kann nicht zum Schreiben geöffnet werden.&lt;br/&gt;&lt;br/&gt;Die Protokolldatei kann &lt;b&gt;nicht&lt;/b&gt; gespeichert werden!&lt;/nobr&gt;</translation>
+    </message>
+</context>
+<context>
+    <name>OCC::CreateMessageDialog</name>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="17"/>
+        <source>New message</source>
+        <translation>Neue Nachricht</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="42"/>
+        <source>Message title</source>
+        <translation>Nachrichtentitel</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="72"/>
+        <source>Recipient</source>
+        <translation>Empfänger</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="83"/>
+        <source>Dr. Max Mustermann</source>
+        <comment>1</comment>
+        <translation>Dr. Max Mustermann</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="104"/>
+        <source>Severity</source>
+        <translation>Dringlichkeit</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="115"/>
+        <source>Info</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="124"/>
+        <source>Request</source>
+        <translation>Anfrage</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="133"/>
+        <source>Urgent</source>
+        <translation>Dringend</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="142"/>
+        <source>Critical</source>
+        <translation>Kritisch</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="166"/>
+        <source>Employee</source>
+        <translation>Mitarbeitername</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="173"/>
+        <source>TextLabel</source>
+        <translation>TextLabel</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="180"/>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="470"/>
+        <source>/</source>
+        <translation>/</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="216"/>
+        <source>Message content</source>
+        <translation>Nachrichtentext</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="253"/>
+        <source>Patient name</source>
+        <translation>Patientenname</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="270"/>
+        <source>Gender</source>
+        <translation>Geschlecht</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="278"/>
+        <source>male</source>
+        <translation>männlich</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="283"/>
+        <source>female</source>
+        <translation>weiblich</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="294"/>
+        <source>Day of birth</source>
+        <translation>Geburtsdatum</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="301"/>
+        <source>dd.MM.yyyy</source>
+        <translation>dd.MM.yyyy</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="325"/>
+        <source>Current vital data</source>
+        <translation>Aktuelle Vitaldaten</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="365"/>
+        <source>Value</source>
+        <translation>Wert</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="388"/>
+        <source>measured</source>
+        <translation>gemessen am</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="404"/>
+        <source>Blood pressure</source>
+        <translation>Blutdruck</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="414"/>
+        <source>Pulse</source>
+        <translation>Puls</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="424"/>
+        <source>Temperature</source>
+        <translation>Temperatur</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="434"/>
+        <source>Blood sugar</source>
+        <translation>Blutzucker</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="444"/>
+        <source>Weight</source>
+        <translation>Gewicht</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="521"/>
+        <source>mmHg</source>
+        <translation>mmHg</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="531"/>
+        <source>bpm</source>
+        <translation>bpm</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="541"/>
+        <source>°C</source>
+        <translation>°C</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="551"/>
+        <source>mg/dl</source>
+        <translation>mg/dl</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="561"/>
+        <source>kg</source>
+        <translation>kg</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="661"/>
+        <source>Anamnesis</source>
+        <translation>Anamnese</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="703"/>
+        <source>Responsiveness</source>
+        <translation>Ansprechbarkeit</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="713"/>
+        <source>Pain</source>
+        <translation>Schmerzen</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="723"/>
+        <source>Last defecation</source>
+        <translation>letzter Stuhlgang</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="733"/>
+        <source>Other</source>
+        <translation>Sonstiges</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="798"/>
+        <source>Attached images</source>
+        <translation>Angehängte Bilder</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="832"/>
+        <source>Attach image</source>
+        <translation>Bild anhängen</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="842"/>
+        <source>Delete image</source>
+        <translation>Bild löschen</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="866"/>
+        <source>Current medication</source>
+        <translation>Aktuelle Medikation</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="891"/>
+        <source>Active agent</source>
+        <translation>Wirkstoff</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="896"/>
+        <source>Brand</source>
+        <translation>Handelsname</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="901"/>
+        <source>Strength</source>
+        <translation>Stärke</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="906"/>
+        <source>Form</source>
+        <translation>Form</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="911"/>
+        <source>mo</source>
+        <translation>mo</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="916"/>
+        <source>no</source>
+        <translation>mi</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="921"/>
+        <source>ev</source>
+        <translation>ab</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="926"/>
+        <source>ni</source>
+        <translation>na</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="931"/>
+        <source>Unit</source>
+        <translation>Einheit</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="936"/>
+        <source>Note</source>
+        <translation>Hinweise</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="941"/>
+        <source>Patient instruction</source>
+        <translation>Grund</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="951"/>
+        <source>+</source>
+        <translation>+</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.ui" line="958"/>
+        <source>-</source>
+        <translation>-</translation>
+    </message>
+</context>
+<context>
+    <name>OCC::MessageModel</name>
+    <message>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="57"/>
+        <source>Title</source>
+        <translation>Titel</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="59"/>
+        <source>Date</source>
+        <translation>Datum</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="61"/>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+</context>
+<context>
+    <name>OCC::MessagesWindow</name>
+    <message>
+        <location filename="../src/gui/messages/messageswindow.ui" line="17"/>
+        <source>Messages</source>
+        <translation>Nachrichten</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messageswindow.ui" line="65"/>
+        <source>New message</source>
+        <translation>Neue Nachricht</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messageswindow.ui" line="97"/>
+        <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.SF NS Text&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messageswindow.ui" line="113"/>
+        <source>Resolved</source>
+        <translation>Erledigt</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messageswindow.ui" line="136"/>
+        <source>Archive</source>
+        <translation>Archivieren</translation>
     </message>
 </context>
 <context>

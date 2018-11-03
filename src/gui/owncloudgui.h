@@ -126,6 +126,7 @@ private slots:
     void slotUnpauseAllFolders();
     void slotPauseAllFolders();
     void slotNewAccountWizard();
+    void recipientsFetched(const QJsonDocument &reply);
 
 private:
     void setPauseOnAllFoldersHelper(bool pause);

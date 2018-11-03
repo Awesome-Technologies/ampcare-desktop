@@ -45,9 +45,10 @@ public:
         SortRole = Qt::UserRole,
         DetailRole,
         StatusRole,
+        MessageObjectRole,
     };
 
-    MessageModel(const QString &rootPath, const QString &currentUser, QObject *parent = 0);
+    MessageModel(const QString &rootPath, const Sharee &currentUser, QObject *parent = 0);
     virtual ~MessageModel();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -67,7 +68,7 @@ private slots:
 
 private:
     QString _rootPath;
-    QString _currentUser;
+    Sharee _currentUser;
     QFileSystemWatcher _watcher;
     QStringList _filters;
     QList<MessageObject> _messageList;

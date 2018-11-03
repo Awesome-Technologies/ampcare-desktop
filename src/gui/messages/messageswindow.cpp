@@ -12,6 +12,7 @@
  * for more details.
  */
 
+#include "createmessagedialog.h"
 #include "messagemodel.h"
 #include "messageswindow.h"
 #include "styledhtmldelegate.h"
@@ -21,13 +22,15 @@
 
 namespace OCC {
 
-MessagesWindow::MessagesWindow(const QString &_currentUser,
+MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     const QString &localPath,
+    const QVector<QSharedPointer<Sharee>> &recipientList,
     QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MessagesWindow)
     , messageModel(new MessageModel(localPath + "/AMP", _currentUser, this))
     , filterProxy(new QSortFilterProxyModel(this))
+    , _createMessageDialog(new CreateMessageDialog(recipientList, localPath + "/AMP", _currentUser, this))
     , currentUser(_currentUser)
     , localPath(localPath)
 {
@@ -63,7 +66,23 @@ void MessagesWindow::slotShowDetails(const QModelIndex &current, const QModelInd
     ui->detailView->setHtml(filterProxy->data(current, MessageModel::DetailRole).toString().toUtf8(), QUrl("qrc:/"));
 
     // set message status to 'read'
-    filterProxy->setData(current, currentUser, MessageModel::StatusRole);
+    filterProxy->setData(current, currentUser.shareWith(), MessageModel::StatusRole);
+}
+
+void MessagesWindow::on_messageList_doubleClicked(const QModelIndex &index)
+{
+    // load values into dialog
+    _createMessageDialog->reset();
+    MessageObject _messageItem(filterProxy->data(index, MessageModel::MessageObjectRole).value<MessageObject>());
+    _createMessageDialog->setValues(_messageItem);
+    _createMessageDialog->show();
+}
+
+void MessagesWindow::on_createMessageButton_clicked()
+{
+    // reset dialog/messageId
+    _createMessageDialog->reset();
+    _createMessageDialog->show();
 }
 
 } // end namespace

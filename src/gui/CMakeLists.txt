@@ -34,6 +34,7 @@ set(client_UI_SRCS
     addcertificatedialog.ui
     proxyauthdialog.ui
     mnemonicdialog.ui
+    messages/createmessagedialog.ui
     messages/messageswindow.ui
     messages/videowindow.ui
     wizard/owncloudadvancedsetuppage.ui
@@ -106,6 +107,7 @@ set(client_SRCS
     creds/oauth.cpp
     creds/webflowcredentials.cpp
     creds/webflowcredentialsdialog.cpp
+    messages/createmessagedialog.cpp
     messages/messagemodel.cpp
     messages/messageobject.cpp
     messages/messageswindow.cpp

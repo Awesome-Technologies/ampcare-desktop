@@ -21,7 +21,7 @@
 
 namespace OCC {
 
-MessageModel::MessageModel(const QString &rootPath, const QString &currentUser, QObject *parent)
+MessageModel::MessageModel(const QString &rootPath, const Sharee &currentUser, QObject *parent)
     : QAbstractTableModel(parent)
     , _rootPath(rootPath)
     , _currentUser(currentUser)
@@ -129,6 +129,10 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
     // current status of message
     case StatusRole:
         return QVariant(_messageItem.status);
+
+    // message object
+    case MessageObjectRole:
+        return QVariant::fromValue<MessageObject>(_messageItem);
     }
 
     return QVariant();

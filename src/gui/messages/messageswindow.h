@@ -16,11 +16,13 @@
 #define MESSAGESWINDOW_H
 
 #include <QMainWindow>
+#include <sharee.h>
 
 class QSortFilterProxyModel;
 
 namespace OCC {
 
+class CreateMessageDialog;
 class MessageModel;
 
 namespace Ui {
@@ -36,8 +38,9 @@ class MessagesWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MessagesWindow(const QString &_currentUser,
+    MessagesWindow(const Sharee &_currentUser,
         const QString &localPath,
+        const QVector<QSharedPointer<Sharee>> &recipientList,
         QWidget *parent = 0);
     virtual ~MessagesWindow();
 
@@ -45,13 +48,20 @@ private:
     Ui::MessagesWindow *ui;
     MessageModel *messageModel;
     QSortFilterProxyModel *filterProxy;
+    CreateMessageDialog *_createMessageDialog;
 
-    const QString currentUser;
+    const Sharee currentUser;
     const QString localPath;
 
 private slots:
     /** shows content of the message in the detailView */
     void slotShowDetails(const QModelIndex &current, const QModelIndex &previous);
+
+    /** item at @p index in message list got double clicked */
+    void on_messageList_doubleClicked(const QModelIndex &index);
+
+    /** show dialog to create a new message */
+    void on_createMessageButton_clicked();
 };
 
 } // namespace OCC
