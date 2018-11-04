@@ -69,7 +69,7 @@ private:
     QString _currentUser;
     QFileSystemWatcher _watcher;
     QStringList _filters;
-    QStringList _fileList;
+    QList<MessageObject> _messageList;
 
     void addEntities();
     void addMessages(const QString &path);

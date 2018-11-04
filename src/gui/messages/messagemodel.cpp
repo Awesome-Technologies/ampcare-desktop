@@ -36,7 +36,7 @@ MessageModel::~MessageModel() {}
 
 int MessageModel::rowCount(const QModelIndex &parent) const
 {
-    return parent.isValid() ? 0 : _fileList.size();
+    return parent.isValid() ? 0 : _messageList.size();
 }
 
 int MessageModel::columnCount(const QModelIndex &parent) const
@@ -69,7 +69,7 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
     if (!index.isValid() || index.model() != this)
         return QVariant();
 
-    MessageObject _messageItem(_fileList.at(index.row()));
+    const MessageObject &_messageItem = _messageList.at(index.row());
 
     switch (role) {
     // data for viewing on listView separated into columns
@@ -123,7 +123,7 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
 
 bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    MessageObject _messageItem(_fileList.at(index.row()));
+    MessageObject _messageItem = _messageList.value(index.row());
 
     switch (role) {
     // set new status - message was read
@@ -173,7 +173,7 @@ void MessageModel::addMessages(const QString &path)
     _watcher.addPath(messagePath);
     for (const QFileInfo &info : QDir(messagePath).entryInfoList(_filters, QDir::Files)) {
         qInfo() << "add" << info.absoluteFilePath();
-        _fileList << info.absoluteFilePath();
+        _messageList << MessageObject(info.absoluteFilePath());
     }
 }
 
@@ -181,7 +181,7 @@ void MessageModel::onDirectoryChanged(const QString &path)
 {
     qInfo() << "directory changed" << path;
     _watcher.removePaths(_watcher.directories());
-    _fileList.clear();
+    _messageList.clear();
     addEntities();
 }
 
