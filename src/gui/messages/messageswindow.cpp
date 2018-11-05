@@ -17,6 +17,8 @@
 #include "styledhtmldelegate.h"
 #include "ui_messageswindow.h"
 
+#include <QSortFilterProxyModel>
+
 namespace OCC {
 
 MessagesWindow::MessagesWindow(const QString &_currentUser,
@@ -25,14 +27,19 @@ MessagesWindow::MessagesWindow(const QString &_currentUser,
     : QMainWindow(parent)
     , ui(new Ui::MessagesWindow)
     , messageModel(new MessageModel(localPath + "/AMP", _currentUser, this))
+    , filterProxy(new QSortFilterProxyModel(this))
     , currentUser(_currentUser)
     , localPath(localPath)
 {
     ui->setupUi(this);
 
+    filterProxy->setSourceModel(messageModel);
+    filterProxy->setSortRole(MessageModel::SortRole);
+    filterProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
+
     // set message delegate to listview
     QTableView *msgList = ui->messageList;
-    msgList->setModel(messageModel);
+    msgList->setModel(filterProxy);
     msgList->setItemDelegateForColumn(MessageModel::TitleColumn, new StyledHtmlDelegate(this));
     msgList->setColumnWidth(MessageModel::PriorityColumn, MessageObject::ICON_IMAGE_HEIGHT + 10);
     msgList->setColumnWidth(MessageModel::TitleColumn, 220);
@@ -53,10 +60,10 @@ MessagesWindow::~MessagesWindow()
 
 void MessagesWindow::slotShowDetails(const QModelIndex &current, const QModelIndex &)
 {
-    ui->detailView->setHtml(messageModel->data(current, MessageModel::DetailRole).toString().toUtf8(), QUrl("qrc:/"));
+    ui->detailView->setHtml(filterProxy->data(current, MessageModel::DetailRole).toString().toUtf8(), QUrl("qrc:/"));
 
     // set message status to 'read'
-    messageModel->setData(current, currentUser, MessageModel::StatusRole);
+    filterProxy->setData(current, currentUser, MessageModel::StatusRole);
 }
 
 } // end namespace

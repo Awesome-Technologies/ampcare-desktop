@@ -17,6 +17,8 @@
 
 #include <QMainWindow>
 
+class QSortFilterProxyModel;
+
 namespace OCC {
 
 class MessageModel;
@@ -42,6 +44,7 @@ public:
 private:
     Ui::MessagesWindow *ui;
     MessageModel *messageModel;
+    QSortFilterProxyModel *filterProxy;
 
     const QString currentUser;
     const QString localPath;

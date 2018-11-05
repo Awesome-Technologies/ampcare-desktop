@@ -109,6 +109,19 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
         }
         return Qt::AlignLeft;
 
+    case SortRole:
+        switch (index.column()) {
+        case PriorityColumn:
+            return _messageItem.priority;
+        case TitleColumn:
+            return _messageItem.title;
+        case DateColumn:
+            return _messageItem.authoredOn;
+        case StatusColumn:
+            return _messageItem.status;
+        }
+        break;
+
     // data for detailView (html)
     case DetailRole:
         return QVariant(_messageItem.details());

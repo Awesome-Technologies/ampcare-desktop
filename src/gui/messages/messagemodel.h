@@ -42,7 +42,8 @@ public:
 
     /** See also QFileSystemModel::Roles */
     enum Roles {
-        DetailRole = Qt::UserRole,
+        SortRole = Qt::UserRole,
+        DetailRole,
         StatusRole,
     };
 
