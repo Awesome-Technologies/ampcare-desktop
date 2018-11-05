@@ -66,6 +66,10 @@ private slots:
     void on_createMessageButton_clicked();
     void on_resolvedButton_clicked();
     void on_archiveButton_clicked();
+    void on_videocallButton_clicked();
+
+signals:
+    void callRecipientChanged(QString callRecipient);
 };
 
 } // namespace OCC

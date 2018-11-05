@@ -1059,7 +1059,7 @@ void ownCloudGui::slotShowGuiMessage(const QString &title, const QString &messag
 }
 
 // show the video window
-void ownCloudGui::slotShowVideo()
+void ownCloudGui::slotShowVideo(QString callRecipient)
 {
     // if account is set up, show the video window
     auto accountList = AccountManager::instance()->accounts();
@@ -1072,6 +1072,9 @@ void ownCloudGui::slotShowVideo()
         // show video window with default url of first account
         // TODO This is OK since we only support a single account
         QString _completeUrl = accountList.first()->account()->url().toString() + "/apps/spreed/";
+        if (callRecipient != "") {
+            _completeUrl += "?callUser=" + callRecipient;
+        }
         QUrl url(_completeUrl);
         _videoWindow->setUrl(url);
         _videoWindow->show();
@@ -1152,6 +1155,8 @@ void ownCloudGui::recipientsFetched(const QJsonDocument &reply)
     // create messagesWindow
     if (_messagesWindow) _messagesWindow->deleteLater();
     _messagesWindow = new MessagesWindow(*_currentUser.data(), FolderMan::instance()->map().first()->cleanPath(), newSharees);
+    QObject::connect(_messagesWindow, SIGNAL(callRecipientChanged(QString)), this, SLOT(slotShowVideo(QString)));
+
     _messagesWindow->show();
     raiseDialog(_messagesWindow);
 }

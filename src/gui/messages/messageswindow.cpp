@@ -139,5 +139,13 @@ void MessagesWindow::on_resolvedButton_clicked()
     filterProxy->setData(ui->messageList->currentIndex(), "", MessageModel::MessageResolvedRole);
 }
 
+void MessagesWindow::on_videocallButton_clicked()
+{
+    MessageObject _messageItem(filterProxy->data(ui->messageList->currentIndex(), MessageModel::MessageObjectRole).value<MessageObject>());
+    QString _callRecipient = _messageItem.sender;
+    // change callRecipient of video window and show it
+    emit callRecipientChanged(_callRecipient);
+}
+
 
 } // end namespace

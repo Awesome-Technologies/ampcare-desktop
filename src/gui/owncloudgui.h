@@ -90,7 +90,7 @@ public slots:
     void slotFoldersChanged();
     void slotShowSettings();
     void slotShowSyncProtocol();
-    void slotShowVideo();
+    void slotShowVideo(QString callRecipient = QString());
     void slotShowMessages();
     void slotShutdown();
     void slotSyncStateChange(Folder *);

@@ -105,6 +105,26 @@ p, li { white-space: pre-wrap; }
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
+         <widget class="QPushButton" name="videocallButton">
+          <property name="text">
+           <string>Videocall</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
          <widget class="QPushButton" name="resolvedButton">
           <property name="enabled">
            <bool>false</bool>
@@ -149,7 +169,7 @@ p, li { white-space: pre-wrap; }
      <x>0</x>
      <y>0</y>
      <width>1020</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>
