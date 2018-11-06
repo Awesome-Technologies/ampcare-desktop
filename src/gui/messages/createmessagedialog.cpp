@@ -19,7 +19,7 @@
 #include <QDateTime>
 #include <QFileDialog>
 #include <QCompleter>
-
+#include <cmath>
 #include <sharee.h>
 
 #include "createmessagedialog.h"
@@ -106,24 +106,27 @@ void CreateMessageDialog::saveMessage(bool isDraft)
 {
     MessageObject messageObject;
 
+    messageObject.recipient = ui->comboBox_recipient->currentData().toString();
+    // if no recipient was selected, save as draft
+    if (messageObject.recipient == "")
+        isDraft = true;
+
     // message metadata
     messageObject.priority = MessageObject::Priority(ui->comboBox_severity->currentIndex());
     messageObject.title = ui->lineEdit_messageTitle->text();
     messageObject.initials = ui->lineEdit_initials->text();
     // message metadata
     if (!ui->plainTextEdit_messageBody->toPlainText().isEmpty()) {
-        messageObject.messageBody = ui->plainTextEdit_messageBody->toPlainText();
-        messageObject.note = "<tr><td><div class='messageSender'>" + currentUser.displayName() + "/" + messageObject.initials + "</div></td><td class='messageBody'>"
-            + messageObject.note + "</td><td class='messageDate'>" + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss") + "</td></tr>";
+        messageObject.note = ui->plainTextEdit_messageBody->toPlainText();
+        if (!isDraft) { // format message with html
+            messageObject.note = "<tr><td><div class='messageSender'>" + currentUser.displayName() + "/" + messageObject.initials + "</div></td><td class='messageBody'>"
+                + messageObject.note + "</td><td class='messageDate'>" + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss") + "</td></tr>";
+        }
     }
     if (!currentMessageId.isNull()) {
         messageObject.messageId = currentMessageId;
     }
 
-    messageObject.recipient = ui->comboBox_recipient->currentData().toString();
-    // if no recipient was selected, save as draft
-    if (messageObject.recipient == "")
-        isDraft = true;
     messageObject.recipientName = ui->comboBox_recipient->currentText();
     messageObject.sender = currentUser.shareWith();
     messageObject.senderName = currentUser.displayName();
@@ -256,7 +259,7 @@ void CreateMessageDialog::setValues(MessageObject message)
     _index = message.priority;
     ui->comboBox_severity->setCurrentIndex(_index);
 
-    ui->plainTextEdit_messageBody->setPlainText(message.messageBody);
+    ui->plainTextEdit_messageBody->setPlainText(message.note);
     ui->lineEdit_messageTitle->setText(message.title);
 
     ui->label_requester->setText(message.sender);
@@ -268,22 +271,33 @@ void CreateMessageDialog::setValues(MessageObject message)
     ui->comboBox_gender->setCurrentIndex(message.gender == MessageObject::MALE ? 0 : 1);
 
     // vital data
-    ui->lineEdit_pulse->setText(QString::number(message.pulse));
-    ui->dateTime_pulse->setDateTime(message.dtPulse);
+    if (message.pulse) {
+        ui->lineEdit_pulse->setText(QString::number(message.pulse));
+        ui->dateTime_pulse->setDateTime(message.dtPulse);
+    }
 
-    ui->lineEdit_bloodsugar->setText(QString::number(message.sugar));
-    ui->dateTime_bloodsugar->setDateTime(message.dtSugar);
+    if (!std::isnan(message.sugar)) {
+        ui->lineEdit_bloodsugar->setText(QString::number(message.sugar));
+        ui->dateTime_bloodsugar->setDateTime(message.dtSugar);
+    }
+
 
     // TODO double _temp = v.toObject().value("valueQuantity").toObject().value("value").toDouble();
-    ui->lineEdit_temperature->setText(QString::number(message.temp));
-    ui->dateTime_temperature->setDateTime(message.dtTemp);
+    if (!std::isnan(message.temp)) {
+        ui->lineEdit_temperature->setText(QString::number(message.temp));
+        ui->dateTime_temperature->setDateTime(message.dtTemp);
+    }
 
-    ui->lineEdit_bpSys->setText(QString::number(message.bpSys));
-    ui->lineEdit_bpDia->setText(QString::number(message.bpDia));
-    ui->dateTime_bloodpressure->setDateTime(message.dtBp);
+    if (message.bpSys || message.bpDia) {
+        ui->lineEdit_bpSys->setText(QString::number(message.bpSys));
+        ui->lineEdit_bpDia->setText(QString::number(message.bpDia));
+        ui->dateTime_bloodpressure->setDateTime(message.dtBp);
+    }
 
-    ui->lineEdit_bodyweight->setText(QString::number(message.weight));
-    ui->dateTime_bodyweight->setDateTime(message.dtWeight);
+    if (!std::isnan(message.weight)) {
+        ui->lineEdit_bodyweight->setText(QString::number(message.weight));
+        ui->dateTime_bodyweight->setDateTime(message.dtWeight);
+    }
 
     ui->dateTime_lastDefecation->setDateTime(message.dtDefac);
 

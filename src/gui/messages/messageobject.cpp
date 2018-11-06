@@ -456,10 +456,6 @@ void MessageObject::buildJson(QJsonObject &json, Sharee &currentUser, bool isDra
     // TODO sanitize inputs
 
     // message metadata
-    QString _note = "<tr><td><div class='messageSender'>" + currentUser.displayName() + "/" + initials + "</div></td><td class='messageBody'>"
-        + messageBody + "</td><td class='messageDate'>" + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss") + "</td></tr>";
-
-    // message metadata
     json["resourceType"] = "Message";
     json["id"] = messageId.toString();
 

@@ -75,7 +75,6 @@ public:
     Status status;
     QString title;
     QString initials;
-    QString messageBody;
     QString note;
     QString recipient;
     QString recipientName;
