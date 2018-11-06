@@ -128,7 +128,7 @@ public:
     void setJson(const QJsonObject &json);
 
     /** creates a HL7/FHIR conform json */
-    void buildJson(QJsonObject &json, Sharee &currentUser, bool isDraft) const;
+    void buildJson(QJsonObject &json, bool isDraft) const;
 
     /** writes message to file */
     bool saveMessage(const QString &basePath, Sharee &currentUser, bool isDraft);

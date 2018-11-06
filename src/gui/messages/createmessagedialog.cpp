@@ -250,7 +250,7 @@ void CreateMessageDialog::setValues(MessageObject message)
     // message metadata
 
     // set dropbox to correct selection
-    QString _recipient = message.recipient;
+    QString _recipient = message.recipientName;
     int _index = ui->comboBox_recipient->findText(_recipient);
     if (_index != -1) { // -1 for not found
         ui->comboBox_recipient->setCurrentIndex(_index);

@@ -345,10 +345,10 @@ void MessageObject::setJson(const QJsonObject &json)
         priority = Priority(json["priority"].toInt());
 
     if (json.contains("requester")) {
-        QStringList requester = json["requester"].toObject().value("agent").toObject().value("reference").toString().split("/");
+        sender = json["requester"].toObject().value("agent").toObject().value("reference").toString();
+        QStringList requester = json["requester"].toObject().value("agent").toObject().value("display").toString().split("/");
         initials = requester.value(1);
-        sender = requester.value(0);
-        senderName = json["requester"].toObject().value("agent").toObject().value("display").toString();
+        senderName = requester.value(0);
         recipient = json["requester"].toObject().value("onBehalfOf").toObject().value("reference").toString();
         recipientName = json["requester"].toObject().value("onBehalfOf").toObject().value("display").toString();
     }
@@ -451,7 +451,7 @@ void MessageObject::setJson(const QJsonObject &json)
     }
 }
 
-void MessageObject::buildJson(QJsonObject &json, Sharee &currentUser, bool isDraft) const
+void MessageObject::buildJson(QJsonObject &json, bool isDraft) const
 {
     // TODO sanitize inputs
 
@@ -489,9 +489,10 @@ void MessageObject::buildJson(QJsonObject &json, Sharee &currentUser, bool isDra
     QJsonObject requester;
     QJsonObject agent;
     QJsonObject onBehalfOf;
-    QString requesterReference = currentUser.shareWith() + "/" + initials;
+    QString requesterReference = sender;
     agent["reference"] = requesterReference;
-    agent["display"] = currentUser.displayName();
+    QString requesterDisplay = senderName + "/" + initials;
+    agent["display"] = requesterDisplay;
     onBehalfOf["reference"] = recipient;
     onBehalfOf["display"] = recipientName;
     requester.insert("agent", agent);
@@ -535,7 +536,7 @@ void MessageObject::buildJson(QJsonObject &json, Sharee &currentUser, bool isDra
     generalPractitioner["reference"] = recipient;
     patient["generalPractitioner"] = generalPractitioner;
     QJsonObject managingOrganization;
-    managingOrganization["reference"] = currentUser.shareWith();
+    managingOrganization["reference"] = sender;
     patient["managingOrganization"] = managingOrganization;
     payload.insert("patient", patient);
 
@@ -790,7 +791,7 @@ void MessageObject::buildJson(QJsonObject &json, Sharee &currentUser, bool isDra
         QJsonObject requester;
         QJsonObject agent;
         QJsonObject onBehalfOf;
-        agent["reference"] = currentUser.shareWith();
+        agent["reference"] = sender;
         onBehalfOf["reference"] = recipient;
         requester.insert("agent", agent);
         requester.insert("onBehalfOf", onBehalfOf);
@@ -907,8 +908,9 @@ bool MessageObject::saveMessage(const QString &basePath, Sharee &currentUser, bo
     // create filename and correct path
     // complete path: <basePath>/<recipientid>/messages/<messageId>.json
 
+    QString _userFolder = (recipient == currentUser.shareWith()) ? sender : recipient;
     // save drafts to drafts folder
-    QString dirPath = basePath + (isDraft ? QString("/drafts/") : QString("/" + recipient));
+    QString dirPath = basePath + (isDraft ? QString("/drafts/") : QString("/" + _userFolder));
 
     // create messages directory if it doesnt exist
     QDir dir(dirPath + "/messages/");
@@ -969,7 +971,7 @@ bool MessageObject::saveMessage(const QString &basePath, Sharee &currentUser, bo
     }
 
     QJsonObject content;
-    buildJson(content, currentUser, isDraft);
+    buildJson(content, isDraft);
 
     // write contents to file
     QString filePath = dirPath + "/messages/" + messageId.toString() + ".json";
