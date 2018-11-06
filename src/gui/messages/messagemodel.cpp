@@ -184,7 +184,6 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
     }
 
     if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {
-        emit dataChanged(index, index, QVector<int>() << role);
         return true;
     }
     return false;
@@ -193,6 +192,7 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
 void MessageModel::addEntities()
 {
     _watcher.addPath(_rootPath);
+    qInfo() << "watch"<< _rootPath;
     for (const QFileInfo &info : QDir(_rootPath).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         qInfo() << "entity" << info.absoluteFilePath();
         addMessages(info.absoluteFilePath());
@@ -203,6 +203,7 @@ void MessageModel::addMessages(const QString &path)
 {
     QString messagePath = path + "/messages";
     _watcher.addPath(messagePath);
+    qInfo() << "watch" << messagePath;
     for (const QFileInfo &info : QDir(messagePath).entryInfoList(_filters, QDir::Files)) {
         qInfo() << "add" << info.absoluteFilePath();
         _messageList << MessageObject(info.absoluteFilePath());
@@ -211,10 +212,12 @@ void MessageModel::addMessages(const QString &path)
 
 void MessageModel::onDirectoryChanged(const QString &path)
 {
+    emit layoutAboutToBeChanged();
     qInfo() << "directory changed" << path;
     _watcher.removePaths(_watcher.directories());
     _messageList.clear();
     addEntities();
+    emit layoutChanged();
 }
 
 } // end namespace OCC
