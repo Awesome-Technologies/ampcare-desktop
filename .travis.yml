@@ -11,7 +11,7 @@ install:
 script:
   - mkdir $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build
   - PATH="/usr/local/opt/qt/bin:$PATH" cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install
-    -DAPPLICATION_UPDATE_URL="https://updates.amp.care/client"
+    -DAPPLICATION_UPDATE_URL="https://updates.amp.care/client/"
     -DOEM_THEME_DIR="$TRAVIS_BUILD_DIR/theme/amp"
     -DMIRALL_VERSION_BUILD=$TRAVIS_BUILD_NUMBER
     -DMIRALL_VERSION_SUFFIX="alpha"
