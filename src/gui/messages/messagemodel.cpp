@@ -153,6 +153,9 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
         if (_messageItem.recipient == value.toString()) {
             if (_messageItem.status == MessageObject::SentStatus) {
                 _messageItem.status = MessageObject::ReadStatus;
+                if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {
+                    return true;
+                }
                 break;
             } else {
                 return true;
@@ -163,6 +166,9 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
         if (_messageItem.sender == value.toString()) {
             if (_messageItem.status == MessageObject::ResentStatus) {
                 _messageItem.status = MessageObject::RereadStatus;
+                if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {
+                    return true;
+                }
                 break;
             } else {
                 return true;
@@ -174,25 +180,28 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
     // set new status - message was resolved
     case MessageResolvedRole:
         _messageItem.status = MessageObject::ResolvedStatus;
+        if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {
+            return true;
+        }
         break;
 
     // set new status - message was archived
     case MessageArchivedRole:
         _messageItem.archivedFor.append({ _currentUser.shareWith(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss") });
         _messageItem.status = MessageObject::ArchivedStatus;
+        if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {
+            return true;
+        }
         break;
     }
 
-    if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {
-        return true;
-    }
     return false;
 }
 
 void MessageModel::addEntities()
 {
     _watcher.addPath(_rootPath);
-    qInfo() << "watch"<< _rootPath;
+    qInfo() << "watch" << _rootPath;
     for (const QFileInfo &info : QDir(_rootPath).entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
         qInfo() << "entity" << info.absoluteFilePath();
         addMessages(info.absoluteFilePath());
