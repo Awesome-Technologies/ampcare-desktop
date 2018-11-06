@@ -571,7 +571,7 @@
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.SF NS Text&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/messages/answermessagedialog.ui" line="78"/>
@@ -581,12 +581,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../src/gui/messages/answermessagedialog.ui" line="85"/>
         <source>TextLabel</source>
-        <translation type="unfinished">TextLabel</translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../src/gui/messages/answermessagedialog.ui" line="92"/>
         <source>/</source>
-        <translation type="unfinished"></translation>
+        <translation>/</translation>
     </message>
     <message>
         <location filename="../src/gui/messages/answermessagedialog.ui" line="128"/>
@@ -594,12 +594,12 @@ p, li { white-space: pre-wrap; }
         <translation>Antworttext</translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/answermessagedialog.cpp" line="33"/>
-        <source>Save</source>
-        <translation>Speichern</translation>
+        <location filename="../src/gui/messages/answermessagedialog.cpp" line="35"/>
+        <source>Send</source>
+        <translation>Senden</translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/answermessagedialog.cpp" line="34"/>
+        <location filename="../src/gui/messages/answermessagedialog.cpp" line="36"/>
         <source>Don&apos;t save</source>
         <translation>Nicht speichern</translation>
     </message>
@@ -1917,6 +1917,11 @@ p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;.SF NS Text&apos;; font-size:13pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messageswindow.ui" line="110"/>
+        <source>Videocall</source>
+        <translation>Videoanruf</translation>
     </message>
     <message>
         <location filename="../src/gui/messages/messageswindow.ui" line="113"/>
@@ -4508,6 +4513,18 @@ Es ist nicht ratsam, diese zu benutzen.</translation>
     <message>
         <source>Error on copying assets!</source>
         <translation>Fehler beim Kopieren der Anhänge!</translation>
+    </message>
+    <message>
+        <source>Error on moving assets!</source>
+        <translation>Fehler beim Verschieben der Anhänge!</translation>
+    </message>
+    <message>
+        <source>female</source>
+        <translation>weiblich</translation>
+    </message>
+    <message>
+        <source>male</source>
+        <translation>männlich</translation>
     </message>
 </context>
 <context>

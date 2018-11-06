@@ -32,7 +32,7 @@ AnswerMessageDialog::AnswerMessageDialog(Sharee currentUser, QString localPath, 
     ui->setupUi(this);
 
     // change button texts
-    ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Save"));
+    ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Send"));
     ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Don't save"));
 
     // connect button signals to slots

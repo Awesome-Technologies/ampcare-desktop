@@ -137,7 +137,7 @@ QString MessageObject::details() const
     static const char *YELLOW = "#F1C40F";
     static const char *BLUE = "#3498DB";
 
-    QString genderText = QObject::tr(gender == FEMALE ? "female" : "male");
+    QString genderText = gender == FEMALE ? QObject::tr("female") : QObject::tr("male");
 
     // urgencyColor sets interface color corresponding to the messages priority
     QString urgencyColor = BLUE;
