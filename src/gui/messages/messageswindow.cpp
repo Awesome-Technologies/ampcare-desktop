@@ -62,6 +62,7 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
 
     // connect slot for showing details of message on click on the message item in the listView
     connect(ui->messageList->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(slotShowDetails(QModelIndex, QModelIndex)));
+
     msgList->setCurrentIndex(messageModel->index(0, 0));
 }
 
@@ -70,7 +71,7 @@ MessagesWindow::~MessagesWindow()
     delete ui;
 }
 
-void MessagesWindow::slotShowDetails(const QModelIndex &current, const QModelIndex &)
+void MessagesWindow::slotShowDetails(const QModelIndex &current, const QModelIndex &previous)
 {
     // selection has changed -> disable resolved and archive button
     ui->resolvedButton->setEnabled(false);
@@ -78,8 +79,11 @@ void MessagesWindow::slotShowDetails(const QModelIndex &current, const QModelInd
 
     ui->detailView->setHtml(filterProxy->data(current, MessageModel::DetailRole).toString().toUtf8(), QUrl("qrc:/"));
 
-    // set message status to 'read'
-    filterProxy->setData(current, currentUser.shareWith(), MessageModel::StatusRole);
+    // update status only if selection has changed
+    if (current.row() != previous.row()) {
+        // set message status to 'read'
+        filterProxy->setData(current, currentUser.shareWith(), MessageModel::StatusRole);
+    }
 
     // is message 'read' and the user == receiver
     MessageObject _messageItem(filterProxy->data(current, MessageModel::MessageObjectRole).value<MessageObject>());
