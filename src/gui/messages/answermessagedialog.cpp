@@ -71,8 +71,10 @@ void AnswerMessageDialog::on_sendAnswer_clicked()
 
     // change css class corresponding to author of the text
     QString _messageClass = (message.sender == currentUser.shareWith()) ? "messageSender" : "messageRecipient";
-
     QString _newBodyText = QString("%1<tr><td><div class='%2'>%3/%4</div></td><td class='messageBody'>%5</td><td class='messageDate'>%6</td></tr>").arg(_oldBodyText, _messageClass, currentUser.displayName(), _initials, _text, QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"));
+
+    // change status of message
+    message.status = (message.sender == currentUser.shareWith()) ? MessageObject::SentStatus : MessageObject::ResentStatus;
 
     // write new message body
     message.note = _newBodyText;
