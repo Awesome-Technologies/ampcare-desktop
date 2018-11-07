@@ -16,13 +16,11 @@
 #define ANSWERMESSAGEDIALOG_H
 
 #include <QDialog>
-#include <QModelIndex>
-#include <QSortFilterProxyModel>
-#include <sharee.h>
 #include "ui_answermessagedialog.h"
 #include "messageobject.h"
 
 namespace OCC {
+class MessageModel;
 
 namespace Ui {
     class AnswerMessageDialog;
@@ -33,7 +31,7 @@ class AnswerMessageDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit AnswerMessageDialog(Sharee currentUser, QString localPath = "", QSortFilterProxyModel *proxyModel = 0, QWidget *parent = 0);
+    AnswerMessageDialog(MessageModel *model, QWidget *parent = 0);
     ~AnswerMessageDialog();
 
     /**
@@ -56,10 +54,7 @@ public:
 private:
     Ui::AnswerMessageDialog *ui;
     MessageObject message;
-    Sharee currentUser;
-    QString tempFile;
-    QSortFilterProxyModel *filterProxy;
-    QString basePath;
+    MessageModel *model;
 
 private slots:
     void on_sendAnswer_clicked();

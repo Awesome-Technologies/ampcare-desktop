@@ -23,6 +23,7 @@
 #include <sharee.h>
 
 #include "createmessagedialog.h"
+#include "messagemodel.h"
 #include "messageobject.h"
 #include "messageswindow.h"
 #include "ui_createmessagedialog.h"
@@ -30,12 +31,10 @@
 namespace OCC {
 
 CreateMessageDialog::CreateMessageDialog(const QVector<QSharedPointer<Sharee>> &recipientList,
-    const QString &localPath, const Sharee &currentUser,
-    QWidget *parent)
+    MessageModel *model, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::CreateMessageDialog)
-    , basePath(localPath)
-    , currentUser(currentUser)
+    , model(model)
 {
     ui->setupUi(this);
 
@@ -119,7 +118,7 @@ void CreateMessageDialog::saveMessage(bool isDraft)
     if (!ui->plainTextEdit_messageBody->toPlainText().isEmpty()) {
         messageObject.note = ui->plainTextEdit_messageBody->toPlainText();
         if (!isDraft) { // format message with html
-            messageObject.note = "<tr><td><div class='messageSender'>" + currentUser.displayName() + "/" + messageObject.initials + "</div></td><td class='messageBody'>"
+            messageObject.note = "<tr><td><div class='messageSender'>" + model->currentUser().displayName() + "/" + messageObject.initials + "</div></td><td class='messageBody'>"
                 + messageObject.note + "</td><td class='messageDate'>" + QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss") + "</td></tr>";
         }
     }
@@ -128,8 +127,8 @@ void CreateMessageDialog::saveMessage(bool isDraft)
     }
 
     messageObject.recipientName = ui->comboBox_recipient->currentText();
-    messageObject.sender = currentUser.shareWith();
-    messageObject.senderName = currentUser.displayName();
+    messageObject.sender = model->currentUser().shareWith();
+    messageObject.senderName = model->currentUser().displayName();
     messageObject.status = isDraft ? MessageObject::DraftStatus : MessageObject::SentStatus;
 
     // patient data
@@ -205,7 +204,7 @@ void CreateMessageDialog::saveMessage(bool isDraft)
         medicationList.append(medicationElement);
     }
     messageObject.medicationList = medicationList;
-    messageObject.saveMessage(basePath, currentUser, isDraft);
+    model->writeMessage(messageObject, isDraft);
 
     // delete removed images from assets folder
     for (QString item : deleteList) {
@@ -220,7 +219,7 @@ void CreateMessageDialog::saveMessage(bool isDraft)
 void CreateMessageDialog::on_button_addImage_clicked()
 {
     // restrict to images only
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image"), this->basePath, "Images (*.jpg *.png)");
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image"), model->rootPath(), "Images (*.jpg *.png)");
 
     // add image name to listbox
     QListWidgetItem *newItem = new QListWidgetItem;
@@ -334,7 +333,7 @@ void CreateMessageDialog::reset()
     // reset message id
     currentMessageId = QUuid();
     ui->lineEdit_initials->clear();
-    ui->label_requester->setText(currentUser.displayName());
+    ui->label_requester->setText(model->currentUser().displayName());
     ui->comboBox_recipient->setCurrentIndex(-1);
     ui->comboBox_severity->setCurrentIndex(-1);
     ui->lineEdit_messageTitle->clear();

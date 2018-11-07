@@ -6,6 +6,7 @@
 
 #include <QtTest>
 #include <QDebug>
+#include <QJsonDocument>
 
 #include <common/utility.h>
 #include <messages/messageobject.h>
@@ -20,14 +21,17 @@ private slots:
     void testMessageObject()
     {
         QString testFile = QFINDTESTDATA("testmessageobject.json");
-        MessageObject obj(testFile);
+        MessageObject obj;
+        QFile file(QFileInfo(testFile).absolutePath());
+        file.open(QIODevice::ReadOnly);
+        obj.setJson(QJsonDocument::fromJson(file.readAll()).object());
+        obj.path = QFileInfo(testFile).absolutePath();
         QCOMPARE(obj.path, QFileInfo(testFile).absolutePath());
         QCOMPARE(obj.messageId, QUuid("{13e29128-5130-40ad-909c-e7f7c36ac69f}"));
         QCOMPARE(obj.status, MessageObject::SentStatus);
 
         QCOMPARE(obj.title, "Ich hab nur ne Frage");
         QCOMPARE(obj.initials, "Hans");
-        QCOMPARE(obj.messageBody, "");
         QVERIFY(!obj.note.isEmpty());
         QCOMPARE(obj.recipient, "Arzt 1");
 

@@ -77,9 +77,7 @@ SET(MessageModel_SRC ../src/gui/messages/messagemodel.cpp)
 list(APPEND MessageModel_SRC ../src/gui/messages/messageobject.cpp )
 list(APPEND MessageModel_SRC ../src/gui/sharee.cpp )
 owncloud_add_test(MessageModel "${MessageModel_SRC}")
-SET(MessageObject_SRC ../src/gui/messages/messageobject.cpp)
-list(APPEND MessageObject_SRC ../src/gui/sharee.cpp )
-owncloud_add_test(MessageObject "${MessageObject_SRC}")
+owncloud_add_test(MessageObject ../src/gui/messages/messageobject.cpp)
 
 configure_file(test_journal.db "${PROJECT_BINARY_DIR}/bin/test_journal.db" COPYONLY)
 

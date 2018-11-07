@@ -18,6 +18,7 @@
 #include <QDir>
 #include <QFileInfo>
 #include <QJsonDocument>
+#include <QMessageBox>
 
 namespace OCC {
 
@@ -153,26 +154,16 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
         if (_messageItem.recipient == value.toString()) {
             if (_messageItem.status == MessageObject::SentStatus) {
                 _messageItem.status = MessageObject::ReadStatus;
-                if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {
-                    return true;
-                }
                 break;
-            } else {
-                return true;
             }
-        }
-
+            return true;
         // check if the sender clicked the message
-        if (_messageItem.sender == value.toString()) {
+        } else if (_messageItem.sender == value.toString()) {
             if (_messageItem.status == MessageObject::ResentStatus) {
                 _messageItem.status = MessageObject::RereadStatus;
-                if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {
-                    return true;
-                }
                 break;
-            } else {
-                return true;
             }
+            return true;
         }
         // a message should be either from the sender or the recipient
         return false;
@@ -180,21 +171,123 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
     // set new status - message was resolved
     case MessageResolvedRole:
         _messageItem.status = MessageObject::ResolvedStatus;
-        if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {
-            return true;
-        }
         break;
 
     // set new status - message was archived
     case MessageArchivedRole:
         _messageItem.archivedFor.append({ _currentUser.shareWith(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss") });
         _messageItem.status = MessageObject::ArchivedStatus;
-        if (_messageItem.saveMessage(_rootPath, _currentUser, false)) {
-            return true;
-        }
         break;
+    default:
+        return false;
     }
 
+    if (writeMessage(_messageItem)) {
+        _messageList.replace(index.row(), _messageItem);
+        emit dataChanged(index, index);
+        return true;
+    }
+
+    return false;
+}
+
+bool MessageModel::writeMessage(MessageObject &msg)
+{
+    bool isDraft = (msg.status == MessageObject::DraftStatus);
+    bool wasDraft = false;
+    // create new uuid if none is set
+    if (msg.messageId.isNull()) {
+        msg.messageId = QUuid::createUuid();
+    } else {
+        // if the message was a draft, delete it
+        if (!isDraft) {
+            QString filePath = _rootPath + "/drafts/messages/" + msg.messageId.toString() + ".json";
+            if (QFileInfo::exists(filePath) && QFileInfo(filePath).isFile()) {
+                QFile::remove(filePath);
+                wasDraft = true;
+            }
+        }
+    }
+
+    // create filename and correct path
+    // complete path: <_rootPath>/<recipientid>/messages/<messageId>.json
+
+    QString _userFolder = (msg.recipient == _currentUser.shareWith()) ? msg.sender : msg.recipient;
+    // save drafts to drafts folder
+    QString dirPath = _rootPath + (isDraft ? QString("/drafts/") : QString("/" + _userFolder));
+
+    // create messages directory if it doesnt exist
+    QDir dir(dirPath + "/messages/");
+    if (!dir.exists(dirPath + "/messages/")) {
+        if (!dir.mkpath(dirPath + "/messages/")) {
+            // display error
+            QMessageBox msgBox;
+            msgBox.setText(QObject::tr("Error on creating folder for messages!"));
+            msgBox.exec();
+            return false;
+        }
+    }
+
+    // process images list
+    for (MessageObject::ImageDetails &image : msg.imagesList) {
+        // get full file path
+        if (!image.path.isEmpty()) {
+            QString fullFilePath = image.path;
+
+            // create assets directory if it doesn't exist
+            QDir dir(dirPath + "/assets/");
+            if (!dir.exists(dirPath + "/assets/")) {
+                if (!dir.mkpath(dirPath + "/assets/")) {
+                    // display error
+                    QMessageBox msgBox;
+                    msgBox.setText(QObject::tr("Error on creating folder for assets!"));
+                    msgBox.exec();
+                    return false;
+                }
+            }
+
+            if (wasDraft) { // move assets belonging to draft to new assets folder
+                // assure filename is unique
+                while (QFileInfo::exists(dirPath + "/assets/" + image.name)) {
+                    image.name = QUuid::createUuid().toString() + image.name;
+                }
+                if (!QFile::rename(fullFilePath, dirPath + "/assets/" + image.name)) {
+                    // display error
+                    QMessageBox msgBox;
+                    msgBox.setText(QObject::tr("Error on moving assets!"));
+                    msgBox.exec();
+                    return false;
+                }
+            } else { // copy file to assets folder
+                // assure filename is unique
+                while (QFileInfo::exists(dirPath + "/assets/" + image.name)) {
+                    image.name = QUuid::createUuid().toString() + image.name;
+                }
+                if (!QFile::copy(fullFilePath, dirPath + "/assets/" + image.name)) {
+                    // display error
+                    QMessageBox msgBox;
+                    msgBox.setText(QObject::tr("Error on copying assets!"));
+                    msgBox.exec();
+                    return false;
+                }
+            }
+        }
+    }
+
+    // write contents to file
+    QString filePath = dirPath + "/messages/" + msg.messageId.toString() + ".json";
+    msg.path = filePath;
+
+    QJsonObject content;
+    msg.buildJson(content, isDraft);
+
+    qInfo() << "Write JSON to" << filePath;
+    QFile file(filePath);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QJsonDocument saveDoc(content);
+        file.write(saveDoc.toJson());
+        return true;
+    }
     return false;
 }
 
@@ -215,7 +308,12 @@ void MessageModel::addMessages(const QString &path)
     qInfo() << "watch" << messagePath;
     for (const QFileInfo &info : QDir(messagePath).entryInfoList(_filters, QDir::Files)) {
         qInfo() << "add" << info.absoluteFilePath();
-        _messageList << MessageObject(info.absoluteFilePath());
+        MessageObject messageObject;
+        QFile file(info.absoluteFilePath());
+        file.open(QIODevice::ReadOnly);
+        messageObject.setJson(QJsonDocument::fromJson(file.readAll()).object());
+        messageObject.path = info.absoluteFilePath();
+        _messageList << messageObject;
     }
 }
 

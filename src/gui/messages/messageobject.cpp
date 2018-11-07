@@ -17,10 +17,6 @@
 
 #include <cmath>
 #include <QDir>
-#include <QFile>
-#include <QFileInfo>
-#include <QJsonDocument>
-#include <QMessageBox>
 #include <QRegularExpression>
 #include <QRegularExpressionMatch>
 
@@ -37,22 +33,6 @@ MessageObject::MessageObject()
     , sugar(std::numeric_limits<double>::quiet_NaN())
     , weight(std::numeric_limits<double>::quiet_NaN())
 {
-}
-
-MessageObject::MessageObject(const QString &_path)
-    : priority(InfoPriority)
-    , status(DraftStatus)
-    , bpSys(0)
-    , bpDia(0)
-    , pulse(0)
-    , temp(std::numeric_limits<double>::quiet_NaN())
-    , sugar(std::numeric_limits<double>::quiet_NaN())
-    , weight(std::numeric_limits<double>::quiet_NaN())
-{
-    path = QFileInfo(_path).absolutePath();
-    QFile file(_path);
-    file.open(QIODevice::ReadOnly);
-    setJson(QJsonDocument::fromJson(file.readAll()).object());
 }
 
 QIcon MessageObject::priorityIcon() const
@@ -886,103 +866,6 @@ void MessageObject::buildJson(QJsonObject &json, bool isDraft) const
 
     if (!payload.empty())
         json["payload"] = payload;
-}
-
-bool MessageObject::saveMessage(const QString &basePath, Sharee &currentUser, bool isDraft)
-{
-    bool wasDraft = false;
-    // create new uuid if none is set
-    if (messageId.isNull()) {
-        messageId = messageId.createUuid();
-    } else {
-        // if the message was a draft, delete it
-        if (!isDraft) {
-            QString filePath = basePath + "/drafts/messages/" + messageId.toString() + ".json";
-            if (QFileInfo::exists(filePath) && QFileInfo(filePath).isFile()) {
-                QFile::remove(filePath);
-                wasDraft = true;
-            }
-        }
-    }
-
-    // create filename and correct path
-    // complete path: <basePath>/<recipientid>/messages/<messageId>.json
-
-    QString _userFolder = (recipient == currentUser.shareWith()) ? sender : recipient;
-    // save drafts to drafts folder
-    QString dirPath = basePath + (isDraft ? QString("/drafts/") : QString("/" + _userFolder));
-
-    // create messages directory if it doesnt exist
-    QDir dir(dirPath + "/messages/");
-    if (!dir.exists(dirPath + "/messages/")) {
-        if (!dir.mkpath(dirPath + "/messages/")) {
-            // display error
-            QMessageBox msgBox;
-            msgBox.setText(QObject::tr("Error on creating folder for messages!"));
-            msgBox.exec();
-            return false;
-        }
-    }
-
-    // process images list
-    for (ImageDetails &image : imagesList) {
-        // get full file path
-        if (!image.path.isEmpty()) {
-            QString fullFilePath = image.path;
-
-            // create assets directory if it doesn't exist
-            QDir dir(dirPath + "/assets/");
-            if (!dir.exists(dirPath + "/assets/")) {
-                if (!dir.mkpath(dirPath + "/assets/")) {
-                    // display error
-                    QMessageBox msgBox;
-                    msgBox.setText(QObject::tr("Error on creating folder for assets!"));
-                    msgBox.exec();
-                    return false;
-                }
-            }
-
-            if (wasDraft) { // move assets belonging to draft to new assets folder
-                // assure filename is unique
-                while (QFileInfo::exists(dirPath + "/assets/" + image.name)) {
-                    image.name = QUuid::createUuid().toString() + image.name;
-                }
-                if (!QFile::rename(fullFilePath, dirPath + "/assets/" + image.name)) {
-                    // display error
-                    QMessageBox msgBox;
-                    msgBox.setText(QObject::tr("Error on moving assets!"));
-                    msgBox.exec();
-                    return false;
-                }
-            } else { // copy file to assets folder
-                // assure filename is unique
-                while (QFileInfo::exists(dirPath + "/assets/" + image.name)) {
-                    image.name = QUuid::createUuid().toString() + image.name;
-                }
-                if (!QFile::copy(fullFilePath, dirPath + "/assets/" + image.name)) {
-                    // display error
-                    QMessageBox msgBox;
-                    msgBox.setText(QObject::tr("Error on copying assets!"));
-                    msgBox.exec();
-                    return false;
-                }
-            }
-        }
-    }
-
-    QJsonObject content;
-    buildJson(content, isDraft);
-
-    // write contents to file
-    QString filePath = dirPath + "/messages/" + messageId.toString() + ".json";
-    QFile file(filePath);
-
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QJsonDocument saveDoc(content);
-        file.write(saveDoc.toJson());
-        return true;
-    }
-    return false;
 }
 
 QString MessageObject::isArchivedFor(const QString &user) const

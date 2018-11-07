@@ -22,6 +22,7 @@
 #include "messageobject.h"
 
 namespace OCC {
+class MessageModel;
 
 namespace Ui {
     class CreateMessageDialog;
@@ -33,7 +34,7 @@ class CreateMessageDialog : public QDialog
 
 public:
     CreateMessageDialog(const QVector<QSharedPointer<Sharee>> &recipientList,
-        const QString &localPath, const Sharee &currentUser, QWidget *parent = 0);
+        MessageModel *model, QWidget *parent = 0);
     virtual ~CreateMessageDialog();
 
     /** fills fields of form with values from previous draft */
@@ -51,9 +52,8 @@ private:
      */
     void saveMessage(bool isDraft);
 
-    QString basePath;
+    MessageModel *model;
     QUuid currentMessageId;
-    Sharee currentUser;
     QStringList deleteList;
 
 private slots:

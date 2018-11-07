@@ -22,12 +22,10 @@
 namespace OCC {
 
 
-AnswerMessageDialog::AnswerMessageDialog(Sharee currentUser, QString localPath, QSortFilterProxyModel *filterProxy, QWidget *parent)
+AnswerMessageDialog::AnswerMessageDialog(MessageModel *model, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::AnswerMessageDialog)
-    , currentUser(currentUser)
-    , filterProxy(filterProxy)
-    , basePath(localPath)
+    , model(model)
 {
     ui->setupUi(this);
 
@@ -58,7 +56,7 @@ void AnswerMessageDialog::reset()
 {
     ui->plainTextEdit_messageBody->clear();
     ui->lineEdit_initials->clear();
-    ui->label_requester->setText(currentUser.displayName());
+    ui->label_requester->setText(model->currentUser().displayName());
 }
 
 void AnswerMessageDialog::on_sendAnswer_clicked()
@@ -70,15 +68,16 @@ void AnswerMessageDialog::on_sendAnswer_clicked()
     QString _oldBodyText = message.note;
 
     // change css class corresponding to author of the text
-    QString _messageClass = (message.sender == currentUser.shareWith()) ? "messageSender" : "messageRecipient";
-    QString _newBodyText = QString("%1<tr><td><div class='%2'>%3/%4</div></td><td class='messageBody'>%5</td><td class='messageDate'>%6</td></tr>").arg(_oldBodyText, _messageClass, currentUser.displayName(), _initials, _text, QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"));
+    QString _messageClass = (message.sender == model->currentUser().shareWith()) ? "messageSender" : "messageRecipient";
+    QString _newBodyText = QString("%1<tr><td><div class='%2'>%3/%4</div></td><td class='messageBody'>%5</td><td class='messageDate'>%6</td></tr>")
+                               .arg(_oldBodyText, _messageClass, model->currentUser().displayName(), _initials, _text, QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"));
 
     // change status of message
-    message.status = (message.sender == currentUser.shareWith()) ? MessageObject::SentStatus : MessageObject::ResentStatus;
+    message.status = (message.sender == model->currentUser().shareWith()) ? MessageObject::SentStatus : MessageObject::ResentStatus;
 
     // write new message body
     message.note = _newBodyText;
-    message.saveMessage(basePath, currentUser, false);
+    model->writeMessage(message, false);
 }
 
 } //end namespace

@@ -21,7 +21,6 @@
 #include <QJsonObject>
 #include <QString>
 #include <QUuid>
-#include "sharee.h"
 
 namespace OCC {
 
@@ -64,7 +63,6 @@ public:
     };
 
     MessageObject();
-    explicit MessageObject(const QString &path);
 
     // file data
     QString path;
@@ -129,9 +127,6 @@ public:
 
     /** creates a HL7/FHIR conform json */
     void buildJson(QJsonObject &json, bool isDraft) const;
-
-    /** writes message to file */
-    bool saveMessage(const QString &basePath, Sharee &currentUser, bool isDraft);
 
     /** isArchivedFor for @p user */
     QString isArchivedFor(const QString &user) const;

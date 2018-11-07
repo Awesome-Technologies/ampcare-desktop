@@ -33,8 +33,8 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     , ui(new Ui::MessagesWindow)
     , messageModel(new MessageModel(localPath + "/AMP", _currentUser, this))
     , filterProxy(new QSortFilterProxyModel(this))
-    , _answerMessageDialog(new AnswerMessageDialog(_currentUser, localPath + "/AMP", filterProxy, this))
-    , _createMessageDialog(new CreateMessageDialog(recipientList, localPath + "/AMP", _currentUser, this))
+    , _answerMessageDialog(new AnswerMessageDialog(messageModel, this))
+    , _createMessageDialog(new CreateMessageDialog(recipientList, messageModel, this))
     , currentUser(_currentUser)
     , localPath(localPath)
 

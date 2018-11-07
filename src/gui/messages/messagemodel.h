@@ -17,10 +17,12 @@
 
 #include <QAbstractTableModel>
 #include <QFileSystemWatcher>
+#include <sharee.h>
 
 #include "messageobject.h"
 
 namespace OCC {
+class Sharee;
 
 /**
  * @brief The MessageModel class abstracts the filesystem and provides access to the message files
@@ -53,6 +55,12 @@ public:
 
     MessageModel(const QString &rootPath, const Sharee &currentUser, QObject *parent = 0);
     virtual ~MessageModel();
+
+    QString rootPath() const { return _rootPath; }
+    const Sharee &currentUser() const { return _currentUser; }
+
+    /** writes message to file */
+    bool writeMessage(MessageObject &msg, bool isDraft);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
