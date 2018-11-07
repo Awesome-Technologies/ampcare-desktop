@@ -1,6 +1,9 @@
 #include "videowindow.h"
 #include "ui_videowindow.h"
 
+#include <QDesktopWidget>
+#include <QStyle>
+
 namespace OCC {
 
 VideoWindow::VideoWindow(QWidget *parent)
@@ -8,6 +11,12 @@ VideoWindow::VideoWindow(QWidget *parent)
     , ui(new Ui::VideoWindow)
 {
     ui->setupUi(this);
+    setGeometry(
+        QStyle::alignedRect(
+            Qt::LeftToRight,
+            Qt::AlignCenter,
+            QSize(1200, 750),
+            qApp->desktop()->availableGeometry()));
     QWebEnginePage *page = ui->webEngineView->page();
     QObject::connect(page, &QWebEnginePage::featurePermissionRequested, this, &VideoWindow::slotFeaturePermissionRequested);
 }
