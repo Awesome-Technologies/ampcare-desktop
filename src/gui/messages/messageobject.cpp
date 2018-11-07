@@ -433,6 +433,7 @@ void MessageObject::setJson(const QJsonObject &json)
         if (payload.contains("media")) {
             QDir imgPath = QDir(path);
             imgPath.cdUp();
+            imgPath.cdUp();
             for (const QJsonValue &v : payload.value("media").toArray()) {
                 imagesList.append({ v.toObject().value("content").toString(), imgPath.absolutePath() + "/assets/" + v.toObject().value("content").toString() });
             }

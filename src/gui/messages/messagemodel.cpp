@@ -325,8 +325,8 @@ void MessageModel::addMessages(const QString &path)
         MessageObject messageObject;
         QFile file(info.absoluteFilePath());
         file.open(QIODevice::ReadOnly);
-        messageObject.setJson(QJsonDocument::fromJson(file.readAll()).object());
         messageObject.path = info.absoluteFilePath();
+        messageObject.setJson(QJsonDocument::fromJson(file.readAll()).object());
         _messageList << messageObject;
     }
 }
