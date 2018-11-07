@@ -16,6 +16,7 @@
 #define MESSAGECREATEDIALOG_H
 
 #include <QDialog>
+#include <QPersistentModelIndex>
 #include <QUuid>
 #include <sharee.h>
 
@@ -38,7 +39,7 @@ public:
     virtual ~CreateMessageDialog();
 
     /** fills fields of form with values from previous draft */
-    void setValues(MessageObject message);
+    void setModelIndex(const QPersistentModelIndex &index);
 
     /** resets all fields of the form */
     void reset();
@@ -53,6 +54,7 @@ private:
     void saveMessage(bool isDraft);
 
     MessageModel *model;
+    QPersistentModelIndex modelIndex;
     QUuid currentMessageId;
     QStringList deleteList;
 

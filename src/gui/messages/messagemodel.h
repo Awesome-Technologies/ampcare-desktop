@@ -59,9 +59,6 @@ public:
     QString rootPath() const { return _rootPath; }
     const Sharee &currentUser() const { return _currentUser; }
 
-    /** writes message to file */
-    bool writeMessage(MessageObject &msg, bool isDraft);
-
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -83,6 +80,9 @@ private:
     QFileSystemWatcher _watcher;
     QStringList _filters;
     QList<MessageObject> _messageList;
+
+    /** writes message to file */
+    bool writeMessage(MessageObject &msg);
 
     void addEntities();
     void addMessages(const QString &path);

@@ -56,6 +56,8 @@ private:
     const QString localPath;
 
 private slots:
+    /** model data changed */
+    void slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight);
     /** shows content of the message in the detailView */
     void slotShowDetails(const QModelIndex &current, const QModelIndex &previous);
 

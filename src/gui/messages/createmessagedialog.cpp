@@ -204,8 +204,8 @@ void CreateMessageDialog::saveMessage(bool isDraft)
         medicationList.append(medicationElement);
     }
     messageObject.medicationList = medicationList;
-    model->writeMessage(messageObject, isDraft);
 
+    model->setData(modelIndex, QVariant::fromValue(messageObject), MessageModel::MessageObjectRole);
     // delete removed images from assets folder
     for (QString item : deleteList) {
         if (QFileInfo::exists(item) && QFileInfo(item).isFile()) {
@@ -241,8 +241,10 @@ void CreateMessageDialog::on_button_deleteImage_clicked()
     }
 }
 
-void CreateMessageDialog::setValues(MessageObject message)
+void CreateMessageDialog::setModelIndex(const QPersistentModelIndex &index)
 {
+    modelIndex = index;
+    MessageObject message = index.data(MessageModel::MessageObjectRole).value<MessageObject>();
     // set current message id
     currentMessageId = message.messageId;
 
@@ -329,6 +331,7 @@ void CreateMessageDialog::reset()
 {
     QDate date = QDate::currentDate();
 
+    modelIndex = QPersistentModelIndex();
     // message metadata
     // reset message id
     currentMessageId = QUuid();

@@ -173,6 +173,11 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
         _messageItem.status = MessageObject::ResolvedStatus;
         break;
 
+    // message object
+    case MessageObjectRole:
+        _messageItem = value.value<MessageObject>();
+        break;
+
     // set new status - message was archived
     case MessageArchivedRole:
         _messageItem.archivedFor.append({ _currentUser.shareWith(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss") });
@@ -183,8 +188,14 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
     }
 
     if (writeMessage(_messageItem)) {
-        _messageList.replace(index.row(), _messageItem);
-        emit dataChanged(index, index);
+        if (index.isValid()) {
+            _messageList.replace(index.row(), _messageItem);
+            emit dataChanged(index, index);
+        } else {
+            emit layoutAboutToBeChanged();
+            _messageList.insert(0, _messageItem);
+            emit layoutChanged();
+        }
         return true;
     }
 

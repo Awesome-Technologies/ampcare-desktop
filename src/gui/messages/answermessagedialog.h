@@ -16,8 +16,8 @@
 #define ANSWERMESSAGEDIALOG_H
 
 #include <QDialog>
+#include <QPersistentModelIndex>
 #include "ui_answermessagedialog.h"
-#include "messageobject.h"
 
 namespace OCC {
 class MessageModel;
@@ -35,16 +35,10 @@ public:
     ~AnswerMessageDialog();
 
     /**
-     * @brief setMessageObject
-     * @param message
+     * @brief setModelIndex
+     * @param index
      */
-    void setMessageObject(const MessageObject &message);
-
-    /**
-     * @brief set values of dialog
-     * @param HTML of detail view
-     */
-    void setValues(QString values);
+    void setModelIndex(const QPersistentModelIndex &index);
 
     /**
      * @brief reset dialog fields
@@ -53,8 +47,8 @@ public:
 
 private:
     Ui::AnswerMessageDialog *ui;
-    MessageObject message;
     MessageModel *model;
+    QPersistentModelIndex modelIndex;
 
 private slots:
     void on_sendAnswer_clicked();

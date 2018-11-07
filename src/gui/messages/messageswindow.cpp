@@ -48,6 +48,7 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     filterProxy->setSortCaseSensitivity(Qt::CaseInsensitive);
     filterProxy->setFilterRole(MessageModel::ArchivedForRole);
     filterProxy->setFilterRegExp(QRegExp("false", Qt::CaseInsensitive, QRegExp::FixedString));
+    connect(filterProxy, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(slotDataChanged(QModelIndex, QModelIndex)));
 
     // set message delegate to listview
     QTableView *msgList = ui->messageList;
@@ -69,6 +70,13 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
 MessagesWindow::~MessagesWindow()
 {
     delete ui;
+}
+
+void MessagesWindow::slotDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
+{
+    QModelIndex sel = ui->messageList->selectionModel()->currentIndex();
+    if (topLeft.row() <= sel.row() && sel.row() <= bottomRight.row())
+        slotShowDetails(sel, QModelIndex());
 }
 
 void MessagesWindow::slotShowDetails(const QModelIndex &current, const QModelIndex &previous)
@@ -100,17 +108,15 @@ void MessagesWindow::slotShowDetails(const QModelIndex &current, const QModelInd
 void MessagesWindow::on_messageList_doubleClicked(const QModelIndex &index)
 {
     int _currentStatus = filterProxy->data(index, MessageModel::StatusRole).toInt();
-    MessageObject _messageItem(filterProxy->data(index, MessageModel::MessageObjectRole).value<MessageObject>());
 
     if (_currentStatus == MessageObject::DraftStatus) { // message is a draft
         // load values into dialog
         _createMessageDialog->reset();
-        _createMessageDialog->setValues(_messageItem);
+        _createMessageDialog->setModelIndex(filterProxy->mapToSource(index));
         _createMessageDialog->show();
     } else { // message was sent, only answers are allowed
         _answerMessageDialog->reset();
-        _answerMessageDialog->setMessageObject(_messageItem);
-        _answerMessageDialog->setValues(filterProxy->data(index, MessageModel::DetailRole).toString());
+        _answerMessageDialog->setModelIndex(filterProxy->mapToSource(index));
         _answerMessageDialog->show();
     }
 }

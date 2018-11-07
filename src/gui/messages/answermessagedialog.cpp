@@ -42,18 +42,16 @@ AnswerMessageDialog::~AnswerMessageDialog()
     delete ui;
 }
 
-void AnswerMessageDialog::setMessageObject(const MessageObject &message)
+void AnswerMessageDialog::setModelIndex(const QPersistentModelIndex &index)
 {
-    this->message = message;
-}
-
-void AnswerMessageDialog::setValues(QString values)
-{
+    modelIndex = index;
+    QString values = index.data(MessageModel::DetailRole).toString();
     ui->detailView->setHtml(values.toUtf8(), QUrl("qrc:/"));
 }
 
 void AnswerMessageDialog::reset()
 {
+    modelIndex = QPersistentModelIndex();
     ui->plainTextEdit_messageBody->clear();
     ui->lineEdit_initials->clear();
     ui->label_requester->setText(model->currentUser().displayName());
@@ -64,6 +62,7 @@ void AnswerMessageDialog::on_sendAnswer_clicked()
     QString _initials = ui->lineEdit_initials->text();
     QString _text = ui->plainTextEdit_messageBody->toPlainText();
 
+    MessageObject message = modelIndex.data(MessageModel::MessageObjectRole).value<MessageObject>();
     // combine old text and answer
     QString _oldBodyText = message.note;
 
@@ -77,7 +76,7 @@ void AnswerMessageDialog::on_sendAnswer_clicked()
 
     // write new message body
     message.note = _newBodyText;
-    model->writeMessage(message, false);
+    model->setData(modelIndex, QVariant::fromValue(message), MessageModel::MessageObjectRole);
 }
 
 } //end namespace
