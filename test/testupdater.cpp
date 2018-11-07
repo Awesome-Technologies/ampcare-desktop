@@ -18,10 +18,10 @@ class TestUpdater : public QObject
 private slots:
     void testVersionToInt()
     {
-        qint64 lowVersion = Updater::Helper::versionToInt(1,2,80,3000);
-        QCOMPARE(Updater::Helper::stringVersionToInt("1.2.80.3000"), lowVersion);
+        qint64 lowVersion = Updater::Helper::versionToInt(2050,2,80);
+        QCOMPARE(Updater::Helper::stringVersionToInt("2018.2-80"), lowVersion);
 
-        qint64 highVersion = Updater::Helper::versionToInt(99,2,80,3000);
+        qint64 highVersion = Updater::Helper::versionToInt(1999,2,80);
         qint64 currVersion = Updater::Helper::currentVersionToInt();
         QVERIFY(currVersion > 0);
         QVERIFY(currVersion > lowVersion);

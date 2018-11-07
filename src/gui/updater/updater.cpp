@@ -127,15 +127,15 @@ Updater *Updater::create()
 }
 
 
-qint64 Updater::Helper::versionToInt(qint64 major, qint64 minor, qint64 patch, qint64 build)
+qint64 Updater::Helper::versionToInt(qint64 year, qint64 month, qint64 rev)
 {
-    return major << 56 | minor << 48 | patch << 40 | build;
+    return year << 48 | month << 40 | rev;
 }
 
 qint64 Updater::Helper::currentVersionToInt()
 {
-    return versionToInt(MIRALL_VERSION_MAJOR, MIRALL_VERSION_MINOR,
-        MIRALL_VERSION_PATCH, MIRALL_VERSION_BUILD);
+    return versionToInt(AMP_VERSION_YEAR, AMP_VERSION_MONTH,
+        AMP_VERSION_REV);
 }
 
 qint64 Updater::Helper::stringVersionToInt(const QString &version)
@@ -143,9 +143,9 @@ qint64 Updater::Helper::stringVersionToInt(const QString &version)
     if (version.isEmpty())
         return 0;
     QByteArray baVersion = version.toLatin1();
-    int major = 0, minor = 0, patch = 0, build = 0;
-    sscanf(baVersion, "%d.%d.%d.%d", &major, &minor, &patch, &build);
-    return versionToInt(major, minor, patch, build);
+    int year = 0, month = 0, rev = 0;
+    sscanf(baVersion, "%d.%d-%d", &year, &month, &rev);
+    return versionToInt(year, month, rev);
 }
 
 QString Updater::clientVersion()
