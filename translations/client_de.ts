@@ -687,29 +687,6 @@ p, li { white-space: pre-wrap; }
     </message>
 </context>
 <context>
-    <name>OCC::CreateMessageDialog</name>
-    <message>
-        <location filename="../src/gui/messages/createmessagedialog.cpp" line="199"/>
-        <source>Attach image</source>
-        <translation>Bild anhängen</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/messages/createmessagedialog.cpp" line="48"/>
-        <source>Send</source>
-        <translation>Senden</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/messages/createmessagedialog.cpp" line="49"/>
-        <source>Save as draft</source>
-        <translation>Entwurf speichern</translation>
-    </message>
-    <message>
-        <location filename="../src/gui/messages/createmessagedialog.cpp" line="50"/>
-        <source>Don&apos;t save</source>
-        <translation>Nicht speichern</translation>
-    </message>
-</context>
-<context>
     <name>OCC::DiscoveryMainThread</name>
     <message>
         <location filename="../src/libsync/discoveryphase.cpp" line="613"/>
@@ -1878,6 +1855,21 @@ Objekte, bei denen Löschen erlaubt ist, werden gelöscht, wenn diese die Lösch
         <source>-</source>
         <translation>-</translation>
     </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.cpp" line="48"/>
+        <source>Send</source>
+        <translation>Senden</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.cpp" line="49"/>
+        <source>Save as draft</source>
+        <translation>Entwurf speichern</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/createmessagedialog.cpp" line="50"/>
+        <source>Don&apos;t save</source>
+        <translation>Nicht speichern</translation>
+    </message>
 </context>
 <context>
     <name>OCC::MessageModel</name>
@@ -1895,6 +1887,13 @@ Objekte, bei denen Löschen erlaubt ist, werden gelöscht, wenn diese die Lösch
         <location filename="../src/gui/messages/messagemodel.cpp" line="61"/>
         <source>Status</source>
         <translation>Status</translation>
+    </message>
+</context>
+<context>
+    <name>OCC::VideoWindow</name>
+    <message>
+        <source>Video</source>
+        <translation>Video</translation>
     </message>
 </context>
 <context>
@@ -4379,6 +4378,30 @@ Es ist nicht ratsam, diese zu benutzen.</translation>
         <translation>%1: %2</translation>
     </message>
     <message>
+        <source>Preparation</source>
+        <translation>Entwurf</translation>
+    </message>
+    <message>
+        <source>Sent</source>
+        <translation>Gesendet</translation>
+    </message>
+    <message>
+        <source>Read</source>
+        <translation>Gelesen</translation>
+    </message>
+    <message>
+        <source>Resent</source>
+        <translation>Antwort gesendet</translation>
+    </message>
+    <message>
+        <source>Reread</source>
+        <translation>Antwort gelesen</translation>
+    </message>
+    <message>
+        <source>Resolved</source>
+        <translation>Erledigt</translation>
+    </message>
+    <message>
         <source>Created</source>
         <translation>Erstellt am</translation>
     </message>
@@ -4770,47 +4793,6 @@ Es ist nicht ratsam, diese zu benutzen.</translation>
         <location filename="../src/gui/guiutility.cpp" line="56"/>
         <source>There was an error when launching the email client to create a new message. Maybe no default email client is configured?</source>
         <translation>Es ist ein Fehler beim Öffnen der E-Mail Anwendung, zum Erstellen einer neuen Nachricht, aufgetreten. Vielleicht ist keine standardmäßige E-Mail Anwendung konfiguriert?</translation>
-    </message>
-</context>
-<context>
-    <name>OCC::VideoWindow</name>
-    <message>
-        <source>Video</source>
-        <translation>Video</translation>
-    </message>
-</context>
-<context>
-    <name>OCC::MessageModel</name>
-    <message>
-        <source>Title</source>
-        <translation>Titel</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Datum</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Status</translation>
-    </message>
-</context>
-<context>
-    <name>OCC::MessagesWindow</name>
-    <message>
-        <source>Messages</source>
-        <translation>Nachrichten</translation>
-    </message>
-    <message>
-        <source>New message</source>
-        <translation>Neue Nachricht</translation>
-    </message>
-    <message>
-        <source>Resolved</source>
-        <translation>Erledigt</translation>
-    </message>
-    <message>
-        <source>Archive</source>
-        <translation>Archivieren</translation>
     </message>
 </context>
 </TS>

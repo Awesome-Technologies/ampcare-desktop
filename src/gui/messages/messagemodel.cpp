@@ -99,7 +99,7 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
         case DateColumn:
             return _messageItem.authoredOn;
         case StatusColumn:
-            return _messageItem.status;
+            return _messageItem.statusText;
         }
         break;
 

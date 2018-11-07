@@ -71,6 +71,7 @@ public:
     QUuid messageId;
     Priority priority;
     Status status;
+    QString statusText;
     QString title;
     QString initials;
     QString note;

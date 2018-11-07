@@ -82,6 +82,9 @@ QIcon MessageObject::statusIcon() const
     case ResolvedStatus:
         _statusIcon = "icon_f_resolved.png";
         break;
+    case ArchivedStatus:
+        _statusIcon = "icon_a_empty";
+        break;
     }
 
     return QIcon(QString(":/client/theme/amp/%1").arg(_statusIcon));
@@ -298,16 +301,22 @@ void MessageObject::setJson(const QJsonObject &json)
         QString _status = json["status"].toString();
         if (_status == "preparation") {
             status = DraftStatus;
+            statusText = QObject::tr("Preparation");
         } else if (_status == "sent") {
             status = SentStatus;
+            statusText = QObject::tr("Sent");
         } else if (_status == "read") {
             status = ReadStatus;
+            statusText = QObject::tr("Read");
         } else if (_status == "resent") {
             status = ResentStatus;
+            statusText = QObject::tr("Resent");
         } else if (_status == "reread") {
             status = RereadStatus;
+            statusText = QObject::tr("Reread");
         } else if (_status == "resolved") {
             status = ResolvedStatus;
+            statusText = QObject::tr("Resolved");
         }
     }
 
