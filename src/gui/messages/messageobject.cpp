@@ -468,6 +468,10 @@ void MessageObject::buildJson(QJsonObject &json, bool isDraft) const
     case ResolvedStatus:
         jsonStatus = "resolved";
         break;
+    // stay on resolved until both users have archived the message
+    case ArchivedStatus:
+        jsonStatus = "resolved";
+        break;
     }
     json["status"] = (isDraft ? "preparation" : jsonStatus);
     json["title"] = title;
