@@ -378,8 +378,8 @@ void MessageObject::setJson(const QJsonObject &json)
                     temp = v.toObject().value("valueQuantity").toObject().value("value").toDouble();
                     dtTemp = (QDateTime::fromString(v.toObject().value("effectiveDateTime").toString(), DATETIMEFORMAT));
                 } else if (payloadId == "blood-pressure") {
-                    bpSys = v.toObject().value("component")[0].toObject().value("valueQuantity").toObject().value("value").toInt();
-                    bpDia = v.toObject().value("component")[1].toObject().value("valueQuantity").toObject().value("value").toInt();
+                    bpSys = v.toObject().value("component").toArray()[0].toObject().value("valueQuantity").toObject().value("value").toInt();
+                    bpDia = v.toObject().value("component").toArray()[1].toObject().value("valueQuantity").toObject().value("value").toInt();
                     dtBp = (QDateTime::fromString(v.toObject().value("effectiveDateTime").toString(), DATETIMEFORMAT));
                 } else if (payloadId == "body-weight") {
                     weight = v.toObject().value("valueQuantity").toObject().value("value").toDouble();
