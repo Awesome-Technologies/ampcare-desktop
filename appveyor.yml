@@ -1,6 +1,6 @@
 version: '{branch}-{build}'
 image: Visual Studio 2017
-clone_depth: 10
+clone_depth: 20
 clone_folder: C:\projects\ampcare\desktop
 init:
 - ps: |
