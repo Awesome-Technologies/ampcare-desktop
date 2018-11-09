@@ -32,7 +32,7 @@ FRAMEWORK_SEARCH_PATH=[
     os.path.join(os.environ['HOME'], 'Library/Frameworks')
 ]
 
-LIBRARY_SEARCH_PATH=['/usr/local/lib', '/usr/local/Qt-5.6.2/lib', '.']
+LIBRARY_SEARCH_PATH=['/usr/local/lib', '/usr/local/Qt-5.6.2/lib', '.', '/usr/local/opt/qt/lib']
 
 QT_PLUGINS = [
     'sqldrivers/libqsqlite.dylib',
@@ -41,12 +41,14 @@ QT_PLUGINS = [
     'imageformats/libqico.dylib',
     'imageformats/libqjpeg.dylib',
     'imageformats/libqsvg.dylib',
+    'styles/libqmacstyle.dylib',
 ]
 
 QT_PLUGINS_SEARCH_PATH=[
 #    os.path.join(os.environ['QTDIR'], 'plugins'),
 #    '/usr/local/Cellar/qt/5.2.1/plugins',
     '/usr/local/Qt-5.6.2/plugins',
+    '/usr/local/opt/qt/plugins',
 ]
 
 
@@ -351,6 +353,10 @@ if LooseVersion(qt_version) >= LooseVersion("5.10.0"):
 else:
   args = ['plutil', '-insert', 'LSMinimumSystemVersion', '-string', '10.7.0', os.path.join(bundle_dir, 'Contents', 'Info.plist')]
   commands.append(args)
+
+# insert camera usage description into Info.plist
+args = ['plutil', '-insert', 'NSCameraUsageDescription', '-string', 'Uses camera for videocalling', os.path.join(bundle_dir, 'Contents', 'Info.plist')]
+commands.append(args)
 
 if len(sys.argv) <= 2:
   print 'Will run %d commands:' % len(commands)
