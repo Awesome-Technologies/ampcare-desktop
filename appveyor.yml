@@ -11,8 +11,6 @@ init:
       Update-AppveyorBuild -Version "$env:APPVEYOR_REPO_BRANCH-$($env:APPVEYOR_REPO_COMMIT.substring(0,7))"
     }
 environment:
-  COMPILER: msvc2017_64
-  QT_VER: 5.11.1
   QT_PATH: C:\Qt\$(QT_VER)\$(COMPILER)
   CMAKE_BUILD_TYPE: Release
   VERSION_SUFFIX: alpha
@@ -22,12 +20,33 @@ environment:
   QT_KEYCHAIN_ROOT_DIR: C:\projects\qtkeychain
   QTKEYCHAIN_LIBRARY: C:\projects\qtkeychain\install\lib\qt5keychain.lib
   QTKEYCHAIN_INCLUDE_DIR: C:\projects\qtkeychain\install\include\qt5keychain
-  OPENSSL10_PATH: C:\OpenSSL-Win64
-  OPENSSL11_PATH: C:\OpenSSL-v11-Win64
   NINJA_URL: https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-win.zip
   NINJA_ROOT_DIR: C:\projects\deps\ninja
-  ZLIB_URL: http://www.samsonov.net/wp?kcccount=http://www.samsonov.net/wp/assets/Dist_zlib/X64-release/zlib.7z
   ZLIB_ROOT_DIR: C:\projects\zlib
+  matrix:
+    - COMPILER: msvc2015
+      QT_VER: 5.10
+      OPENSSL10_PATH: C:\OpenSSL-Win32
+      OPENSSL11_PATH: C:\OpenSSL-v11-Win32
+      ZLIB_URL: http://www.samsonov.net/wp?kcccount=http://www.samsonov.net/wp/assets/Dist_zlib/x86-release/zlib.7z
+      ARCH: x86
+      OPENSSL11_LIBCRYPTO_PATH: C:\OpenSSL-v11-Win32\bin\libcrypto-1_1.dll
+    - COMPILER: msvc2017_64
+      QT_VER: 5.11
+      OPENSSL10_PATH: C:\OpenSSL-Win64
+      OPENSSL11_PATH: C:\OpenSSL-v11-Win64
+      ZLIB_URL: http://www.samsonov.net/wp?kcccount=http://www.samsonov.net/wp/assets/Dist_zlib/X64-release/zlib.7z
+      ARCH: amd64
+      OPENSSL11_LIBCRYPTO_PATH: C:\OpenSSL-v11-Win64\bin\libcrypto-1_1-x64.dll
+platform:
+  - x86
+  - x64
+matrix:
+  exclude:
+    - platform: x86
+      COMPILER: msvc2017_64
+    - platform: x64
+      COMPILER: msvc2015
 install:
 - ps: |
     md C:\downloads | out-null
@@ -66,7 +85,8 @@ build_script:
     REM Setup QT and MSVC compiler
     echo "%QT_PATH%"
     %QT_PATH%\bin\qtenv2.bat
-    "%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" amd64
+    echo "%VS140COMNTOOLS%"
+    "%VS140COMNTOOLS%\..\..\VC\vcvarsall.bat" %ARCH%
 
     REM Set additional paths
     set PATH=%PATH%;%NINJA_ROOT_DIR%;%PNG2IMG_ROOT_DIR%\x64

@@ -9,6 +9,7 @@
 !define APPLICATION_LICENSE ""
 !define WIN_SETUP_BITMAP_PATH "$%PROJECT_PATH%\desktop\admin\win\nsi"
 !define CRASHREPORTER_EXECUTABLE "ampcare_crash_reporter"
+!define BUILD_PLATFORM "$%ARCH%"
 
 ;-----------------------------------------------------------------------------
 ; Some installer script options (comment-out options not required)
@@ -39,6 +40,7 @@
 !define SOURCE_PATH "${PROJECT_PATH}\desktop"
 !define OPENSSL10_PATH "$%OPENSSL10_PATH%"
 !define OPENSSL11_PATH "$%OPENSSL11_PATH%"
+!define OPENSSL11_LIBCRYPTO_PATH "$%OPENSSL11_LIBCRYPTO_PATH%"
 
 !define CSYNC_LIBRARY_DIR ""
 !define CSYNC_CONFIG_DIR ""
@@ -71,7 +73,7 @@ Var NoAutomaticUpdates
 ; Initial installer setup and definitions.
 ;-----------------------------------------------------------------------------
 
-!define INSTALLER_FILENAME "${APPLICATION_NAME}-${VERSION}-${MIRALL_VERSION_SUFFIX}-${BUILD_TIME_FILENAME}.exe"
+!define INSTALLER_FILENAME "${APPLICATION_NAME}-${VERSION}-${MIRALL_VERSION_SUFFIX}-${BUILD_TIME_FILENAME}-${BUILD_PLATFORM}.exe"
 Name "AMPcare"
 BrandingText "${APPLICATION_NAME} ${VERSION} - ${BUILD_TIME}"
 OutFile "${PROJECT_PATH}\install\${INSTALLER_FILENAME}"
@@ -340,7 +342,7 @@ Section "${APPLICATION_NAME}" SEC_APPLICATION
 ; extra dll's
     File "${OPENSSL10_PATH}\bin\libeay32.dll"
     File "${OPENSSL10_PATH}\bin\ssleay32.dll"
-    File "${OPENSSL11_PATH}\bin\libcrypto-1_1-x64.dll"
+    File "${OPENSSL11_LIBCRYPTO_PATH}"
     File "${OPENSSL11_PATH}\bin\msvcr120.dll"
 
 ; translations TODO put the translations under the folder translations
