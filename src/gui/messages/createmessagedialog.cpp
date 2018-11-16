@@ -221,14 +221,17 @@ void CreateMessageDialog::on_button_addImage_clicked()
     // restrict to images only
     QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image"), model->rootPath(), "Images (*.jpg *.png)");
 
-    // add image name to listbox
-    QListWidgetItem *newItem = new QListWidgetItem;
-    QVariant fullFilePathData(filePath);
-    QFileInfo fileinfo = QFileInfo(filePath);
-    newItem->setData(Qt::UserRole, fullFilePathData);
-    newItem->setText(fileinfo.fileName());
-    int row = ui->listWidget_images->row(ui->listWidget_images->currentItem());
-    ui->listWidget_images->insertItem(row, newItem);
+    // check if filepath is empty, e.g. by cancelling the open file dialog
+    if (!filePath.isEmpty()) {
+        // add image name to listbox
+        QListWidgetItem *newItem = new QListWidgetItem;
+        QVariant fullFilePathData(filePath);
+        QFileInfo fileinfo = QFileInfo(filePath);
+        newItem->setData(Qt::UserRole, fullFilePathData);
+        newItem->setText(fileinfo.fileName());
+        int row = ui->listWidget_images->row(ui->listWidget_images->currentItem());
+        ui->listWidget_images->insertItem(row, newItem);
+    }
 }
 
 // remove image from message
