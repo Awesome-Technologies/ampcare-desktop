@@ -117,8 +117,11 @@ public:
     /** returns an icon corresponding to priority */
     QIcon priorityIcon() const;
 
-    /** returns HTML to display the current status of the message */
+    /** returns an icon to display the current status of the message */
     QIcon statusIcon() const;
+
+    /** returns HTML to display the recipient of the message */
+    QString getRecipient() const;
 
     /** returns HTML of content of the message */
     QString details() const;

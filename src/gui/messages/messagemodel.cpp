@@ -56,6 +56,8 @@ QVariant MessageModel::headerData(int section, Qt::Orientation orientation, int 
             return " ";
         case TitleColumn:
             return tr("Title");
+        case RecipientColumn:
+            return tr("Recipient");
         case DateColumn:
             return tr("Date");
         case StatusColumn:
@@ -78,6 +80,8 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case TitleColumn:
             return _messageItem.shortTitle();
+        case RecipientColumn:
+            return _messageItem.getRecipient();
         case DateColumn:
             return _messageItem.authoredOn;
         }
@@ -96,6 +100,8 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case TitleColumn:
             return _messageItem.longTitle();
+        case RecipientColumn:
+            return _messageItem.recipientName;
         case DateColumn:
             return _messageItem.authoredOn;
         case StatusColumn:
@@ -116,6 +122,8 @@ QVariant MessageModel::data(const QModelIndex &index, int role) const
             return _messageItem.priority;
         case TitleColumn:
             return _messageItem.title;
+        case RecipientColumn:
+            return _messageItem.recipientName;
         case DateColumn:
             return _messageItem.authoredOn;
         case StatusColumn:

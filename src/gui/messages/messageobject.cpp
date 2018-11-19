@@ -113,6 +113,11 @@ QString MessageObject::longTitle() const
         .arg(title, note);
 }
 
+QString MessageObject::getRecipient() const
+{
+    return recipientName;
+}
+
 QString MessageObject::details() const
 {
     static const char *GREEN = "#27AE60";

@@ -37,6 +37,7 @@ public:
     enum Columns {
         PriorityColumn,
         TitleColumn,
+        RecipientColumn,
         DateColumn,
         StatusColumn,
         ColumnCount,

@@ -54,8 +54,10 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     QTableView *msgList = ui->messageList;
     msgList->setModel(filterProxy);
     msgList->setItemDelegateForColumn(MessageModel::TitleColumn, new StyledHtmlDelegate(this));
+    msgList->setItemDelegateForColumn(MessageModel::RecipientColumn, new StyledHtmlDelegate(this));
     msgList->setColumnWidth(MessageModel::PriorityColumn, MessageObject::ICON_IMAGE_HEIGHT + 10);
     msgList->setColumnWidth(MessageModel::TitleColumn, 220);
+    msgList->setColumnWidth(MessageModel::RecipientColumn, 110);
     msgList->setColumnWidth(MessageModel::DateColumn, 110);
     msgList->setColumnWidth(MessageModel::StatusColumn, 50);
     msgList->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
