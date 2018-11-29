@@ -61,8 +61,8 @@ private:
 private slots:
     void on_sendMessage_clicked();
     void on_storeMessage_clicked();
-    void on_button_addImage_clicked();
-    void on_button_deleteImage_clicked();
+    void on_button_addAttachment_clicked();
+    void on_button_deleteAttachment_clicked();
     void on_deleteRow_clicked();
     void on_addRow_clicked();
 

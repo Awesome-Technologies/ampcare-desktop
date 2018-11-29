@@ -182,16 +182,23 @@ void CreateMessageDialog::saveMessage(bool isDraft)
         messageObject.misc = ui->lineEdit_misc->text();
     }
 
-    // process images list
-    QList<MessageObject::ImageDetails> imagesList;
-    for (int i = 0; i < ui->listWidget_images->count(); ++i) {
-        const auto &currentItem = ui->listWidget_images->item(i);
+    // process attachement list
+    QList<MessageObject::AttachmentDetails> imagesList;
+    QList<MessageObject::AttachmentDetails> documentsList;
+
+    for (int i = 0; i < ui->listWidget_attachments->count(); ++i) {
+        const auto &currentItem = ui->listWidget_attachments->item(i);
         // get filename and full file path
         if (currentItem) {
-            imagesList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString() });
+            if (currentItem->data(Qt::UserRole).toString().right(3).toLower() == "pdf") {
+                documentsList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString() });
+            } else {
+                imagesList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString() });
+            }
         }
     }
     messageObject.imagesList = imagesList;
+    messageObject.documentsList = documentsList;
 
     // process medication list
     QList<QStringList> medicationList;
@@ -206,7 +213,8 @@ void CreateMessageDialog::saveMessage(bool isDraft)
     messageObject.medicationList = medicationList;
 
     model->setData(modelIndex, QVariant::fromValue(messageObject), MessageModel::MessageObjectRole);
-    // delete removed images from assets folder
+
+    // delete removed attachments from assets folder
     for (QString item : deleteList) {
         if (QFileInfo::exists(item) && QFileInfo(item).isFile()) {
             QFile::remove(item);
@@ -216,31 +224,31 @@ void CreateMessageDialog::saveMessage(bool isDraft)
 }
 
 // add an image to the message
-void CreateMessageDialog::on_button_addImage_clicked()
+void CreateMessageDialog::on_button_addAttachment_clicked()
 {
     // restrict to images only
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image"), model->rootPath(), "Images (*.jpg *.png)");
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image or document"), model->rootPath(), "Images (*.jpg *.png);; Documents (*.pdf)");
 
     // check if filepath is empty, e.g. by cancelling the open file dialog
     if (!filePath.isEmpty()) {
-        // add image name to listbox
+        // add name to listbox
         QListWidgetItem *newItem = new QListWidgetItem;
         QVariant fullFilePathData(filePath);
         QFileInfo fileinfo = QFileInfo(filePath);
         newItem->setData(Qt::UserRole, fullFilePathData);
         newItem->setText(fileinfo.fileName());
-        int row = ui->listWidget_images->row(ui->listWidget_images->currentItem());
-        ui->listWidget_images->insertItem(row, newItem);
+        int row = ui->listWidget_attachments->row(ui->listWidget_attachments->currentItem());
+        ui->listWidget_attachments->insertItem(row, newItem);
     }
 }
 
 // remove image from message
-void CreateMessageDialog::on_button_deleteImage_clicked()
+void CreateMessageDialog::on_button_deleteAttachment_clicked()
 {
-    QList<QListWidgetItem *> items = ui->listWidget_images->selectedItems();
+    QList<QListWidgetItem *> items = ui->listWidget_attachments->selectedItems();
     for (QListWidgetItem *item : items) {
         deleteList.append(item->data(Qt::UserRole).toString());
-        delete ui->listWidget_images->takeItem(ui->listWidget_images->row(item));
+        delete ui->listWidget_attachments->takeItem(ui->listWidget_attachments->row(item));
     }
 }
 
@@ -311,13 +319,22 @@ void CreateMessageDialog::setModelIndex(const QPersistentModelIndex &index)
 
     ui->lineEdit_misc->setText(message.misc);
 
-    // fill image list
-    for (const MessageObject::ImageDetails &imageEntry : message.imagesList) {
+    // fill attachment list
+    // images
+    for (const MessageObject::AttachmentDetails &imageEntry : message.imagesList) {
         QListWidgetItem *newItem = new QListWidgetItem;
         newItem->setData(Qt::UserRole, imageEntry.path);
         newItem->setText(imageEntry.name);
-        int row = ui->listWidget_images->row(ui->listWidget_images->currentItem());
-        ui->listWidget_images->insertItem(row, newItem);
+        int row = ui->listWidget_attachments->row(ui->listWidget_attachments->currentItem());
+        ui->listWidget_attachments->insertItem(row, newItem);
+    }
+    // documents
+    for (const MessageObject::AttachmentDetails &documentEntry : message.documentsList) {
+        QListWidgetItem *newItem = new QListWidgetItem;
+        newItem->setData(Qt::UserRole, documentEntry.path);
+        newItem->setText(documentEntry.name);
+        int row = ui->listWidget_attachments->row(ui->listWidget_attachments->currentItem());
+        ui->listWidget_attachments->insertItem(row, newItem);
     }
 
     // fill medication list
@@ -369,7 +386,7 @@ void CreateMessageDialog::reset()
     ui->lineEdit_temperature->clear();
 
     // images and medication list
-    ui->listWidget_images->clear();
+    ui->listWidget_attachments->clear();
     ui->tableWidget->setRowCount(0);
 }
 

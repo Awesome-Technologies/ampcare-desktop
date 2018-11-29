@@ -172,7 +172,7 @@ QString MessageObject::details() const
                             "</style>")
                         .arg(urgencyColor);
 
-    QString html = "<html><head>" + style + "</head><body>";
+    QString html = QString("<html><head>%1</head><body>").arg(style);
 
     // add patients data
     html += "<div class='topBar'></div>";
@@ -192,6 +192,16 @@ QString MessageObject::details() const
         html += "<div class='imgcontainer'>";
         for (const auto &image : imagesList) {
             html += QString("<img class='zoom' width='200' src='file://%1'>").arg(image.path);
+        }
+        html += "</div></div></div>";
+    }
+
+    // add documents
+    if (documentsList.size() > 0) {
+        html += "<h1>" + QObject::tr("Documents") + "</h1><div class='segmentBodyColoredBorder'><div class='segmentBody'>";
+        html += "<div class='documentcontainer'>";
+        for (const auto &document : documentsList) {
+            html += QString("<a href='#%1'><img src='qrc:///client/theme/amp/documentIcon.png' height='64px'><br/>%2</a>").arg(document.path).arg(document.name);
         }
         html += "</div></div></div>";
     }
@@ -283,7 +293,6 @@ QString MessageObject::details() const
         html += "</tbody></table></div></div>";
     }
 
-    html += "</body></html>";
     return html;
 }
 
@@ -441,6 +450,16 @@ void MessageObject::setJson(const QJsonObject &json)
             imgPath.cdUp();
             for (const QJsonValue &v : payload.value("media").toArray()) {
                 imagesList.append({ v.toObject().value("content").toString(), imgPath.absolutePath() + "/assets/" + v.toObject().value("content").toString() });
+            }
+        }
+
+        // documents
+        if (payload.contains("documentReference")) {
+            QDir documentPath = QDir(path);
+            documentPath.cdUp();
+            documentPath.cdUp();
+            for (const QJsonValue &v : payload.value("documentReference").toArray()) {
+                documentsList.append({ v.toObject().value("content").toObject().value("attachment").toString(), documentPath.absolutePath() + "/assets/" + v.toObject().value("content").toObject().value("attachment").toString() });
             }
         }
     }
@@ -861,7 +880,7 @@ void MessageObject::buildJson(QJsonObject &json, bool isDraft) const
     // process images list
     QJsonArray mediaArray;
 
-    for (const ImageDetails &image : imagesList) {
+    for (const AttachmentDetails &image : imagesList) {
         QString fullFilePath = image.path;
         QFileInfo fileInfo = QFileInfo(fullFilePath);
 
@@ -883,13 +902,33 @@ void MessageObject::buildJson(QJsonObject &json, bool isDraft) const
     if (!mediaArray.empty())
         payload.insert("media", mediaArray);
 
+    // process documents list
+    QJsonArray documentsArray;
+
+    for (const AttachmentDetails &document : documentsList) {
+        QString fullFilePath = document.path;
+        QFileInfo fileInfo = QFileInfo(fullFilePath);
+
+        QJsonObject documentObject;
+        documentObject["resourceType"] = "DocumentReference";
+        documentObject["type"] = "pdf";
+        QJsonObject content;
+        content["attachment"] = fileInfo.fileName();
+        documentObject["content"] = content;
+
+        documentsArray.append(documentObject);
+    }
+
+    if (!documentsArray.empty())
+        payload.insert("documentReference", documentsArray);
+
     if (!payload.empty())
         json["payload"] = payload;
 }
 
 QString MessageObject::isArchivedFor(const QString &user) const
 {
-    if (status == MessageObject::ArchivedStatus) {
+    if (status == MessageObject::ArchivedStatus || status == MessageObject::ResolvedStatus) {
         for (int i = 0; i < archivedFor.length(); i++) {
             if (archivedFor.at(i).contains(user)) {
                 return "true";

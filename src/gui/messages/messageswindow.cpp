@@ -22,6 +22,8 @@
 #include <QSortFilterProxyModel>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QDesktopServices>
+#include <QMessageBox>
 
 namespace OCC {
 
@@ -37,7 +39,6 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     , _createMessageDialog(new CreateMessageDialog(recipientList, messageModel, this))
     , currentUser(_currentUser)
     , localPath(localPath)
-
 {
     ui->setupUi(this);
 
@@ -62,6 +63,8 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     msgList->setColumnWidth(MessageModel::StatusColumn, 50);
     msgList->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     msgList->horizontalHeader()->setSectionResizeMode(MessageModel::TitleColumn, QHeaderView::Stretch);
+
+    connect(ui->detailView, SIGNAL(urlChanged(QUrl)), this, SLOT(slotUrlChanged(QUrl)));
 
     // connect slot for showing details of message on click on the message item in the listView
     connect(ui->messageList->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(slotShowDetails(QModelIndex, QModelIndex)));
@@ -138,8 +141,65 @@ void MessagesWindow::on_archiveButton_clicked()
         fileName.append(".pdf");
     }
 
+    // create a folder
+    QString archivePath = QFileInfo(fileName).absolutePath() + "/" + QFileInfo(fileName).fileName();
+    archivePath.chop(4); // remove suffix
+    QDir dir(archivePath);
+    if (!dir.exists(archivePath)) {
+        if (!dir.mkpath(archivePath)) {
+            // display error
+            QMessageBox msgBox;
+            msgBox.setText(QObject::tr("Error on creating folder for archiving!"));
+            msgBox.exec();
+            return;
+        }
+    }
+
     // print content of detailView to pdf
-    ui->detailView->page()->printToPdf(fileName);
+    ui->detailView->page()->printToPdf(QString(archivePath + "/" + QFileInfo(fileName).fileName()));
+
+    // copy assets
+    MessageObject _messageItem(filterProxy->data(ui->messageList->currentIndex(), MessageModel::MessageObjectRole).value<MessageObject>());
+
+    // process images list
+    for (MessageObject::AttachmentDetails &image : _messageItem.imagesList) {
+        // get full file path
+        if (!image.path.isEmpty()) {
+            QString fullFilePath = image.path;
+
+            // assure filename is unique
+            while (QFileInfo::exists(archivePath + "/" + image.name)) {
+                image.name = QUuid::createUuid().toString() + image.name;
+            }
+            if (!QFile::copy(fullFilePath, archivePath + "/" + image.name)) {
+                // display error
+                QMessageBox msgBox;
+                msgBox.setText(QObject::tr("Error on copying assets!"));
+                msgBox.exec();
+                return;
+            }
+        }
+    }
+
+    // process documents list
+    for (MessageObject::AttachmentDetails &document : _messageItem.documentsList) {
+        // get full file path
+        if (!document.path.isEmpty()) {
+            QString fullFilePath = document.path;
+
+            // assure filename is unique
+            while (QFileInfo::exists(archivePath + "/" + document.name)) {
+                document.name = QUuid::createUuid().toString() + document.name;
+            }
+            if (!QFile::copy(fullFilePath, archivePath + "/" + document.name)) {
+                // display error
+                QMessageBox msgBox;
+                msgBox.setText(QObject::tr("Error on copying assets!"));
+                msgBox.exec();
+                return;
+            }
+        }
+    }
 
     // set message status to 'archived'
     filterProxy->setData(ui->messageList->currentIndex(), "", MessageModel::MessageArchivedRole);
@@ -159,5 +219,11 @@ void MessagesWindow::on_videocallButton_clicked()
     emit callRecipientChanged(_callRecipient);
 }
 
+void MessagesWindow::slotUrlChanged(QUrl url)
+{
+    if (url.fragment() != "") {
+        QDesktopServices::openUrl(QUrl("file:///" + url.fragment(), QUrl::TolerantMode));
+    }
+}
 
 } // end namespace

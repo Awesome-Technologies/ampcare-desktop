@@ -56,7 +56,7 @@ public:
         FEMALE,
     };
 
-    struct ImageDetails
+    struct AttachmentDetails
     {
         QString name;
         QString path;
@@ -104,7 +104,8 @@ public:
     QDateTime dtTemp;
     QDateTime dtDefac;
 
-    QList<ImageDetails> imagesList;
+    QList<AttachmentDetails> imagesList;
+    QList<AttachmentDetails> documentsList;
     QList<QStringList> medicationList;
     QList<QStringList> archivedFor;
 

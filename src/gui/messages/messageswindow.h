@@ -70,6 +70,8 @@ private slots:
     void on_archiveButton_clicked();
     void on_videocallButton_clicked();
 
+    void slotUrlChanged(QUrl url);
+
 signals:
     void callRecipientChanged(QString callRecipient);
 };

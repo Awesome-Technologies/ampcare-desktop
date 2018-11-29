@@ -795,7 +795,7 @@
             <locale language="German" country="Germany"/>
            </property>
            <property name="text">
-            <string>Attached images</string>
+            <string>Attachments</string>
            </property>
           </widget>
          </item>
@@ -815,7 +815,7 @@
         </layout>
        </item>
        <item>
-        <widget class="QListWidget" name="listWidget_images">
+        <widget class="QListWidget" name="listWidget_attachments">
          <property name="locale">
           <locale language="German" country="Germany"/>
          </property>
@@ -824,22 +824,22 @@
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_10">
          <item>
-          <widget class="QPushButton" name="button_addImage">
+          <widget class="QPushButton" name="button_addAttachment">
            <property name="locale">
             <locale language="German" country="Germany"/>
            </property>
            <property name="text">
-            <string>Attach image</string>
+            <string>Attach</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="button_deleteImage">
+          <widget class="QPushButton" name="button_deleteAttachment">
            <property name="locale">
             <locale language="German" country="Germany"/>
            </property>
            <property name="text">
-            <string>Delete image</string>
+            <string>Delete</string>
            </property>
           </widget>
          </item>
@@ -1022,9 +1022,9 @@
   <tabstop>lineEdit_pain</tabstop>
   <tabstop>dateTime_lastDefecation</tabstop>
   <tabstop>lineEdit_misc</tabstop>
-  <tabstop>listWidget_images</tabstop>
-  <tabstop>button_addImage</tabstop>
-  <tabstop>button_deleteImage</tabstop>
+  <tabstop>listWidget_attachments</tabstop>
+  <tabstop>button_addAttachment</tabstop>
+  <tabstop>button_deleteAttachment</tabstop>
   <tabstop>tableWidget</tabstop>
   <tabstop>addRow</tabstop>
   <tabstop>deleteRow</tabstop>
