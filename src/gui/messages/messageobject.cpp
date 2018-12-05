@@ -61,11 +61,11 @@ QIcon MessageObject::priorityIcon() const
 QIcon MessageObject::statusIcon() const
 {
     // set image for message status
-    QString _statusIcon = "icon_a_empty";
+    QString _statusIcon = "icon_a_draft";
 
     switch (status) {
     case DraftStatus:
-        _statusIcon = "icon_a_empty";
+        _statusIcon = "icon_a_draft";
         break;
     case SentStatus:
         _statusIcon = "icon_b_sent.png";
@@ -83,7 +83,7 @@ QIcon MessageObject::statusIcon() const
         _statusIcon = "icon_f_resolved.png";
         break;
     case ArchivedStatus:
-        _statusIcon = "icon_a_empty";
+        _statusIcon = "icon_a_draft";
         break;
     }
 
