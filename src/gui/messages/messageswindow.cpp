@@ -20,9 +20,10 @@
 #include "systray.h"
 #include "ui_messageswindow.h"
 
+#include <QAction>
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QFileInfo>
-#include <QDesktopServices>
 #include <QJsonDocument>
 #include <QMessageBox>
 #include <QSortFilterProxyModel>
@@ -39,6 +40,7 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     , filterProxy(new QSortFilterProxyModel(this))
     , _answerMessageDialog(new AnswerMessageDialog(messageModel, this))
     , _createMessageDialog(new CreateMessageDialog(recipientList, messageModel, this))
+    , deleteAction(new QAction(this))
     , currentUser(_currentUser)
     , localPath(localPath)
 {
@@ -72,6 +74,11 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
 
     // connect slot for showing details of message on click on the message item in the listView
     connect(ui->messageList->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(slotShowDetails(QModelIndex, QModelIndex)));
+
+    // install action for deleting drafts
+    deleteAction->setShortcut(Qt::Key_Backspace);
+    connect(deleteAction, SIGNAL(triggered()), this, SLOT(on_deleteKey_pressed()));
+    addAction(deleteAction);
 
     msgList->setCurrentIndex(messageModel->index(0, 0));
 }
@@ -213,6 +220,39 @@ void MessagesWindow::on_resolvedButton_clicked()
 {
     // set message status to 'resolved'
     filterProxy->setData(ui->messageList->currentIndex(), "", MessageModel::MessageResolvedRole);
+}
+
+void MessagesWindow::on_deleteKey_pressed()
+{
+    MessageObject _messageItem(filterProxy->data(ui->messageList->currentIndex(), MessageModel::MessageObjectRole).value<MessageObject>());
+    if (_messageItem.status == MessageObject::DraftStatus) {
+        QMessageBox msgBox;
+        msgBox.setText(tr("Do you really want to delete this draft?"));
+        QAbstractButton *pButtonYes = msgBox.addButton(tr("Delete"), QMessageBox::YesRole);
+        msgBox.addButton(tr("Cancel"), QMessageBox::NoRole);
+        msgBox.exec();
+
+        if (msgBox.clickedButton() == pButtonYes) {
+            // delete assets
+            // documents
+            for (MessageObject::AttachmentDetails item : _messageItem.documentsList) {
+                if (QFileInfo::exists(item.path) && QFileInfo(item.path).isFile()) {
+                    QFile::remove(item.path);
+                }
+            }
+            // images
+            for (MessageObject::AttachmentDetails item : _messageItem.imagesList) {
+                if (QFileInfo::exists(item.path) && QFileInfo(item.path).isFile()) {
+                    QFile::remove(item.path);
+                }
+            }
+
+            // delete message
+            if (QFileInfo::exists(_messageItem.path) && QFileInfo(_messageItem.path).isFile()) {
+                QFile::remove(_messageItem.path);
+            }
+        }
+    }
 }
 
 void MessagesWindow::on_videocallButton_clicked()

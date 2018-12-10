@@ -19,6 +19,7 @@
 #include <sharee.h>
 
 class QSortFilterProxyModel;
+class QAction;
 
 namespace OCC {
 
@@ -51,6 +52,7 @@ private:
     QSortFilterProxyModel *filterProxy;
     AnswerMessageDialog *_answerMessageDialog;
     CreateMessageDialog *_createMessageDialog;
+    QAction *deleteAction;
 
     const Sharee currentUser;
     const QString localPath;
@@ -61,13 +63,13 @@ private slots:
     /** shows content of the message in the detailView */
     void slotShowDetails(const QModelIndex &current, const QModelIndex &previous);
 
-    /** item at @p index in message list got double clicked */
-    void on_messageList_doubleClicked(const QModelIndex &index);
-
+    void on_archiveButton_clicked();
     /** show dialog to create a new message */
     void on_createMessageButton_clicked();
+    void on_deleteKey_pressed();
+    /** item at @p index in message list got double clicked */
+    void on_messageList_doubleClicked(const QModelIndex &index);
     void on_resolvedButton_clicked();
-    void on_archiveButton_clicked();
     void on_videocallButton_clicked();
 
     void slotMessageReceived(QString messagePath);

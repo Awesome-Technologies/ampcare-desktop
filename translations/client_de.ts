@@ -2038,6 +2038,21 @@ p, li { white-space: pre-wrap; }
         <translation>Archivieren</translation>
     </message>
     <message>
+        <location filename="../src/gui/messages/messageswindow.cpp" line="226"/>
+        <source>Do you really want to delete this draft?</source>
+        <translation>Möchten Sie diesen Entwurf wirklich löschen?</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messageswindow.cpp" line="227"/>
+        <source>Delete</source>
+        <translation>Löschen</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messageswindow.cpp" line="228"/>
+        <source>Cancel</source>
+        <translation>Abbrechen</translation>
+    </message>
+    <message>
         <location filename="../src/gui/messages/messageswindow.cpp" line="248"/>
         <source>New Message</source>
         <translation>Neue Nachricht</translation>
