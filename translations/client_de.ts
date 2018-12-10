@@ -2037,6 +2037,11 @@ p, li { white-space: pre-wrap; }
         <source>Archive</source>
         <translation>Archivieren</translation>
     </message>
+    <message>
+        <location filename="../src/gui/messages/messageswindow.cpp" line="248"/>
+        <source>New Message</source>
+        <translation>Neue Nachricht</translation>
+    </message>
 </context>
 <context>
     <name>OCC::NSISUpdater</name>

@@ -17,13 +17,15 @@
 #include "messagemodel.h"
 #include "messageswindow.h"
 #include "styledhtmldelegate.h"
+#include "systray.h"
 #include "ui_messageswindow.h"
 
-#include <QSortFilterProxyModel>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QDesktopServices>
+#include <QJsonDocument>
 #include <QMessageBox>
+#include <QSortFilterProxyModel>
 
 namespace OCC {
 
@@ -65,6 +67,8 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     msgList->horizontalHeader()->setSectionResizeMode(MessageModel::TitleColumn, QHeaderView::Stretch);
 
     connect(ui->detailView, SIGNAL(urlChanged(QUrl)), this, SLOT(slotUrlChanged(QUrl)));
+
+    connect(messageModel, SIGNAL(newMessageReceived(QString)), this, SLOT(slotMessageReceived(QString)));
 
     // connect slot for showing details of message on click on the message item in the listView
     connect(ui->messageList->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(slotShowDetails(QModelIndex, QModelIndex)));
@@ -224,6 +228,24 @@ void MessagesWindow::slotUrlChanged(QUrl url)
     if (url.fragment() != "") {
         QDesktopServices::openUrl(QUrl("file:///" + url.fragment(), QUrl::TolerantMode));
     }
+}
+
+void MessagesWindow::slotMessageReceived(QString messagePath)
+{
+    // notify about new message
+    MessageObject messageObject;
+    QFile file(messagePath);
+    file.open(QIODevice::ReadOnly);
+    messageObject.path = messagePath;
+    messageObject.setJson(QJsonDocument::fromJson(file.readAll()).object());
+
+    QString _text = messageObject.title;
+    if (_text.length() > MessageObject::TEXT_PREVIEW_LENGTH)
+        _text = _text.left(MessageObject::TEXT_PREVIEW_LENGTH) + " ...";
+
+    Systray _tray;
+    _tray.setIcon(messageObject.priorityIcon());
+    _tray.showMessage(tr("New Message"), _text, QSystemTrayIcon::Information, messageObject.notificationTimeout());
 }
 
 } // end namespace

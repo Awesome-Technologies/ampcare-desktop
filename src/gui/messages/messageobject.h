@@ -118,6 +118,9 @@ public:
     /** returns an icon corresponding to priority */
     QIcon priorityIcon() const;
 
+    /** returns the time how long the 'new message' notification should be shown for this message in milliseconds */
+    int notificationTimeout() const;
+
     /** returns an icon to display the current status of the message */
     QIcon statusIcon() const;
 

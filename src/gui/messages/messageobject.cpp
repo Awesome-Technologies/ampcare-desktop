@@ -58,6 +58,27 @@ QIcon MessageObject::priorityIcon() const
     return QIcon(QString(":/client/theme/amp/%1").arg(_priorityIcon));
 }
 
+int MessageObject::notificationTimeout() const
+{
+    int _timeout = 10000; // show for 10 seconds
+
+    switch (priority) {
+    case MessageObject::InfoPriority:
+        break;
+    case MessageObject::GoodPriority:
+        _timeout = 600000; // show for 10 minutes
+        break;
+    case MessageObject::UrgentPriority:
+        _timeout = 1200000; // show for 20 minutes
+        break;
+    case MessageObject::CriticalPriority:
+        _timeout = 2400000; // show for 40 minutes
+        break;
+    }
+
+    return _timeout;
+}
+
 QIcon MessageObject::statusIcon() const
 {
     // set image for message status

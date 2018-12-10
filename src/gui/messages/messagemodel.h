@@ -72,6 +72,9 @@ public:
     /** provides header texts for the columns in the listView */
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+signals:
+    void newMessageReceived(QString messagePath);
+
 private slots:
     void onDirectoryChanged(const QString &path);
 

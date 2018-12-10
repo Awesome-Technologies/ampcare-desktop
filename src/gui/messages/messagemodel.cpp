@@ -380,6 +380,24 @@ void MessageModel::onDirectoryChanged(const QString &path)
 {
     emit layoutAboutToBeChanged();
     qInfo() << "directory changed" << path;
+
+    // check if a file was added
+    for (const QFileInfo &info : QDir(path).entryInfoList(_filters, QDir::Files)) {
+        bool found = false;
+        for (const MessageObject &message : _messageList) {
+            if (message.path == info.absoluteFilePath()) {
+                found = true;
+            }
+        }
+
+        // file was not in original list
+        if (found == false) {
+            qInfo() << "This file was added: " << info.absoluteFilePath();
+
+            emit newMessageReceived(info.absoluteFilePath());
+        }
+    }
+
     _watcher.removePaths(_watcher.directories());
     _messageList.clear();
     addEntities();
