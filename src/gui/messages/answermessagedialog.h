@@ -49,9 +49,12 @@ private:
     Ui::AnswerMessageDialog *ui;
     MessageModel *model;
     QPersistentModelIndex modelIndex;
+    QStringList deleteList;
 
 private slots:
     void on_sendAnswer_clicked();
+    void on_button_addAttachment_clicked();
+    void on_button_deleteAttachment_clicked();
 };
 
 } // end namespace

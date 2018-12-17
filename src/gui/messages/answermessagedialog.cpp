@@ -16,7 +16,9 @@
 #include "answermessagedialog.h"
 #include "messagemodel.h"
 #include "messageobject.h"
+
 #include <QDir>
+#include <QFileDialog>
 #include <QPushButton>
 
 namespace OCC {
@@ -76,7 +78,59 @@ void AnswerMessageDialog::on_sendAnswer_clicked()
 
     // write new message body
     message.note = _newBodyText;
+
+    // process attachement list
+    for (int i = 0; i < ui->listWidget_attachments->count(); ++i) {
+        const auto &currentItem = ui->listWidget_attachments->item(i);
+        // get filename and full file path
+        if (currentItem) {
+            if (currentItem->data(Qt::UserRole).toString().endsWith("pdf", Qt::CaseInsensitive)) {
+                message.documentsList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString(), model->currentUser().shareWith() });
+            } else {
+                message.imagesList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString(), model->currentUser().shareWith() });
+            }
+        }
+    }
+
     model->setData(modelIndex, QVariant::fromValue(message), MessageModel::MessageObjectRole);
+
+    // delete removed attachments from assets folder
+    for (QString item : deleteList) {
+        if (QFileInfo::exists(item) && QFileInfo(item).isFile()) {
+            QFile::remove(item);
+        }
+    }
+    deleteList.clear();
+}
+
+// add an image to the message
+void AnswerMessageDialog::on_button_addAttachment_clicked()
+{
+    // restrict to images (jpg, png) and pdf documents
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image or document"), model->rootPath(), "Images (*.jpg *.png);; Documents (*.pdf)");
+
+    // check if filepath is empty, e.g. by cancelling the open file dialog
+    if (filePath.isEmpty())
+        return;
+
+    // add name to listbox
+    QListWidgetItem *newItem = new QListWidgetItem;
+    QVariant fullFilePathData(filePath);
+    QFileInfo fileinfo = QFileInfo(filePath);
+    newItem->setData(Qt::UserRole, fullFilePathData);
+    newItem->setText(fileinfo.fileName());
+    int row = ui->listWidget_attachments->row(ui->listWidget_attachments->currentItem());
+    ui->listWidget_attachments->insertItem(row, newItem);
+}
+
+// remove image from message
+void AnswerMessageDialog::on_button_deleteAttachment_clicked()
+{
+    QList<QListWidgetItem *> items = ui->listWidget_attachments->selectedItems();
+    for (const QListWidgetItem *item : items) {
+        deleteList.append(item->data(Qt::UserRole).toString());
+        delete ui->listWidget_attachments->takeItem(ui->listWidget_attachments->row(item));
+    }
 }
 
 } //end namespace

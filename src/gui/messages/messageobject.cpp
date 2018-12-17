@@ -188,6 +188,10 @@ QString MessageObject::details() const
                             ".messageRecipient {background-color:#34495e;}"
                             ".messageBody {padding:0px 10px;width:100%;}"
                             ".messageDate {padding:0px;color:#858585;font-style:italic;white-space:nowrap;}"
+                            "a:link {padding: 4px 10px; text-align: center; text-decoration: none; display: inline-block; -webkit-border-radius:4px;}"
+                            ".documentSender, .documentRecipient {color:#fff;}"
+                            ".documentSender {background-color:#9b59b6;}"
+                            ".documentRecipient {background-color:#34495e;}"
                             "img.zoom {transition: transform 0.2s; -webkit-transition: transform 0.2s;}"
                             "img.zoom:hover {cursor: zoom-in; cursor: -webkit-zoom-in; transform: scale(4.0,4.0); -webkit-transform: scale(4.0,4.0);}"
                             "</style>")
@@ -222,7 +226,7 @@ QString MessageObject::details() const
         html += "<h1>" + QObject::tr("Documents") + "</h1><div class='segmentBodyColoredBorder'><div class='segmentBody'>";
         html += "<div class='documentcontainer'>";
         for (const auto &document : documentsList) {
-            html += QString("<a href='#%1'><img src='qrc:///client/theme/amp/documentIcon.png' height='64px'><br/>%2</a>").arg(document.path).arg(document.name);
+            html += QString("<a href='#%1' class='%3'><img src='qrc:///client/theme/amp/documentIcon.png' height='64px'><br/>%2</a>").arg(document.path).arg(document.name.chopped(4)).arg(document.attachedBy == sender ? "documentSender" : "documentRecipient");
         }
         html += "</div></div></div>";
     }
@@ -470,7 +474,7 @@ void MessageObject::setJson(const QJsonObject &json)
             imgPath.cdUp();
             imgPath.cdUp();
             for (const QJsonValue &v : payload.value("media").toArray()) {
-                imagesList.append({ v.toObject().value("content").toString(), imgPath.absolutePath() + "/assets/" + v.toObject().value("content").toString() });
+                imagesList.append({ v.toObject().value("content").toString(), imgPath.absolutePath() + "/assets/" + v.toObject().value("content").toString(), v.toObject().value("operator").toString() });
             }
         }
 
@@ -480,7 +484,7 @@ void MessageObject::setJson(const QJsonObject &json)
             documentPath.cdUp();
             documentPath.cdUp();
             for (const QJsonValue &v : payload.value("documentReference").toArray()) {
-                documentsList.append({ v.toObject().value("content").toObject().value("attachment").toString(), documentPath.absolutePath() + "/assets/" + v.toObject().value("content").toObject().value("attachment").toString() });
+                documentsList.append({ v.toObject().value("content").toObject().value("attachment").toString(), documentPath.absolutePath() + "/assets/" + v.toObject().value("content").toObject().value("attachment").toString(), v.toObject().value("author").toString() });
             }
         }
     }
@@ -911,7 +915,7 @@ void MessageObject::buildJson(QJsonObject &json, bool isDraft) const
         mediaObject["view"] = "";
         mediaObject["subject"] = "";
         mediaObject["occurrenceDateTime"] = "";
-        mediaObject["operator"] = "";
+        mediaObject["operator"] = image.attachedBy;
         mediaObject["bodySite"] = "";
         mediaObject["height"] = "";
         mediaObject["width"] = "";
@@ -936,6 +940,7 @@ void MessageObject::buildJson(QJsonObject &json, bool isDraft) const
         QJsonObject content;
         content["attachment"] = fileInfo.fileName();
         documentObject["content"] = content;
+        documentObject["author"] = document.attachedBy;
 
         documentsArray.append(documentObject);
     }

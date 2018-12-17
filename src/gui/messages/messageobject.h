@@ -60,6 +60,7 @@ public:
     {
         QString name;
         QString path;
+        QString attachedBy;
     };
 
     MessageObject();

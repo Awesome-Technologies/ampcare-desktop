@@ -191,9 +191,9 @@ void CreateMessageDialog::saveMessage(bool isDraft)
         // get filename and full file path
         if (currentItem) {
             if (currentItem->data(Qt::UserRole).toString().right(3).toLower() == "pdf") {
-                documentsList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString() });
+                documentsList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString(), model->currentUser().shareWith() });
             } else {
-                imagesList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString() });
+                imagesList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString(), model->currentUser().shareWith() });
             }
         }
     }
