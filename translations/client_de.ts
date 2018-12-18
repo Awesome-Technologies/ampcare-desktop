@@ -592,34 +592,54 @@ p, li { white-space: pre-wrap; }
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/answermessagedialog.ui" line="78"/>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="82"/>
         <source>Employee</source>
         <translation>Mitarbeitername</translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/answermessagedialog.ui" line="85"/>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="89"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/answermessagedialog.ui" line="92"/>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="96"/>
         <source>/</source>
         <translation>/</translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/answermessagedialog.ui" line="128"/>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="132"/>
         <source>Answer text</source>
         <translation>Antworttext</translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/answermessagedialog.cpp" line="33"/>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="176"/>
+        <source>Attachments</source>
+        <translation>Anhänge</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="210"/>
+        <source>Attach</source>
+        <translation>Anhängen</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.ui" line="220"/>
+        <source>Delete</source>
+        <translation>Anhang löschen</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.cpp" line="35"/>
         <source>Send</source>
         <translation>Senden</translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/answermessagedialog.cpp" line="34"/>
+        <location filename="../src/gui/messages/answermessagedialog.cpp" line="36"/>
         <source>Don&apos;t save</source>
         <translation>Nicht speichern</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/answermessagedialog.cpp" line="110"/>
+        <source>Attach image or document</source>
+        <translation>Bild oder Dokument anhängen</translation>
     </message>
 </context>
 <context>
