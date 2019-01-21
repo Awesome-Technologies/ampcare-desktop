@@ -58,6 +58,14 @@ private:
     QUuid currentMessageId;
     QStringList deleteList;
 
+    QDate dBirthday;
+    QDateTime dtBp;
+    QDateTime dtPulse;
+    QDateTime dtTemp;
+    QDateTime dtSugar;
+    QDateTime dtWeight;
+    QDateTime dtDefac;
+
 private slots:
     void on_sendMessage_clicked();
     void on_storeMessage_clicked();
@@ -65,6 +73,13 @@ private slots:
     void on_button_deleteAttachment_clicked();
     void on_deleteRow_clicked();
     void on_addRow_clicked();
+    void on_dateEditBirthday_dateChanged(QDate date);
+    void on_dateTime_bloodpressure_dateTimeChanged(QDateTime date);
+    void on_dateTime_bloodsugar_dateTimeChanged(QDateTime date);
+    void on_dateTime_bodyweight_dateTimeChanged(QDateTime date);
+    void on_dateTime_lastDefecation_dateTimeChanged(QDateTime date);
+    void on_dateTime_pulse_dateTimeChanged(QDateTime date);
+    void on_dateTime_temperature_dateTimeChanged(QDateTime date);
 
 signals:
     void listUpdated();

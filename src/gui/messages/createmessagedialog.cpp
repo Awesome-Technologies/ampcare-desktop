@@ -133,7 +133,10 @@ void CreateMessageDialog::saveMessage(bool isDraft)
 
     // patient data
     messageObject.patientName = ui->lineEdit_patientName->text();
-    messageObject.birthday = ui->dateEditBirthday->date();
+    // check if date was set
+    if (!dBirthday.isNull()) {
+        messageObject.birthday = dBirthday;
+    }
     messageObject.gender = MessageObject::Gender(ui->comboBox_gender->currentIndex());
 
     // vital data
@@ -141,30 +144,45 @@ void CreateMessageDialog::saveMessage(bool isDraft)
     if (!ui->lineEdit_bpSys->text().isEmpty() && !ui->lineEdit_bpDia->text().isEmpty()) {
         messageObject.bpSys = ui->lineEdit_bpSys->text().toInt();
         messageObject.bpDia = ui->lineEdit_bpDia->text().toInt();
-        messageObject.dtBp = ui->dateTime_bloodpressure->dateTime();
+        // check if date was set
+        if (!dtBp.isNull()) {
+            messageObject.dtBp = dtBp;
+        }
     }
     // pulse
     if (!ui->lineEdit_pulse->text().isEmpty()) {
         messageObject.pulse = ui->lineEdit_pulse->text().toInt();
-        messageObject.dtPulse = ui->dateTime_pulse->dateTime();
+        // check if date was set
+        if (!dtPulse.isNull()) {
+            messageObject.dtPulse = dtPulse;
+        }
     }
     // temperature
     if (!ui->lineEdit_temperature->text().isEmpty()) {
         // TODO convert according to locale
         messageObject.temp = ui->lineEdit_temperature->text().toDouble();
-        messageObject.dtTemp = ui->dateTime_temperature->dateTime();
+        // check if date was set
+        if (!dtTemp.isNull()) {
+            messageObject.dtTemp = dtTemp;
+        }
     }
     // blood sugar
     if (!ui->lineEdit_bloodsugar->text().isEmpty()) {
         // TODO convert according to locale
         messageObject.sugar = ui->lineEdit_bloodsugar->text().toDouble();
-        messageObject.dtSugar = ui->dateTime_bloodsugar->dateTime();
+        // check if date was set
+        if (!dtSugar.isNull()) {
+            messageObject.dtSugar = dtSugar;
+        }
     }
     // weight
     if (!ui->lineEdit_bodyweight->text().isEmpty()) {
         // TODO convert according to locale
         messageObject.weight = ui->lineEdit_bodyweight->text().toDouble();
-        messageObject.dtWeight = ui->dateTime_bodyweight->dateTime();
+        // check if date was set
+        if (!dtWeight.isNull()) {
+            messageObject.dtWeight = dtWeight;
+        }
     }
 
     if (!ui->lineEdit_responsiveness->text().isEmpty()) {
@@ -175,8 +193,10 @@ void CreateMessageDialog::saveMessage(bool isDraft)
         messageObject.pain = ui->lineEdit_pain->text();
     }
 
-    // TODO check if it was changed
-    messageObject.dtDefac = ui->dateTime_lastDefecation->dateTime();
+    // check if date was set
+    if (!dtDefac.isNull()) {
+        messageObject.dtDefac = dtDefac;
+    }
 
     if (!ui->lineEdit_misc->text().isEmpty()) {
         messageObject.misc = ui->lineEdit_misc->text();
@@ -279,6 +299,7 @@ void CreateMessageDialog::setModelIndex(const QPersistentModelIndex &index)
 
     // patient data
     ui->dateEditBirthday->setDate(message.birthday);
+    dBirthday = message.birthday;
     ui->lineEdit_patientName->setText(message.patientName);
     ui->comboBox_gender->setCurrentIndex(message.gender == MessageObject::MALE ? 0 : 1);
 
@@ -286,32 +307,37 @@ void CreateMessageDialog::setModelIndex(const QPersistentModelIndex &index)
     if (message.pulse) {
         ui->lineEdit_pulse->setText(QString::number(message.pulse));
         ui->dateTime_pulse->setDateTime(message.dtPulse);
+        dtPulse = message.dtPulse;
     }
 
     if (!std::isnan(message.sugar)) {
         ui->lineEdit_bloodsugar->setText(QString::number(message.sugar));
         ui->dateTime_bloodsugar->setDateTime(message.dtSugar);
+        dtBp = message.dtBp;
     }
-
 
     // TODO double _temp = v.toObject().value("valueQuantity").toObject().value("value").toDouble();
     if (!std::isnan(message.temp)) {
         ui->lineEdit_temperature->setText(QString::number(message.temp));
         ui->dateTime_temperature->setDateTime(message.dtTemp);
+        dtTemp = message.dtTemp;
     }
 
     if (message.bpSys || message.bpDia) {
         ui->lineEdit_bpSys->setText(QString::number(message.bpSys));
         ui->lineEdit_bpDia->setText(QString::number(message.bpDia));
         ui->dateTime_bloodpressure->setDateTime(message.dtBp);
+        dtBp = message.dtBp;
     }
 
     if (!std::isnan(message.weight)) {
         ui->lineEdit_bodyweight->setText(QString::number(message.weight));
         ui->dateTime_bodyweight->setDateTime(message.dtWeight);
+        dtWeight = message.dtWeight;
     }
 
     ui->dateTime_lastDefecation->setDateTime(message.dtDefac);
+    dtDefac = message.dtDefac;
 
     ui->lineEdit_pain->setText(message.pain);
 
@@ -349,8 +375,6 @@ void CreateMessageDialog::setModelIndex(const QPersistentModelIndex &index)
 
 void CreateMessageDialog::reset()
 {
-    QDate date = QDate::currentDate();
-
     modelIndex = QPersistentModelIndex();
     // message metadata
     // reset message id
@@ -365,15 +389,28 @@ void CreateMessageDialog::reset()
     // patient data
     ui->comboBox_gender->setCurrentIndex(-1);
     ui->lineEdit_patientName->clear();
-    ui->dateEditBirthday->setDate(date);
+
+    dBirthday = QDate();
+    dtBp = QDateTime();
+    dtSugar = QDateTime();
+    dtWeight = QDateTime();
+    dtDefac = QDateTime();
+    dtPulse = QDateTime();
+    dtTemp = QDateTime();
 
     // vital data
-    ui->dateTime_bloodpressure->setDate(date);
-    ui->dateTime_bloodsugar->setDate(date);
-    ui->dateTime_bodyweight->setDate(date);
-    ui->dateTime_lastDefecation->setDate(date);
-    ui->dateTime_pulse->setDate(date);
-    ui->dateTime_temperature->setDate(date);
+    ui->dateTime_bloodpressure->setTime(QTime(0, 0));
+    ui->dateTime_bloodpressure->setDate(QDate::currentDate());
+    ui->dateTime_bloodsugar->setTime(QTime(0, 0));
+    ui->dateTime_bloodsugar->setDate(QDate::currentDate());
+    ui->dateTime_bodyweight->setTime(QTime(0, 0));
+    ui->dateTime_bodyweight->setDate(QDate::currentDate());
+    ui->dateTime_lastDefecation->setTime(QTime(0, 0));
+    ui->dateTime_lastDefecation->setDate(QDate::currentDate());
+    ui->dateTime_pulse->setTime(QTime(0, 0));
+    ui->dateTime_pulse->setDate(QDate::currentDate());
+    ui->dateTime_temperature->setTime(QTime(0, 0));
+    ui->dateTime_temperature->setDate(QDate::currentDate());
 
     ui->lineEdit_bloodsugar->clear();
     ui->lineEdit_bodyweight->clear();
@@ -404,5 +441,42 @@ void CreateMessageDialog::on_deleteRow_clicked()
     for (const QModelIndex &index : selection)
         ui->tableWidget->removeRow(index.row());
 }
+
+
+void CreateMessageDialog::on_dateEditBirthday_dateChanged(QDate date)
+{
+    dBirthday = date;
+}
+
+void CreateMessageDialog::on_dateTime_bloodpressure_dateTimeChanged(QDateTime date)
+{
+    dtBp = date;
+}
+
+void CreateMessageDialog::on_dateTime_bloodsugar_dateTimeChanged(QDateTime date)
+{
+    dtSugar = date;
+}
+
+void CreateMessageDialog::on_dateTime_bodyweight_dateTimeChanged(QDateTime date)
+{
+    dtWeight = date;
+}
+
+void CreateMessageDialog::on_dateTime_lastDefecation_dateTimeChanged(QDateTime date)
+{
+    dtDefac = date;
+}
+
+void CreateMessageDialog::on_dateTime_pulse_dateTimeChanged(QDateTime date)
+{
+    dtPulse = date;
+}
+
+void CreateMessageDialog::on_dateTime_temperature_dateTimeChanged(QDateTime date)
+{
+    dtTemp = date;
+}
+
 
 } //end namespace

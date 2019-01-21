@@ -232,11 +232,11 @@ QString MessageObject::details() const
     }
 
     // add vital data / observations
-    html += "<div style='float: left; width: 49%;'>";
-    html += "<h1>" + QObject::tr("Vital parameter") + "</h1>";
-    html += "<div class='segmentBodyColoredBorder'><div class='segmentBody'><table class='basicTable'><tbody>";
-    html += QString("<tr><td>%1</td><td>%2</td><td>%3</td></tr><tr><td>%4</td>")
-                .arg(QObject::tr("Parameter"), QObject::tr("Value"), QObject::tr("Timestamp"), QObject::tr("Bloodpressure"));
+    QString vitalDataHtml = "<div style='float: left; width: 49%;'>";
+    vitalDataHtml += "<h1>" + QObject::tr("Vital parameter") + "</h1>";
+    vitalDataHtml += "<div class='segmentBodyColoredBorder'><div class='segmentBody'><table class='basicTable'><tbody>";
+    vitalDataHtml += QString("<tr><td>%1</td><td>%2</td><td>%3</td></tr><tr><td>%4</td>")
+                         .arg(QObject::tr("Parameter"), QObject::tr("Value"), QObject::tr("Timestamp"), QObject::tr("Bloodpressure"));
 
     QString _bpSys = "-", _bpDia = "-", _dtBp = "-";
     if (bpSys && bpDia) {
@@ -244,7 +244,7 @@ QString MessageObject::details() const
         _bpDia = QString::number(bpDia);
         _dtBp = dtBp.toString("dd.MM.yyyy hh:mm");
     }
-    html += QString("<td>%1/%2 mmHg</td><td>%3 %4</td></tr>").arg(_bpSys, _bpDia, _dtBp, QObject::tr("o'clock"));
+    vitalDataHtml += QString("<td>%1/%2 mmHg</td><td>%3 %4</td></tr>").arg(_bpSys, _bpDia, _dtBp, QObject::tr("o'clock"));
 
     QString _pulse = "-", _dtPulse = "-", _temp = "-", _dtTemp = "-";
     if (pulse) {
@@ -255,9 +255,9 @@ QString MessageObject::details() const
         _temp = QString::number(temp);
         _dtTemp = dtTemp.toString("dd.MM.yyyy hh:mm");
     }
-    html += QString("<tr><td>%2</td><td>%4 bpm</td><td>%5 %1</td></tr><tr><td>%3</td><td>%6 °C</td><td>%7 %1</td></tr>")
-                .arg(QObject::tr("o'clock"), QObject::tr("Pulse"), QObject::tr("Body temperature"))
-                .arg(_pulse, _dtPulse, _temp, _dtTemp);
+    vitalDataHtml += QString("<tr><td>%2</td><td>%4 bpm</td><td>%5 %1</td></tr><tr><td>%3</td><td>%6 °C</td><td>%7 %1</td></tr>")
+                         .arg(QObject::tr("o'clock"), QObject::tr("Pulse"), QObject::tr("Body temperature"))
+                         .arg(_pulse, _dtPulse, _temp, _dtTemp);
 
     QString _sugar = "-", _dtSugar = "-", _weight = "-", _dtWeight = "-";
     if (!std::isnan(sugar)) {
@@ -268,23 +268,29 @@ QString MessageObject::details() const
         _weight = QString::number(weight);
         _dtWeight = dtWeight.toString("dd.MM.yyyy hh:mm");
     }
-    html += QString("<tr><td>%2</td><td>%4 mg/dl</td><td>%5 %1</td></tr><tr><td>%3</td><td>%6 kg</td><td>%7 %1</td></tr>")
-                .arg(QObject::tr("o'clock"), QObject::tr("Blood sugar"), QObject::tr("Weight"))
-                .arg(_sugar, _dtSugar, _weight, _dtWeight);
-    html += "</tbody></table></div></div></div><div style='float: right; width: 49%'>";
+    vitalDataHtml += QString("<tr><td>%2</td><td>%4 mg/dl</td><td>%5 %1</td></tr><tr><td>%3</td><td>%6 kg</td><td>%7 %1</td></tr>")
+                         .arg(QObject::tr("o'clock"), QObject::tr("Blood sugar"), QObject::tr("Weight"))
+                         .arg(_sugar, _dtSugar, _weight, _dtWeight);
+    vitalDataHtml += "</tbody></table></div></div></div><div style='float: right; width: 49%'>";
 
-    html += "<h1>" + QObject::tr("Observations") + "</h1>";
-    html += "<div class='segmentBodyColoredBorder'><div class='segmentBody'>"
-            "<table class='basicTable'><tbody>";
-    html += "<tr><td>" + QObject::tr("Parameter") + "</td><td>" + QObject::tr("Value") + "</td></tr>";
+    vitalDataHtml += "<h1>" + QObject::tr("Observations") + "</h1>";
+    vitalDataHtml += "<div class='segmentBodyColoredBorder'><div class='segmentBody'>"
+                     "<table class='basicTable'><tbody>";
+    vitalDataHtml += "<tr><td>" + QObject::tr("Parameter") + "</td><td>" + QObject::tr("Value") + "</td></tr>";
     QString _response = response != "" ? response : "-";
-    html += "<tr><td>" + QObject::tr("Responsiveness") + "</td><td>" + _response + "</td></tr>";
+    vitalDataHtml += "<tr><td>" + QObject::tr("Responsiveness") + "</td><td>" + _response + "</td></tr>";
     QString _pain = pain != "" ? pain : "-";
-    html += "<tr><td>" + QObject::tr("Pain") + "</td><td>" + _pain + "</td></tr>";
-    html += "<tr><td>" + QObject::tr("Last defecation") + "</td><td>" + dtDefac.toString("dd.MM.yyyy hh:mm") + " " + QObject::tr("o'clock") + "</td></tr>";
+    vitalDataHtml += "<tr><td>" + QObject::tr("Pain") + "</td><td>" + _pain + "</td></tr>";
+    QString _lastDefac = !dtDefac.isNull() ? dtDefac.toString("dd.MM.yyyy hh:mm") : "-";
+    vitalDataHtml += "<tr><td>" + QObject::tr("Last defecation") + "</td><td>" + _lastDefac + " " + QObject::tr("o'clock") + "</td></tr>";
     QString _misc = misc != "" ? misc : "-";
-    html += "<tr><td>" + QObject::tr("Other") + "</td><td>" + _misc + "</td></tr>";
-    html += "</tbody></table></div></div></div><div style='clear:both;'></div>";
+    vitalDataHtml += "<tr><td>" + QObject::tr("Other") + "</td><td>" + _misc + "</td></tr>";
+    vitalDataHtml += "</tbody></table></div></div></div><div style='clear:both;'></div>";
+
+    // check if vital data is empty
+    if ((bpSys && bpDia) || pulse || !std::isnan(temp) || !std::isnan(sugar) || !std::isnan(weight) || response != "" || pain != "" || !dtDefac.isNull() || misc != "") {
+        html += vitalDataHtml;
+    }
 
     // add medications
     if (medicationList.size() > 0) {
