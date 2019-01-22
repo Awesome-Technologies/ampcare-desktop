@@ -451,6 +451,13 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QLabel" name="label_30">
+             <property name="text">
+              <string>Oxygen saturation</string>
+             </property>
+            </widget>
+           </item>
           </layout>
          </item>
          <item>
@@ -514,6 +521,9 @@
              </property>
             </widget>
            </item>
+           <item>
+            <widget class="QLineEdit" name="lineEdit_oxygen"/>
+           </item>
           </layout>
          </item>
          <item>
@@ -565,6 +575,13 @@
              </property>
              <property name="text">
               <string>kg</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QLabel" name="label_31">
+             <property name="text">
+              <string>%</string>
              </property>
             </widget>
            </item>
@@ -705,6 +722,23 @@
                <month>1</month>
                <day>1</day>
               </datetime>
+             </property>
+             <property name="date">
+              <date>
+               <year>2019</year>
+               <month>1</month>
+               <day>1</day>
+              </date>
+             </property>
+             <property name="calendarPopup">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QDateTimeEdit" name="dateTime_oxygen">
+             <property name="specialValueText">
+              <string> </string>
              </property>
              <property name="date">
               <date>

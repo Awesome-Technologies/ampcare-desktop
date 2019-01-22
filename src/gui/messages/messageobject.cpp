@@ -29,8 +29,9 @@ MessageObject::MessageObject()
     , bpSys(0)
     , bpDia(0)
     , pulse(0)
-    , temp(std::numeric_limits<double>::quiet_NaN())
+    , oxygen(std::numeric_limits<double>::quiet_NaN())
     , sugar(std::numeric_limits<double>::quiet_NaN())
+    , temp(std::numeric_limits<double>::quiet_NaN())
     , weight(std::numeric_limits<double>::quiet_NaN())
 {
 }
@@ -259,7 +260,7 @@ QString MessageObject::details() const
                          .arg(QObject::tr("o'clock"), QObject::tr("Pulse"), QObject::tr("Body temperature"))
                          .arg(_pulse, _dtPulse, _temp, _dtTemp);
 
-    QString _sugar = "-", _dtSugar = "-", _weight = "-", _dtWeight = "-";
+    QString _sugar = "-", _dtSugar = "-", _weight = "-", _dtWeight = "-", _oxygen = "-", _dtOxygen = "-";
     if (!std::isnan(sugar)) {
         _sugar = QString::number(sugar);
         _dtSugar = dtSugar.toString("dd.MM.yyyy hh:mm");
@@ -268,9 +269,13 @@ QString MessageObject::details() const
         _weight = QString::number(weight);
         _dtWeight = dtWeight.toString("dd.MM.yyyy hh:mm");
     }
-    vitalDataHtml += QString("<tr><td>%2</td><td>%4 mg/dl</td><td>%5 %1</td></tr><tr><td>%3</td><td>%6 kg</td><td>%7 %1</td></tr>")
-                         .arg(QObject::tr("o'clock"), QObject::tr("Blood sugar"), QObject::tr("Weight"))
-                         .arg(_sugar, _dtSugar, _weight, _dtWeight);
+    if (!std::isnan(oxygen)) {
+        _oxygen = QString::number(oxygen);
+        _dtOxygen = dtOxygen.toString("dd.MM.yyyy hh:mm");
+    }
+    vitalDataHtml += QString("<tr><td>%2</td><td>%5 mg/dl</td><td>%6 %1</td></tr><tr><td>%3</td><td>%7 kg</td><td>%8 %1</td></tr><tr><td>%4</td><td>%9 %</td><td>%10 %1</td></tr>")
+                         .arg(QObject::tr("o'clock"), QObject::tr("Blood sugar"), QObject::tr("Weight"), QObject::tr("Oxygen saturation"))
+                         .arg(_sugar, _dtSugar, _weight, _dtWeight, _oxygen, _dtOxygen);
     vitalDataHtml += "</tbody></table></div></div></div><div style='float: right; width: 49%'>";
 
     vitalDataHtml += "<h1>" + QObject::tr("Observations") + "</h1>";
@@ -288,7 +293,7 @@ QString MessageObject::details() const
     vitalDataHtml += "</tbody></table></div></div></div><div style='clear:both;'></div>";
 
     // check if vital data is empty
-    if ((bpSys && bpDia) || pulse || !std::isnan(temp) || !std::isnan(sugar) || !std::isnan(weight) || response != "" || pain != "" || !dtDefac.isNull() || misc != "") {
+    if ((bpSys && bpDia) || pulse || !std::isnan(temp) || !std::isnan(sugar) || !std::isnan(weight) || !std::isnan(oxygen) || response != "" || pain != "" || !dtDefac.isNull() || misc != "") {
         html += vitalDataHtml;
     }
 
@@ -418,6 +423,9 @@ void MessageObject::setJson(const QJsonObject &json)
                 } else if (payloadId == "body-weight") {
                     weight = v.toObject().value("valueQuantity").toObject().value("value").toDouble();
                     dtWeight = (QDateTime::fromString(v.toObject().value("effectiveDateTime").toString(), DATETIMEFORMAT));
+                } else if (payloadId == "satO2") {
+                    oxygen = v.toObject().value("valueQuantity").toObject().value("value").toDouble();
+                    dtOxygen = (QDateTime::fromString(v.toObject().value("effectiveDateTime").toString(), DATETIMEFORMAT));
                 } else if (payloadId == "last-defecation") {
                     dtDefac = (QDateTime::fromString(v.toObject().value("effectiveDateTime").toString(), DATETIMEFORMAT));
                 } else if (payloadId == "pain") {
@@ -764,6 +772,35 @@ void MessageObject::buildJson(QJsonObject &json, bool isDraft) const
         valueQuantity["unit"] = "kg";
         valueQuantity["system"] = "http://unitsofmeasure.org";
         valueQuantity["code"] = "kg";
+        observationObject["valueQuantity"] = valueQuantity;
+        observationArray.append(observationObject);
+    }
+
+    // oxygen saturation
+    if (!std::isnan(oxygen)) {
+        QJsonObject observationObject;
+        observationObject["resourceType"] = "Observation";
+        observationObject["id"] = "satO2";
+        meta["profile"] = "http://hl7.org/fhir/StructureDefinition/vitalsigns";
+        observationObject["meta"] = meta;
+        catCoding["system"] = "http://hl7.org/fhir/observation-category";
+        catCoding["code"] = "vital-signs";
+        catCoding["display"] = "Vital Signs";
+        catCoding["text"] = "Vital Signs";
+        category["coding"] = catCoding;
+        observationObject["category"] = category;
+        codeCoding["system"] = "http://loinc.org";
+        codeCoding["code"] = "59408-5";
+        codeCoding["display"] = "Oxygen saturation in Arterial blood by Pulse oximetry";
+        code["coding"] = codeCoding;
+        code["text"] = "Oxygen saturation";
+        observationObject["code"] = code;
+        observationObject["subject"] = "";
+        observationObject["effectiveDateTime"] = dtOxygen.toString("yyyy-MM-ddThh:mm:ss");
+        valueQuantity["value"] = oxygen;
+        valueQuantity["unit"] = "%";
+        valueQuantity["system"] = "http://unitsofmeasure.org";
+        valueQuantity["code"] = "%";
         observationObject["valueQuantity"] = valueQuantity;
         observationArray.append(observationObject);
     }

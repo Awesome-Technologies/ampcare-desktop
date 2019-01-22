@@ -65,6 +65,7 @@ private:
     QDateTime dtSugar;
     QDateTime dtWeight;
     QDateTime dtDefac;
+    QDateTime dtOxy;
 
 private slots:
     void on_sendMessage_clicked();
@@ -80,6 +81,7 @@ private slots:
     void on_dateTime_lastDefecation_dateTimeChanged(QDateTime date);
     void on_dateTime_pulse_dateTimeChanged(QDateTime date);
     void on_dateTime_temperature_dateTimeChanged(QDateTime date);
+    void on_dateTime_oxygen_dateTimeChanged(QDateTime date);
 
 signals:
     void listUpdated();

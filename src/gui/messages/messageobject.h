@@ -92,18 +92,22 @@ public:
     int bpSys;
     int bpDia;
     int pulse;
-    double temp;
+    double oxygen;
     double sugar;
+    double temp;
     double weight;
+
     QString misc;
     QString pain;
     QString response;
-    QDateTime dtPulse;
+
     QDateTime dtBp;
-    QDateTime dtSugar;
-    QDateTime dtWeight;
-    QDateTime dtTemp;
     QDateTime dtDefac;
+    QDateTime dtOxygen;
+    QDateTime dtPulse;
+    QDateTime dtSugar;
+    QDateTime dtTemp;
+    QDateTime dtWeight;
 
     QList<AttachmentDetails> imagesList;
     QList<AttachmentDetails> documentsList;

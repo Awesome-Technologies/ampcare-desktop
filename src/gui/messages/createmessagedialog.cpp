@@ -61,6 +61,7 @@ CreateMessageDialog::CreateMessageDialog(const QVector<QSharedPointer<Sharee>> &
     ui->lineEdit_temperature->setValidator(new QDoubleValidator(0, 100.0, 2, this));
     ui->lineEdit_bloodsugar->setValidator(new QIntValidator(0, 400, this));
     ui->lineEdit_bodyweight->setValidator(new QDoubleValidator(0, 400.0, 2, this));
+    ui->lineEdit_oxygen->setValidator(new QDoubleValidator(0, 100.0, 2, this));
 
     // configure the rows and the columns on the medication table
     ui->tableWidget->setColumnCount(11);
@@ -182,6 +183,15 @@ void CreateMessageDialog::saveMessage(bool isDraft)
         // check if date was set
         if (!dtWeight.isNull()) {
             messageObject.dtWeight = dtWeight;
+        }
+    }
+    // oxygen
+    if (!ui->lineEdit_oxygen->text().isEmpty()) {
+        // TODO convert according to locale
+        messageObject.oxygen = ui->lineEdit_oxygen->text().toDouble();
+        // check if date was set
+        if (!dtOxy.isNull()) {
+            messageObject.dtOxygen = dtOxy;
         }
     }
 
@@ -336,6 +346,12 @@ void CreateMessageDialog::setModelIndex(const QPersistentModelIndex &index)
         dtWeight = message.dtWeight;
     }
 
+    if (!std::isnan(message.oxygen)) {
+        ui->lineEdit_oxygen->setText(QString::number(message.oxygen));
+        ui->dateTime_oxygen->setDateTime(message.dtOxygen);
+        dtOxy = message.dtOxygen;
+    }
+
     ui->dateTime_lastDefecation->setDateTime(message.dtDefac);
     dtDefac = message.dtDefac;
 
@@ -397,6 +413,7 @@ void CreateMessageDialog::reset()
     dtDefac = QDateTime();
     dtPulse = QDateTime();
     dtTemp = QDateTime();
+    dtOxy = QDateTime();
 
     // vital data
     ui->dateTime_bloodpressure->setTime(QTime(0, 0));
@@ -411,6 +428,8 @@ void CreateMessageDialog::reset()
     ui->dateTime_pulse->setDate(QDate::currentDate());
     ui->dateTime_temperature->setTime(QTime(0, 0));
     ui->dateTime_temperature->setDate(QDate::currentDate());
+    ui->dateTime_oxygen->setTime(QTime(0, 0));
+    ui->dateTime_oxygen->setDate(QDate::currentDate());
 
     ui->lineEdit_bloodsugar->clear();
     ui->lineEdit_bodyweight->clear();
@@ -421,6 +440,7 @@ void CreateMessageDialog::reset()
     ui->lineEdit_pulse->clear();
     ui->lineEdit_responsiveness->clear();
     ui->lineEdit_temperature->clear();
+    ui->lineEdit_oxygen->clear();
 
     // images and medication list
     ui->listWidget_attachments->clear();
@@ -478,5 +498,9 @@ void CreateMessageDialog::on_dateTime_temperature_dateTimeChanged(QDateTime date
     dtTemp = date;
 }
 
+void CreateMessageDialog::on_dateTime_oxygen_dateTimeChanged(QDateTime date)
+{
+    dtOxy = date;
+}
 
 } //end namespace
