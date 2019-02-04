@@ -57,6 +57,7 @@ void AnswerMessageDialog::reset()
     ui->plainTextEdit_messageBody->clear();
     ui->lineEdit_initials->clear();
     ui->label_requester->setText(model->currentUser().displayName());
+    ui->listWidget_attachments->clear();
 }
 
 void AnswerMessageDialog::on_sendAnswer_clicked()
