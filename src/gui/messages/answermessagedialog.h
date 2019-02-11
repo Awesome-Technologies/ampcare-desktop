@@ -31,6 +31,11 @@ class AnswerMessageDialog : public QDialog
     Q_OBJECT
 
 public:
+    enum Roles {
+        PathRole = Qt::UserRole,
+        IsNewRole
+    };
+
     AnswerMessageDialog(MessageModel *model, QWidget *parent = 0);
     ~AnswerMessageDialog();
 
@@ -49,7 +54,6 @@ private:
     Ui::AnswerMessageDialog *ui;
     MessageModel *model;
     QPersistentModelIndex modelIndex;
-    QStringList deleteList;
 
 private slots:
     void on_sendAnswer_clicked();

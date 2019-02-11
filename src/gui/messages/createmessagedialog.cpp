@@ -221,9 +221,9 @@ void CreateMessageDialog::saveMessage(bool isDraft)
         // get filename and full file path
         if (currentItem) {
             if (currentItem->data(Qt::UserRole).toString().right(3).toLower() == "pdf") {
-                documentsList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString(), model->currentUser().shareWith() });
+                documentsList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
             } else {
-                imagesList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString(), model->currentUser().shareWith() });
+                imagesList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
             }
         }
     }
@@ -265,7 +265,8 @@ void CreateMessageDialog::on_button_addAttachment_clicked()
         QListWidgetItem *newItem = new QListWidgetItem;
         QVariant fullFilePathData(filePath);
         QFileInfo fileinfo = QFileInfo(filePath);
-        newItem->setData(Qt::UserRole, fullFilePathData);
+        newItem->setData(Roles::PathRole, fullFilePathData);
+        newItem->setData(Roles::IsNewRole, true);
         newItem->setText(fileinfo.fileName());
         int row = ui->listWidget_attachments->row(ui->listWidget_attachments->currentItem());
         ui->listWidget_attachments->insertItem(row, newItem);
@@ -277,7 +278,9 @@ void CreateMessageDialog::on_button_deleteAttachment_clicked()
 {
     QList<QListWidgetItem *> items = ui->listWidget_attachments->selectedItems();
     for (QListWidgetItem *item : items) {
-        deleteList.append(item->data(Qt::UserRole).toString());
+        if (item->data(Roles::IsNewRole) != true) { // file was added before and has to be deleted
+            deleteList.append(item->data(Roles::PathRole).toString());
+        }
         delete ui->listWidget_attachments->takeItem(ui->listWidget_attachments->row(item));
     }
 }
@@ -365,7 +368,8 @@ void CreateMessageDialog::setModelIndex(const QPersistentModelIndex &index)
     // images
     for (const MessageObject::AttachmentDetails &imageEntry : message.imagesList) {
         QListWidgetItem *newItem = new QListWidgetItem;
-        newItem->setData(Qt::UserRole, imageEntry.path);
+        newItem->setData(Roles::PathRole, imageEntry.path);
+        newItem->setData(Roles::IsNewRole, false);
         newItem->setText(imageEntry.name);
         int row = ui->listWidget_attachments->row(ui->listWidget_attachments->currentItem());
         ui->listWidget_attachments->insertItem(row, newItem);
@@ -373,7 +377,8 @@ void CreateMessageDialog::setModelIndex(const QPersistentModelIndex &index)
     // documents
     for (const MessageObject::AttachmentDetails &documentEntry : message.documentsList) {
         QListWidgetItem *newItem = new QListWidgetItem;
-        newItem->setData(Qt::UserRole, documentEntry.path);
+        newItem->setData(Roles::PathRole, documentEntry.path);
+        newItem->setData(Roles::IsNewRole, false);
         newItem->setText(documentEntry.name);
         int row = ui->listWidget_attachments->row(ui->listWidget_attachments->currentItem());
         ui->listWidget_attachments->insertItem(row, newItem);

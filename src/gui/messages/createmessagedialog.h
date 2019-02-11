@@ -34,6 +34,11 @@ class CreateMessageDialog : public QDialog
     Q_OBJECT
 
 public:
+    enum Roles {
+        PathRole = Qt::UserRole,
+        IsNewRole
+    };
+
     CreateMessageDialog(const QVector<QSharedPointer<Sharee>> &recipientList,
         MessageModel *model, QWidget *parent = 0);
     virtual ~CreateMessageDialog();

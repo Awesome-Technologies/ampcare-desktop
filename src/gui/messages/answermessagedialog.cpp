@@ -86,22 +86,14 @@ void AnswerMessageDialog::on_sendAnswer_clicked()
         // get filename and full file path
         if (currentItem) {
             if (currentItem->data(Qt::UserRole).toString().endsWith("pdf", Qt::CaseInsensitive)) {
-                message.documentsList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString(), model->currentUser().shareWith() });
+                message.documentsList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
             } else {
-                message.imagesList.append({ currentItem->text(), currentItem->data(Qt::UserRole).toString(), model->currentUser().shareWith() });
+                message.imagesList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
             }
         }
     }
 
     model->setData(modelIndex, QVariant::fromValue(message), MessageModel::MessageObjectRole);
-
-    // delete removed attachments from assets folder
-    for (QString item : deleteList) {
-        if (QFileInfo::exists(item) && QFileInfo(item).isFile()) {
-            QFile::remove(item);
-        }
-    }
-    deleteList.clear();
 }
 
 // add an image to the message
@@ -118,7 +110,8 @@ void AnswerMessageDialog::on_button_addAttachment_clicked()
     QListWidgetItem *newItem = new QListWidgetItem;
     QVariant fullFilePathData(filePath);
     QFileInfo fileinfo = QFileInfo(filePath);
-    newItem->setData(Qt::UserRole, fullFilePathData);
+    newItem->setData(Roles::PathRole, fullFilePathData);
+    newItem->setData(Roles::IsNewRole, true);
     newItem->setText(fileinfo.fileName());
     int row = ui->listWidget_attachments->row(ui->listWidget_attachments->currentItem());
     ui->listWidget_attachments->insertItem(row, newItem);
@@ -129,7 +122,6 @@ void AnswerMessageDialog::on_button_deleteAttachment_clicked()
 {
     QList<QListWidgetItem *> items = ui->listWidget_attachments->selectedItems();
     for (const QListWidgetItem *item : items) {
-        deleteList.append(item->data(Qt::UserRole).toString());
         delete ui->listWidget_attachments->takeItem(ui->listWidget_attachments->row(item));
     }
 }
