@@ -85,10 +85,10 @@ void AnswerMessageDialog::on_sendAnswer_clicked()
         const auto &currentItem = ui->listWidget_attachments->item(i);
         // get filename and full file path
         if (currentItem) {
-            if (currentItem->data(Qt::UserRole).toString().endsWith("pdf", Qt::CaseInsensitive)) {
-                message.documentsList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
+            if (currentItem->data(Roles::PathRole).toString().endsWith("pdf", Qt::CaseInsensitive)) {
+                message.newDocumentsList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
             } else {
-                message.imagesList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
+                message.newImagesList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
             }
         }
     }

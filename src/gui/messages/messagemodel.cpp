@@ -212,6 +212,7 @@ bool MessageModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 bool MessageModel::writeMessage(MessageObject &msg)
 {
+    QString dirPath;
     bool isDraft = (msg.status == MessageObject::DraftStatus);
     bool wasDraft = false;
     // create new uuid if none is set
@@ -235,7 +236,7 @@ bool MessageModel::writeMessage(MessageObject &msg)
 
         QString _userFolder = (msg.recipient == _currentUser.shareWith()) ? msg.sender : msg.recipient;
         // save drafts to drafts folder
-        QString dirPath = _rootPath + (isDraft ? QString("/drafts") : QString("/" + _userFolder));
+        dirPath = _rootPath + (isDraft ? QString("/drafts") : QString("/" + _userFolder));
 
         // create messages directory if it doesnt exist
         QDir dir(dirPath + "/messages/");
@@ -248,91 +249,98 @@ bool MessageModel::writeMessage(MessageObject &msg)
                 return false;
             }
         }
+        msg.path = dirPath + "/messages/" + msg.messageId.toString() + ".json";
+    } else {
+        QString _userFolder = (msg.recipient == _currentUser.shareWith()) ? msg.sender : msg.recipient;
+        // save drafts to drafts folder
+        dirPath = _rootPath + QString("/" + _userFolder);
+    }
 
-        // process attachment list
-        if (!msg.imagesList.isEmpty() || !msg.documentsList.isEmpty()) {
-            // create assets directory if it doesn't exist
-            QDir dir(dirPath + "/assets/");
-            if (!dir.exists(dirPath + "/assets/")) {
-                if (!dir.mkpath(dirPath + "/assets/")) {
-                    // display error
-                    QMessageBox msgBox;
-                    msgBox.setText(QObject::tr("Error on creating folder for assets!"));
-                    msgBox.exec();
-                    return false;
-                }
-            }
-
-            // process images list
-            for (MessageObject::AttachmentDetails &image : msg.imagesList) {
-                // get full file path
-                if (!image.path.isEmpty()) {
-                    QString fullFilePath = image.path;
-
-                    if (wasDraft) { // move assets belonging to draft to new assets folder
-                        // assure filename is unique
-                        while (QFileInfo::exists(dirPath + "/assets/" + image.name)) {
-                            image.name = QUuid::createUuid().toString() + image.name;
-                        }
-                        if (!QFile::rename(fullFilePath, dirPath + "/assets/" + image.name)) {
-                            // display error
-                            QMessageBox msgBox;
-                            msgBox.setText(QObject::tr("Error on moving assets!"));
-                            msgBox.exec();
-                            return false;
-                        }
-                    } else { // copy file to assets folder
-                        // assure filename is unique
-                        while (QFileInfo::exists(dirPath + "/assets/" + image.name)) {
-                            image.name = QUuid::createUuid().toString() + image.name;
-                        }
-                        if (!QFile::copy(fullFilePath, dirPath + "/assets/" + image.name)) {
-                            // display error
-                            QMessageBox msgBox;
-                            msgBox.setText(QObject::tr("Error on copying assets!"));
-                            msgBox.exec();
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            // process documents list
-            for (MessageObject::AttachmentDetails &document : msg.documentsList) {
-                // get full file path
-                if (!document.path.isEmpty()) {
-                    QString fullFilePath = document.path;
-
-                    if (wasDraft) { // move assets belonging to draft to new assets folder
-                        // assure filename is unique
-                        while (QFileInfo::exists(dirPath + "/assets/" + document.name)) {
-                            document.name = QUuid::createUuid().toString() + document.name;
-                        }
-                        if (!QFile::rename(fullFilePath, dirPath + "/assets/" + document.name)) {
-                            // display error
-                            QMessageBox msgBox;
-                            msgBox.setText(QObject::tr("Error on moving assets!"));
-                            msgBox.exec();
-                            return false;
-                        }
-                    } else { // copy file to assets folder
-                        // assure filename is unique
-                        while (QFileInfo::exists(dirPath + "/assets/" + document.name)) {
-                            document.name = QUuid::createUuid().toString() + document.name;
-                        }
-                        if (!QFile::copy(fullFilePath, dirPath + "/assets/" + document.name)) {
-                            // display error
-                            QMessageBox msgBox;
-                            msgBox.setText(QObject::tr("Error on copying assets!"));
-                            msgBox.exec();
-                            return false;
-                        }
-                    }
-                }
+    // process attachment list
+    if (!msg.newImagesList.isEmpty() || !msg.newDocumentsList.isEmpty()) {
+        // create assets directory if it doesn't exist
+        QDir dir(dirPath + "/assets/");
+        if (!dir.exists(dirPath + "/assets/")) {
+            if (!dir.mkpath(dirPath + "/assets/")) {
+                // display error
+                QMessageBox msgBox;
+                msgBox.setText(QObject::tr("Error on creating folder for assets!"));
+                msgBox.exec();
+                return false;
             }
         }
 
-        msg.path = dirPath + "/messages/" + msg.messageId.toString() + ".json";
+        // process images list
+        for (MessageObject::AttachmentDetails &image : msg.newImagesList) {
+            // get full file path
+            if (!image.path.isEmpty()) {
+                QString fullFilePath = image.path;
+
+                if (wasDraft) { // move assets belonging to draft to new assets folder
+                    // assure filename is unique
+                    while (QFileInfo::exists(dirPath + "/assets/" + image.name)) {
+                        image.name = QUuid::createUuid().toString() + image.name;
+                    }
+                    if (!QFile::rename(fullFilePath, dirPath + "/assets/" + image.name)) {
+                        // display error
+                        QMessageBox msgBox;
+                        msgBox.setText(QObject::tr("Error on moving assets!"));
+                        msgBox.exec();
+                        return false;
+                    }
+                } else { // copy file to assets folder
+                    // assure filename is unique
+                    while (QFileInfo::exists(dirPath + "/assets/" + image.name)) {
+                        image.name = QUuid::createUuid().toString() + image.name;
+                    }
+                    if (!QFile::copy(fullFilePath, dirPath + "/assets/" + image.name)) {
+                        // display error
+                        QMessageBox msgBox;
+                        msgBox.setText(QObject::tr("Error on copying assets!"));
+                        msgBox.exec();
+                        return false;
+                    }
+                }
+            }
+            msg.imagesList.append(image);
+        }
+        msg.newImagesList.clear();
+
+        // process documents list
+        for (MessageObject::AttachmentDetails &document : msg.newDocumentsList) {
+            // get full file path
+            if (!document.path.isEmpty()) {
+                QString fullFilePath = document.path;
+
+                if (wasDraft) { // move assets belonging to draft to new assets folder
+                    // assure filename is unique
+                    while (QFileInfo::exists(dirPath + "/assets/" + document.name)) {
+                        document.name = QUuid::createUuid().toString() + document.name;
+                    }
+                    if (!QFile::rename(fullFilePath, dirPath + "/assets/" + document.name)) {
+                        // display error
+                        QMessageBox msgBox;
+                        msgBox.setText(QObject::tr("Error on moving assets!"));
+                        msgBox.exec();
+                        return false;
+                    }
+                } else { // copy file to assets folder
+                    // assure filename is unique
+                    while (QFileInfo::exists(dirPath + "/assets/" + document.name)) {
+                        document.name = QUuid::createUuid().toString() + document.name;
+                    }
+                    if (!QFile::copy(fullFilePath, dirPath + "/assets/" + document.name)) {
+                        // display error
+                        QMessageBox msgBox;
+                        msgBox.setText(QObject::tr("Error on copying assets!"));
+                        msgBox.exec();
+                        return false;
+                    }
+                }
+            }
+            msg.documentsList.append(document);
+        }
+        msg.newDocumentsList.clear();
     }
 
 

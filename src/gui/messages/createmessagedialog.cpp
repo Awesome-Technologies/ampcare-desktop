@@ -213,22 +213,26 @@ void CreateMessageDialog::saveMessage(bool isDraft)
     }
 
     // process attachement list
-    QList<MessageObject::AttachmentDetails> imagesList;
-    QList<MessageObject::AttachmentDetails> documentsList;
-
     for (int i = 0; i < ui->listWidget_attachments->count(); ++i) {
         const auto &currentItem = ui->listWidget_attachments->item(i);
         // get filename and full file path
         if (currentItem) {
-            if (currentItem->data(Qt::UserRole).toString().right(3).toLower() == "pdf") {
-                documentsList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
-            } else {
-                imagesList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
+            // attachment is a document
+            if (currentItem->data(Roles::PathRole).toString().right(3).toLower() == "pdf") {
+                if (currentItem->data(Roles::IsNewRole) == true) {
+                    messageObject.newDocumentsList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
+                } else {
+                    messageObject.documentsList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
+                }
+            } else { // attachment is an image
+                if (currentItem->data(Roles::IsNewRole) == true) {
+                    messageObject.newImagesList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
+                } else {
+                    messageObject.imagesList.append({ currentItem->text(), currentItem->data(Roles::PathRole).toString(), model->currentUser().shareWith() });
+                }
             }
         }
     }
-    messageObject.imagesList = imagesList;
-    messageObject.documentsList = documentsList;
 
     // process medication list
     QList<QStringList> medicationList;

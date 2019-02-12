@@ -111,6 +111,8 @@ public:
 
     QList<AttachmentDetails> imagesList;
     QList<AttachmentDetails> documentsList;
+    QList<AttachmentDetails> newImagesList;
+    QList<AttachmentDetails> newDocumentsList;
     QList<QStringList> medicationList;
     QList<QStringList> archivedFor;
 
