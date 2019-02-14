@@ -148,6 +148,12 @@ void MessagesWindow::on_archiveButton_clicked()
 {
     // get filename and path for export
     QString fileName = QFileDialog::getSaveFileName((QWidget *)0, "Export PDF", QString(), "*.pdf");
+
+    // archiving was cancelled
+    if (fileName == "") {
+        return;
+    }
+
     if (QFileInfo(fileName).suffix().isEmpty()) {
         fileName.append(".pdf");
     }
