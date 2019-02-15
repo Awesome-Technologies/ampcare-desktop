@@ -41,6 +41,7 @@
 !define OPENSSL10_PATH "$%OPENSSL10_PATH%"
 !define OPENSSL11_PATH "$%OPENSSL11_PATH%"
 !define OPENSSL11_LIBCRYPTO_PATH "$%OPENSSL11_LIBCRYPTO_PATH%"
+!define OPENSSL_LIB_PATH "$%OPENSSL_LIB_PATH%"
 
 !define CSYNC_LIBRARY_DIR ""
 !define CSYNC_CONFIG_DIR ""
@@ -340,10 +341,9 @@ Section "${APPLICATION_NAME}" SEC_APPLICATION
     File /r "${LIBS_PATH}\*"
 
 ; extra dll's
-    File "${OPENSSL10_PATH}\bin\libeay32.dll"
-    File "${OPENSSL10_PATH}\bin\ssleay32.dll"
+    File "${OPENSSL_LIB_PATH}\libeay32.dll"
+    File "${OPENSSL_LIB_PATH}\ssleay32.dll"
     File "${OPENSSL11_LIBCRYPTO_PATH}"
-    File "${OPENSSL11_PATH}\bin\msvcr120.dll"
 
 ; translations TODO put the translations under the folder translations
    SetOutPath "$INSTDIR\i18n"

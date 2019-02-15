@@ -7,7 +7,7 @@ addons:
       - qtkeychain
 install:
   - curl http://s.sudre.free.fr/Software/files/Packages.dmg -o $HOME/Packages.dmg
-  - sudo sh -c 'hdiutil attach $HOME/Packages.dmg && installer -package "/Volumes/Packages 1.2.4/Install Packages.pkg" -target /; hdiutil detach "/Volumes/Packages 1.2.4"'
+  - sudo sh -c 'hdiutil attach $HOME/Packages.dmg && installer -package "/Volumes/Packages 1.2.5/Install Packages.pkg" -target /; hdiutil detach "/Volumes/Packages 1.2.5"'
 script:
   - mkdir $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build
   - PATH="/usr/local/opt/qt/bin:$PATH" cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install

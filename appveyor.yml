@@ -1,5 +1,5 @@
 version: '{branch}-{build}'
-image: Previous Visual Studio 2017
+image: Visual Studio 2017
 clone_depth: 20
 clone_folder: C:\projects\ampcare\desktop
 init:
@@ -23,6 +23,7 @@ environment:
   NINJA_URL: https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-win.zip
   NINJA_ROOT_DIR: C:\projects\deps\ninja
   ZLIB_ROOT_DIR: C:\projects\zlib
+  OPENSSL_LIB_PATH: C:\projects\openssl_libs
   matrix:
     - COMPILER: msvc2015
       QT_VER: 5.10
@@ -68,6 +69,10 @@ install:
     # Download zlib
     appveyor DownloadFile "$env:ZLIB_URL" -FileName C:\downloads\zlib.7z
     7z x C:\downloads\zlib.7z -o"$env:ZLIB_ROOT_DIR" | out-null
+
+    # Fetch OpenSSL dlls that do not depend on msvcr120.dll
+    appveyor DownloadFile "https://indy.fulgan.com/SSL/openssl-1.0.2q-x64_86-win64.zip" -FileName C:\downloads\openssl-1.0.2q-x64_86-win64.zip
+    7z x C:\downloads\openssl-1.0.2q-x64_86-win64.zip -o"$env:OPENSSL_LIB_PATH" | out-null
 
     # Install NSIS plugins
     appveyor DownloadFile "http://nsis.sourceforge.net/mediawiki/images/8/8f/UAC.zip" -FileName C:\downloads\UAC.zip
