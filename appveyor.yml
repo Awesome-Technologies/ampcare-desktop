@@ -1,5 +1,5 @@
 version: '{branch}-{build}'
-image: Previous Visual Studio 2017
+image: Visual Studio 2017
 clone_depth: 20
 clone_folder: C:\projects\ampcare\desktop
 init:
@@ -31,6 +31,7 @@ environment:
       ZLIB_URL: http://www.samsonov.net/wp?kcccount=http://www.samsonov.net/wp/assets/Dist_zlib/x86-release/zlib.7z
       ARCH: x86
       OPENSSL11_LIBCRYPTO_PATH: C:\OpenSSL-v11-Win32\bin\libcrypto-1_1.dll
+      OPENSSL_DLL_PATH: '%PROJECT_PATH%\desktop\admin\win\openssl\x86'
     - COMPILER: msvc2017_64
       QT_VER: 5.11
       OPENSSL10_PATH: C:\OpenSSL-Win64
@@ -38,6 +39,7 @@ environment:
       ZLIB_URL: http://www.samsonov.net/wp?kcccount=http://www.samsonov.net/wp/assets/Dist_zlib/X64-release/zlib.7z
       ARCH: amd64
       OPENSSL11_LIBCRYPTO_PATH: C:\OpenSSL-v11-Win64\bin\libcrypto-1_1-x64.dll
+      OPENSSL_DLL_PATH: '%PROJECT_PATH%\desktop\admin\win\openssl\x64'
 platform:
   - x86
   - x64
