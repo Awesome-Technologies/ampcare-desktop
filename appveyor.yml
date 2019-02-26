@@ -22,6 +22,10 @@ environment:
   QTKEYCHAIN_INCLUDE_DIR: C:\projects\qtkeychain\install\include\qt5keychain
   NINJA_URL: https://github.com/ninja-build/ninja/releases/download/v1.6.0/ninja-win.zip
   NINJA_ROOT_DIR: C:\projects\deps\ninja
+  SNORENOTIFY_URL: https://github.com/Awesome-Technologies/snorenotify/archive/v0.7.0.zip
+  SNORENOTIFY_ROOT_DIR: C:\projects\snorenotify
+  EXTRA_CMAKE_MODULES_URL: https://anongit.kde.org/extra-cmake-modules.git
+  EXTRA_CMAKE_MODULES_ROOT_DIR: C:\projects\extra_cmake_modules
   ZLIB_ROOT_DIR: C:\projects\zlib
   matrix:
     - COMPILER: msvc2015
@@ -31,7 +35,7 @@ environment:
       ZLIB_URL: http://www.samsonov.net/wp?kcccount=http://www.samsonov.net/wp/assets/Dist_zlib/x86-release/zlib.7z
       ARCH: x86
       OPENSSL11_LIBCRYPTO_PATH: C:\OpenSSL-v11-Win32\bin\libcrypto-1_1.dll
-      OPENSSL_DLL_PATH: %PROJECT_PATH%\desktop\admin\win\openssl\x86
+      OPENSSL_DLL_PATH: '%PROJECT_PATH%\desktop\admin\win\openssl\x86'
     - COMPILER: msvc2017_64
       QT_VER: 5.11
       OPENSSL10_PATH: C:\OpenSSL-Win64
@@ -39,7 +43,7 @@ environment:
       ZLIB_URL: http://www.samsonov.net/wp?kcccount=http://www.samsonov.net/wp/assets/Dist_zlib/X64-release/zlib.7z
       ARCH: amd64
       OPENSSL11_LIBCRYPTO_PATH: C:\OpenSSL-v11-Win64\bin\libcrypto-1_1-x64.dll
-      OPENSSL_DLL_PATH: %PROJECT_PATH%\desktop\admin\win\openssl\x64
+      OPENSSL_DLL_PATH: '%PROJECT_PATH%\desktop\admin\win\openssl\x64'
 platform:
   - x86
   - x64
@@ -67,9 +71,17 @@ install:
     7z x -oC:\projects\qtkeychain C:\downloads\qtkeychain.zip | out-null
     move $env:QT_KEYCHAIN_ROOT_DIR/qtkeychain*/* $env:QT_KEYCHAIN_ROOT_DIR
 
+    # Download snorenotify
+    appveyor DownloadFile "$env:SNORENOTIFY_URL" -FileName C:\downloads\snorenotify.zip
+    7z x C:\downloads\snorenotify.zip -o"$env:SNORENOTIFY_ROOT_DIR" | out-null
+    move $env:SNORENOTIFY_ROOT_DIR/snorenotify*/* $env:SNORENOTIFY_ROOT_DIR
+
     # Download zlib
     appveyor DownloadFile "$env:ZLIB_URL" -FileName C:\downloads\zlib.7z
     7z x C:\downloads\zlib.7z -o"$env:ZLIB_ROOT_DIR" | out-null
+
+    # Clone extra-cmake-modules
+    git clone $env:EXTRA_CMAKE_MODULES_URL $env:EXTRA_CMAKE_MODULES_ROOT_DIR 2> $null
 
     # Install NSIS plugins
     appveyor DownloadFile "http://nsis.sourceforge.net/mediawiki/images/8/8f/UAC.zip" -FileName C:\downloads\UAC.zip
@@ -82,6 +94,9 @@ install:
     7z e C:\downloads\NsProcess.7z -o"C:\Program Files (x86)\NSIS\Plugins\x86-ansi" nsProcess.dll -r | out-null
     7z e C:\downloads\NsProcess.7z -o"C:\Program Files (x86)\NSIS\Plugins\x86-unicode" nsProcessW.dll -r | out-null
     7z e C:\downloads\NsProcess.7z -o"C:\Program Files (x86)\NSIS\Include" nsProcess.nsh -r | out-null
+
+    $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
+
 build_script:
 - cmd: |
     REM Setup QT and MSVC compiler
@@ -102,6 +117,20 @@ build_script:
     cmake -G"Ninja" .. -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% -DCMAKE_INSTALL_PREFIX="%QT_KEYCHAIN_ROOT_DIR%\install"
     cmake --build . --config Release --target install
 
+    REM Build extra-cmake-modules
+    mkdir %EXTRA_CMAKE_MODULES_ROOT_DIR%\build
+    mkdir %EXTRA_CMAKE_MODULES_ROOT_DIR%\install
+    cd %EXTRA_CMAKE_MODULES_ROOT_DIR%\build
+    cmake -G"Ninja" .. -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% -DCMAKE_INSTALL_PREFIX="%EXTRA_CMAKE_MODULES_ROOT_DIR%\install"
+    cmake --build . --config Release --target install
+
+    REM Build snorenotify
+    mkdir %SNORENOTIFY_ROOT_DIR%\build
+    mkdir %SNORENOTIFY_ROOT_DIR%\install
+    cd %SNORENOTIFY_ROOT_DIR%\build
+    cmake -G"Ninja" .. -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% -DCMAKE_INSTALL_PREFIX="%SNORENOTIFY_ROOT_DIR%\install" -DECM_DIR="%EXTRA_CMAKE_MODULES_ROOT_DIR%\install\share\ECM\cmake"
+    cmake --build . --config Release --target install
+
     REM Configure AMPcare
     cd %APPVEYOR_BUILD_FOLDER%
     git submodule update --init --recursive
@@ -109,7 +138,7 @@ build_script:
     mkdir %PROJECT_PATH%\install
     cd %APPVEYOR_BUILD_FOLDER%\build
 
-    cmake -G"Ninja" %APPVEYOR_BUILD_FOLDER% -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% -DCMAKE_INSTALL_PREFIX="%PROJECT_PATH%\install" -DAPPLICATION_UPDATE_URL="https://updates.amp.care/client/" -DOEM_THEME_DIR="%APPVEYOR_BUILD_FOLDER%/theme/amp" -DWITH_CRASHREPORTER=OFF -DNO_SHIBBOLETH=1 -DBUILD_SHELL_INTEGRATION=OFF -DMIRALL_VERSION_SUFFIX="%VERSION_SUFFIX%" -DMIRALL_VERSION_BUILD=%APPVEYOR_BUILD_NUMBER% -DQTKEYCHAIN_LIBRARY=%QTKEYCHAIN_LIBRARY% -DQTKEYCHAIN_INCLUDE_DIR=%QTKEYCHAIN_INCLUDE_DIR% -DOPENSSL_ROOT_DIR=%OPENSSL11_PATH% -DZLIB_INCLUDE_DIR="%ZLIB_ROOT_DIR%/include" -DZLIB_LIBRARY="%ZLIB_ROOT_DIR%/lib/zlib.lib"
+    cmake -G"Ninja" %APPVEYOR_BUILD_FOLDER% -DCMAKE_BUILD_TYPE=%CMAKE_BUILD_TYPE% -DCMAKE_INSTALL_PREFIX="%PROJECT_PATH%\install" -DAPPLICATION_UPDATE_URL="https://updates.amp.care/client/" -DOEM_THEME_DIR="%APPVEYOR_BUILD_FOLDER%/theme/amp" -DWITH_CRASHREPORTER=OFF -DNO_SHIBBOLETH=1 -DBUILD_SHELL_INTEGRATION=OFF -DMIRALL_VERSION_SUFFIX="%VERSION_SUFFIX%" -DMIRALL_VERSION_BUILD=%APPVEYOR_BUILD_NUMBER% -DQTKEYCHAIN_LIBRARY=%QTKEYCHAIN_LIBRARY% -DQTKEYCHAIN_INCLUDE_DIR=%QTKEYCHAIN_INCLUDE_DIR% -DOPENSSL_ROOT_DIR=%OPENSSL11_PATH% -DZLIB_INCLUDE_DIR="%ZLIB_ROOT_DIR%/include" -DZLIB_LIBRARY="%ZLIB_ROOT_DIR%/lib/zlib.lib" -DLibsnoreQt5_DIR="%SNORENOTIFY_ROOT_DIR%\install\lib\cmake\libsnoreQt5" -DLibsnoreSettingsQt5_DIR="%SNORENOTIFY_ROOT_DIR%\install\lib\cmake\libsnoreSettingsQt5"
 
     REM Run cmake to compile and install
     cmake --build . --config Release --target install
