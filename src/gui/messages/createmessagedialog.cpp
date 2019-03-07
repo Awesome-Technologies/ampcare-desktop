@@ -257,11 +257,11 @@ void CreateMessageDialog::saveMessage(bool isDraft)
     deleteList.clear();
 }
 
-// add an image to the message
+// add an attachment to the message
 void CreateMessageDialog::on_button_addAttachment_clicked()
 {
     // restrict to images only
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image or document"), model->rootPath(), "Images (*.jpg *.png);; Documents (*.pdf)");
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image or document"), model->rootPath(), "Images and Documents (*.jpg *.png *.pdf)");
 
     // check if filepath is empty, e.g. by cancelling the open file dialog
     if (!filePath.isEmpty()) {

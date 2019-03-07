@@ -100,7 +100,7 @@ void AnswerMessageDialog::on_sendAnswer_clicked()
 void AnswerMessageDialog::on_button_addAttachment_clicked()
 {
     // restrict to images (jpg, png) and pdf documents
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image or document"), model->rootPath(), "Images (*.jpg *.png);; Documents (*.pdf)");
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image or document"), model->rootPath(), "Images and Documents (*.jpg *.png *.pdf)");
 
     // check if filepath is empty, e.g. by cancelling the open file dialog
     if (filePath.isEmpty())
