@@ -68,6 +68,7 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     msgList->setColumnWidth(MessageModel::StatusColumn, 50);
     msgList->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     msgList->horizontalHeader()->setSectionResizeMode(MessageModel::TitleColumn, QHeaderView::Stretch);
+    msgList->sortByColumn(MessageModel::DateColumn, Qt::DescendingOrder);
 
     connect(ui->detailView, SIGNAL(urlChanged(QUrl)), this, SLOT(slotUrlChanged(QUrl)));
 
