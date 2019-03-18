@@ -14,6 +14,7 @@
 
 #include "ui_answermessagedialog.h"
 #include "answermessagedialog.h"
+#include "configfile.h"
 #include "messagemodel.h"
 #include "messageobject.h"
 
@@ -99,12 +100,21 @@ void AnswerMessageDialog::on_sendAnswer_clicked()
 // add an image to the message
 void AnswerMessageDialog::on_button_addAttachment_clicked()
 {
+    // get last attachment path
+    ConfigFile cfg;
+    QSettings settings(cfg.configFile(), QSettings::IniFormat);
+    QString defaultAttachmentPath = settings.value(QLatin1String("MessagesAttachmentPath"), model->rootPath()).toString();
+
     // restrict to images (jpg, png) and pdf documents
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image or document"), model->rootPath(), "Images and Documents (*.jpg *.png *.pdf)");
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image or document"), defaultAttachmentPath, "Images and Documents (*.jpg *.png *.pdf)");
 
     // check if filepath is empty, e.g. by cancelling the open file dialog
     if (filePath.isEmpty())
         return;
+
+    // save path for next time
+    settings.setValue("MessagesAttachmentPath", QFileInfo(filePath).absolutePath());
+    settings.sync();
 
     // add name to listbox
     QListWidgetItem *newItem = new QListWidgetItem;

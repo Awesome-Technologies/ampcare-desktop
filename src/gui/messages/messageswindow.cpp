@@ -14,6 +14,7 @@
 
 #include "answermessagedialog.h"
 #include "createmessagedialog.h"
+#include "configfile.h"
 #include "messagemodel.h"
 #include "messageswindow.h"
 #include "styledhtmldelegate.h"
@@ -146,13 +147,21 @@ void MessagesWindow::on_createMessageButton_clicked()
 
 void MessagesWindow::on_archiveButton_clicked()
 {
+    ConfigFile cfg;
+    QSettings settings(cfg.configFile(), QSettings::IniFormat);
+    QString defaultArchivePath = settings.value(QLatin1String("MessagesArchivePath"), "").toString();
+
     // get filename and path for export
-    QString fileName = QFileDialog::getSaveFileName((QWidget *)0, "Export PDF", QString(), "*.pdf");
+    QString fileName = QFileDialog::getSaveFileName((QWidget *)0, "Export PDF", defaultArchivePath, "*.pdf");
 
     // archiving was cancelled
     if (fileName == "") {
         return;
     }
+
+    // save path for next time
+    settings.setValue("MessagesArchivePath", QFileInfo(fileName).absolutePath());
+    settings.sync();
 
     if (QFileInfo(fileName).suffix().isEmpty()) {
         fileName.append(".pdf");

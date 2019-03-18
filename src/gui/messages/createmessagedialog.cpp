@@ -23,6 +23,7 @@
 #include <sharee.h>
 
 #include "createmessagedialog.h"
+#include "configfile.h"
 #include "messagemodel.h"
 #include "messageobject.h"
 #include "messageswindow.h"
@@ -260,11 +261,20 @@ void CreateMessageDialog::saveMessage(bool isDraft)
 // add an attachment to the message
 void CreateMessageDialog::on_button_addAttachment_clicked()
 {
-    // restrict to images only
-    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image or document"), model->rootPath(), "Images and Documents (*.jpg *.png *.pdf)");
+    // get last attachment path
+    ConfigFile cfg;
+    QSettings settings(cfg.configFile(), QSettings::IniFormat);
+    QString defaultAttachmentPath = settings.value(QLatin1String("MessagesAttachmentPath"), model->rootPath()).toString();
+
+    // restrict to images and pdf documents only
+    QString filePath = QFileDialog::getOpenFileName(this, tr("Attach image or document"), defaultAttachmentPath, "Images and Documents (*.jpg *.png *.pdf)");
 
     // check if filepath is empty, e.g. by cancelling the open file dialog
     if (!filePath.isEmpty()) {
+        // save path for next time
+        settings.setValue("MessagesAttachmentPath", QFileInfo(filePath).absolutePath());
+        settings.sync();
+
         // add name to listbox
         QListWidgetItem *newItem = new QListWidgetItem;
         QVariant fullFilePathData(filePath);
