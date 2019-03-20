@@ -414,7 +414,7 @@ void Application::slotParseMessage(const QString &msg, QObject *)
             qCWarning(lcApplication) << "Ignoring MSG_SHOWSETTINGS, possibly double-invocation of client via session restore and auto start";
             return;
         }
-        showSettingsDialog();
+        showMessagesWindow();
     }
 }
 
@@ -634,5 +634,8 @@ void Application::showSettingsDialog()
     _gui->slotShowSettings();
 }
 
-
+void Application::showMessagesWindow()
+{
+    _gui->slotShowMessages();
+}
 } // namespace OCC
