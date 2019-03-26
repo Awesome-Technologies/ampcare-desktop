@@ -16,7 +16,6 @@
 #include "createmessagedialog.h"
 #include "messagemodel.h"
 #include "messageswindow.h"
-#include "snorenotificationbackend.h"
 #include "styledhtmldelegate.h"
 #include "systray.h"
 #include "ui_messageswindow.h"
@@ -41,7 +40,6 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     , filterProxy(new QSortFilterProxyModel(this))
     , _answerMessageDialog(new AnswerMessageDialog(messageModel, this))
     , _createMessageDialog(new CreateMessageDialog(recipientList, messageModel, this))
-    , _notificationBackend(new SnoreNotificationBackend(this))
     , deleteAction(new QAction(this))
     , currentUser(_currentUser)
     , localPath(localPath)
@@ -149,7 +147,7 @@ void MessagesWindow::on_createMessageButton_clicked()
 void MessagesWindow::on_archiveButton_clicked()
 {
     // get filename and path for export
-    QString fileName = QFileDialog::getSaveFileName((QWidget *)0, "Export PDF", QString(), "*.pdf");
+    QString fileName = QFileDialog::getSaveFileName(this, "Export PDF", QString(), "*.pdf");
 
     // archiving was cancelled
     if (fileName == "") {
@@ -265,8 +263,7 @@ void MessagesWindow::on_deleteKey_pressed()
 
 void MessagesWindow::on_videocallButton_clicked()
 {
-    SnoreNotificationBackend::Notification noti(1, SnoreNotificationBackend::Highlight, "Test", "Test-Notification");
-    _notificationBackend->notify(noti);
+    messageModel->showNotification("Testtitle", "Testmessage", QIcon(":/client/theme/amp/icon_a_critical.png"));
 
     //MessageObject _messageItem(filterProxy->data(ui->messageList->currentIndex(), MessageModel::MessageObjectRole).value<MessageObject>());
     //QString _callRecipient = _messageItem.sender;

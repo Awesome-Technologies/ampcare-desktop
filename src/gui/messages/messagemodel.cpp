@@ -12,7 +12,13 @@
  * for more details.
  */
 
+#include "logger.h"
 #include "messagemodel.h"
+
+#include <libsnore/snore.h>
+#include <libsnore/notification/notification.h>
+#include <libsnore/version.h>
+#include <libsnore/utils.h>
 
 #include <QDebug>
 #include <QDir>
@@ -24,6 +30,7 @@ namespace OCC {
 
 MessageModel::MessageModel(const QString &rootPath, const Sharee &currentUser, QObject *parent)
     : QAbstractTableModel(parent)
+    , _snoreCore(&Snore::SnoreCore::instance())
     , _rootPath(rootPath)
     , _currentUser(currentUser)
 {
@@ -31,6 +38,38 @@ MessageModel::MessageModel(const QString &rootPath, const Sharee &currentUser, Q
     _filters << "*.json";
     addEntities();
     connect(&_watcher, SIGNAL(directoryChanged(const QString &)), this, SLOT(onDirectoryChanged(const QString &)));
+
+    // setup notification backend
+    _snoreCore = &Snore::SnoreCore::instance();
+    _snoreCore->loadPlugins(Snore::SnorePlugin::Backend);
+    Snore::Icon appIcon = Snore::Icon(QIcon(":/client/theme/amp/logo.png"));
+
+
+    //_snoreApplication = new Snore::Application("AMPcare", appIcon);
+    _snoreApplication = new Snore::Application("mytest", appIcon);
+
+    Snore::Icon criticalIcon = Snore::Icon(QIcon(":/client/theme/amp/icon_a_critical.png"));
+    _snoreCriticalAlert = new Snore::Alert(QString::number(MessageObject::Priority::CriticalPriority), "newCriticalMessage", criticalIcon);
+    _snoreApplication->addAlert(*_snoreCriticalAlert);
+
+    Snore::Icon urgentIcon = Snore::Icon(QIcon(":/client/theme/amp/icon_b_urgent.png"));
+    _snoreUrgentAlert = new Snore::Alert(QString::number(MessageObject::Priority::UrgentPriority), "newUrgentMessage", urgentIcon);
+    _snoreApplication->addAlert(*_snoreUrgentAlert);
+
+    Snore::Icon goodIcon = Snore::Icon(QIcon(":/client/theme/amp/icon_c_good.png"));
+    _snoreGoodAlert = new Snore::Alert(QString::number(MessageObject::Priority::GoodPriority), "newGoodMessage", goodIcon);
+    _snoreApplication->addAlert(*_snoreGoodAlert);
+
+    Snore::Icon infoIcon = Snore::Icon(QIcon(":/client/theme/amp/icon_d_info.png"));
+    _snoreInfoAlert = new Snore::Alert(QString::number(MessageObject::Priority::InfoPriority), "newInfoMessage", infoIcon);
+    _snoreApplication->addAlert(*_snoreInfoAlert);
+
+    _snoreApplication->hints().setValue("use-markup", true); // use html to style notifications
+    _snoreApplication->hints().setValue("windows-app-id", "AMPcare"); // id for windows notification framework
+
+    _snoreCore->registerApplication(*_snoreApplication);
+    _snoreNotification = nullptr;
+    _notificationCounter = 0;
 }
 
 MessageModel::~MessageModel() {}
@@ -402,7 +441,13 @@ void MessageModel::onDirectoryChanged(const QString &path)
         if (found == false) {
             qInfo() << "This file was added: " << info.absoluteFilePath();
 
-            emit newMessageReceived(info.absoluteFilePath());
+            // parse message
+            MessageObject messageObject;
+            QFile file(info.absoluteFilePath());
+            file.open(QIODevice::ReadOnly);
+            messageObject.path = info.absoluteFilePath();
+            messageObject.setJson(QJsonDocument::fromJson(file.readAll()).object());
+            showNotification(tr("New Message"), messageObject.title, messageObject.priorityIcon(), messageObject.priority);
         }
     }
 
@@ -410,6 +455,82 @@ void MessageModel::onDirectoryChanged(const QString &path)
     _messageList.clear();
     addEntities();
     emit layoutChanged();
+}
+
+void MessageModel::showNotification(QString title, QString message, QIcon msgIcon, int priority) {
+    bool silent = false;
+    int prio = 2; // -2 to 2
+    int timeout = 0;
+
+    Snore::Icon notiIcon = Snore::Icon(msgIcon);
+
+    QString msgs = tr("message");
+    Snore::Alert alert;
+    _notificationCounter++;
+
+    if(_snoreNotification != nullptr){ // replace last notification
+        QString oldMessage = _snoreNotification->text();
+        if(_notificationCounter > 1){
+            msgs = tr("messages");
+            // remove message counter from old message
+            oldMessage = oldMessage.split("<br/>").first().split("\n").first();
+        }
+
+        // test if new message has a higher priority
+        if(_snoreNotification->alert().key().toInt() >= priority){ // keep notification text and icon
+            title = _snoreNotification->title();
+            message = QString(tr("%1 <br/> ... and %2 other %3")).arg(oldMessage).arg(_notificationCounter-1).arg(msgs);
+            notiIcon = _snoreNotification->icon();
+            priority = _snoreNotification->alert().key().toInt();
+        }
+        else { // replace notification text and icon
+            message = QString(tr("%1 <br/> ... and %2 other %3")).arg(message).arg(_notificationCounter-1).arg(msgs);
+        }
+
+        // close old notification
+        _snoreCore->requestCloseNotification(*_snoreNotification, Snore::Notification::Replaced);
+
+    }
+
+    switch(priority){
+        case MessageObject::Priority::CriticalPriority:
+            alert = *_snoreCriticalAlert;
+            break;
+        case MessageObject::Priority::UrgentPriority:
+            alert = *_snoreUrgentAlert;
+            break;
+        case MessageObject::Priority::GoodPriority:
+            alert = *_snoreGoodAlert;
+            break;
+        case MessageObject::Priority::InfoPriority:
+            alert = *_snoreInfoAlert;
+            break;
+        default:
+            alert = *_snoreCriticalAlert;
+            break;
+    }
+
+    // create new notification
+    _snoreNotification = new Snore::Notification(*_snoreApplication, alert, title, message, notiIcon, timeout, static_cast<Snore::Notification::Prioritys>(prio));
+
+    // register close event
+    connect(_snoreCore, &Snore::SnoreCore::notificationClosed, [&](Snore::Notification noti) {
+        if (silent) {
+            QString reason;
+            QDebug(&reason) << noti.closeReason();
+        }
+        notificationClosed(noti.closeReason());
+    });
+
+    _snoreCore->broadcastNotification(*_snoreNotification);
+}
+
+void MessageModel::notificationClosed(int returnCode){
+    // notification was dismissed or closed by user
+    if(returnCode == Snore::Notification::Dismissed || returnCode == Snore::Notification::Closed){
+        _snoreNotification = nullptr;
+        _notificationCounter = 0;
+    }
 }
 
 } // end namespace OCC

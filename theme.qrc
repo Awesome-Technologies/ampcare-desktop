@@ -16,6 +16,7 @@
         <file alias="theme/colored/AMP-icon-64.png">theme/colored/64-AMP-icon.png</file>
         <file>theme/amp/wizard_logo.png</file>
         <file>theme/amp/wizard_logo@2x.png</file>
+		<file>theme/amp/logo.png</file>
         <file>theme/amp/icon_a_critical.png</file>
         <file>theme/amp/icon_b_urgent.png</file>
         <file>theme/amp/icon_c_good.png</file>

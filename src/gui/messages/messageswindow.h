@@ -20,7 +20,6 @@
 
 class QSortFilterProxyModel;
 class QAction;
-class SnoreNotificationBackend;
 
 namespace OCC {
 
@@ -53,7 +52,6 @@ private:
     QSortFilterProxyModel *filterProxy;
     AnswerMessageDialog *_answerMessageDialog;
     CreateMessageDialog *_createMessageDialog;
-    SnoreNotificationBackend *_notificationBackend;
     QAction *deleteAction;
 
     const Sharee currentUser;
