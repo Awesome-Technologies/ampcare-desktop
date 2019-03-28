@@ -273,10 +273,13 @@ void MessagesWindow::on_deleteKey_pressed()
 
 void MessagesWindow::on_videocallButton_clicked()
 {
-    MessageObject _messageItem(filterProxy->data(ui->messageList->currentIndex(), MessageModel::MessageObjectRole).value<MessageObject>());
-    QString _callRecipient = _messageItem.sender;
+
+    messageModel->showNotification("Testtitle", "Testmessage", QIcon(":/client/theme/amp/icon_a_critical.png"), 0);
+
+    //MessageObject _messageItem(filterProxy->data(ui->messageList->currentIndex(), MessageModel::MessageObjectRole).value<MessageObject>());
+    //QString _callRecipient = _messageItem.sender;
     // change callRecipient of video window and show it
-    emit callRecipientChanged(_callRecipient);
+    //emit callRecipientChanged(_callRecipient);
 }
 
 void MessagesWindow::slotUrlChanged(QUrl url)

@@ -1998,24 +1998,45 @@ Protokolle werden in % 1 geschrieben</translation>
 <context>
     <name>OCC::MessageModel</name>
     <message>
-        <location filename="../src/gui/messages/messagemodel.cpp" line="58"/>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="97"/>
         <source>Title</source>
         <translation>Titel</translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/messagemodel.cpp" line="60"/>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="99"/>
         <source>Recipient</source>
         <translation>Empfänger</translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/messagemodel.cpp" line="62"/>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="101"/>
         <source>Date</source>
         <translation>Datum</translation>
     </message>
     <message>
-        <location filename="../src/gui/messages/messagemodel.cpp" line="64"/>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="103"/>
         <source>Status</source>
         <translation>Status</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="450"/>
+        <source>New Message</source>
+        <translation>Neue Nachricht</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="467"/>
+        <source>message</source>
+        <translation>Nachricht</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="474"/>
+        <source>messages</source>
+        <translation>Nachrichten</translation>
+    </message>
+    <message>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="482"/>
+        <location filename="../src/gui/messages/messagemodel.cpp" line="487"/>
+        <source>%1 &lt;br/&gt; ... and %2 other %3</source>
+        <translation>%1 &lt;br/&gt; ... und %2 weitere %3</translation>
     </message>
 </context>
 <context>
