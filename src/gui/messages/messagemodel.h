@@ -21,6 +21,13 @@
 
 #include "messageobject.h"
 
+namespace Snore {
+    class Alert;
+    class Application;
+    class Notification;
+    class SnoreCore;
+}
+
 namespace OCC {
 class Sharee;
 
@@ -59,6 +66,15 @@ public:
 
     QString rootPath() const { return _rootPath; }
     const Sharee &currentUser() const { return _currentUser; }
+    Snore::Alert *_snoreCriticalAlert;
+    Snore::Alert *_snoreUrgentAlert;
+    Snore::Alert *_snoreGoodAlert;
+    Snore::Alert *_snoreInfoAlert;
+    Snore::Application *_snoreApplication;
+    Snore::Notification *_snoreNotification;
+    Snore::SnoreCore *_snoreCore;
+
+    void showNotification(QString title, QString message, QIcon msgIcon, int priority);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -72,6 +88,9 @@ public:
     /** provides header texts for the columns in the listView */
     QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
 
+public slots:
+    void notificationClosed(int returnCode);
+
 signals:
     void newMessageReceived(QString messagePath);
 
@@ -84,6 +103,7 @@ private:
     QFileSystemWatcher _watcher;
     QStringList _filters;
     QList<MessageObject> _messageList;
+    int _notificationCounter;
 
     /** writes message to file */
     bool writeMessage(MessageObject &msg);

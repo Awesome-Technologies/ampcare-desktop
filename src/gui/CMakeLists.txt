@@ -1,5 +1,9 @@
 project(gui)
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
+find_package(LibsnoreQt5 0.7.0 REQUIRED)
+if (LibsnoreQt5_FOUND)
+    find_package(LibsnoreSettingsQt5 0.7.0 QUIET)
+endif()
 set(CMAKE_AUTOMOC TRUE)
 set(CMAKE_AUTOUIC TRUE)
 set(CMAKE_AUTORCC TRUE)
@@ -320,6 +324,8 @@ target_link_libraries( ${APPLICATION_EXECUTABLE} Qt5::Widgets Qt5::Network Qt5::
 target_link_libraries( ${APPLICATION_EXECUTABLE} ${synclib_NAME} )
 target_link_libraries( ${APPLICATION_EXECUTABLE} updater )
 target_link_libraries( ${APPLICATION_EXECUTABLE} ${OS_SPECIFIC_LINK_LIBRARIES} )
+target_link_libraries( ${APPLICATION_EXECUTABLE} Snore::Libsnore Snore::LibsnoreSettings)
+
 IF( LIBCLOUDPROVIDERS_FOUND )
     string(TOLOWER "${APPLICATION_VENDOR}" DBUS_VENDOR)
     string(REGEX REPLACE "[^A-z0-9]" "" DBUS_VENDOR "${DBUS_VENDOR}")
