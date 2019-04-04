@@ -39,6 +39,10 @@ CreateMessageDialog::CreateMessageDialog(const QVector<QSharedPointer<Sharee>> &
 {
     ui->setupUi(this);
 
+    // show maximize/close button on window
+    Qt::WindowFlags flags = Qt::Window | Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint;
+    this->setWindowFlags(flags);
+
     // fill recipient list - use displayName to show in the list, but shareWith to store messages
     ui->comboBox_recipient->clear();
     for (const auto &recipient : recipientList)

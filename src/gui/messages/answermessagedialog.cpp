@@ -32,6 +32,10 @@ AnswerMessageDialog::AnswerMessageDialog(MessageModel *model, QWidget *parent)
 {
     ui->setupUi(this);
 
+    // show maximize/close button on window
+    Qt::WindowFlags flags = Qt::Window | Qt::WindowMinMaxButtonsHint | Qt::WindowCloseButtonHint;
+    this->setWindowFlags(flags);
+
     // change button texts
     ui->buttonBox->button(QDialogButtonBox::Save)->setText(tr("Send"));
     ui->buttonBox->button(QDialogButtonBox::Cancel)->setText(tr("Don't save"));
