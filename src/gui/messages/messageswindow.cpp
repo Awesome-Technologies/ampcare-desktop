@@ -14,6 +14,7 @@
 
 #include "answermessagedialog.h"
 #include "createmessagedialog.h"
+#include "configfile.h"
 #include "messagemodel.h"
 #include "messageswindow.h"
 #include "styledhtmldelegate.h"
@@ -67,6 +68,7 @@ MessagesWindow::MessagesWindow(const Sharee &_currentUser,
     msgList->setColumnWidth(MessageModel::StatusColumn, 50);
     msgList->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     msgList->horizontalHeader()->setSectionResizeMode(MessageModel::TitleColumn, QHeaderView::Stretch);
+    msgList->sortByColumn(MessageModel::DateColumn, Qt::DescendingOrder);
 
     connect(ui->detailView, SIGNAL(urlChanged(QUrl)), this, SLOT(slotUrlChanged(QUrl)));
 
@@ -146,13 +148,21 @@ void MessagesWindow::on_createMessageButton_clicked()
 
 void MessagesWindow::on_archiveButton_clicked()
 {
+    ConfigFile cfg;
+    QSettings settings(cfg.configFile(), QSettings::IniFormat);
+    QString defaultArchivePath = settings.value(QLatin1String("MessagesArchivePath"), "").toString();
+
     // get filename and path for export
-    QString fileName = QFileDialog::getSaveFileName(this, "Export PDF", QString(), "*.pdf");
+    QString fileName = QFileDialog::getSaveFileName(this, "Export PDF", defaultArchivePath, "*.pdf");
 
     // archiving was cancelled
     if (fileName == "") {
         return;
     }
+
+    // save path for next time
+    settings.setValue("MessagesArchivePath", QFileInfo(fileName).absolutePath());
+    settings.sync();
 
     if (QFileInfo(fileName).suffix().isEmpty()) {
         fileName.append(".pdf");
@@ -263,7 +273,7 @@ void MessagesWindow::on_deleteKey_pressed()
 
 void MessagesWindow::on_videocallButton_clicked()
 {
-    messageModel->showNotification("Testtitle", "Testmessage", QIcon(":/client/theme/amp/icon_a_critical.png"));
+    messageModel->showNotification("Testtitle", "Testmessage", QIcon(":/client/theme/amp/icon_a_critical.png"), 0);
 
     //MessageObject _messageItem(filterProxy->data(ui->messageList->currentIndex(), MessageModel::MessageObjectRole).value<MessageObject>());
     //QString _callRecipient = _messageItem.sender;

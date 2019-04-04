@@ -16,11 +16,9 @@
 #include "messagemodel.h"
 
 #include <libsnore/snore.h>
+#include <libsnore/snore_p.h>
 #include <libsnore/notification/notification.h>
-#include <libsnore/version.h>
-#include <libsnore/utils.h>
 
-#include <QDebug>
 #include <QDir>
 #include <QFileInfo>
 #include <QJsonDocument>
@@ -44,9 +42,12 @@ MessageModel::MessageModel(const QString &rootPath, const Sharee &currentUser, Q
     _snoreCore->loadPlugins(Snore::SnorePlugin::Backend);
     Snore::Icon appIcon = Snore::Icon(QIcon(":/client/theme/amp/logo.png"));
 
+    _snoreCore->setSettingsValue(QStringLiteral("PrimaryBackend"), "Snore", Snore::SettingsType::LocalSetting);
+    _snoreCore->setSettingsValue(QStringLiteral("Timeout"), 0, Snore::SettingsType::LocalSetting); // set default timeout for notifications to 0 (sticky)
+    //SnoreNotifierSettings::setSettingsValue("Position", 2); // show notifications in bottom right corner
 
-    //_snoreApplication = new Snore::Application("AMPcare", appIcon);
-    _snoreApplication = new Snore::Application("mytest", appIcon);
+
+    _snoreApplication = new Snore::Application("AMPcare", appIcon);
 
     Snore::Icon criticalIcon = Snore::Icon(QIcon(":/client/theme/amp/icon_a_critical.png"));
     _snoreCriticalAlert = new Snore::Alert(QString::number(MessageObject::Priority::CriticalPriority), "newCriticalMessage", criticalIcon);
@@ -460,7 +461,6 @@ void MessageModel::onDirectoryChanged(const QString &path)
 void MessageModel::showNotification(QString title, QString message, QIcon msgIcon, int priority) {
     bool silent = false;
     int prio = 2; // -2 to 2
-    int timeout = 0;
 
     Snore::Icon notiIcon = Snore::Icon(msgIcon);
 
@@ -511,7 +511,7 @@ void MessageModel::showNotification(QString title, QString message, QIcon msgIco
     }
 
     // create new notification
-    _snoreNotification = new Snore::Notification(*_snoreApplication, alert, title, message, notiIcon, timeout, static_cast<Snore::Notification::Prioritys>(prio));
+    _snoreNotification = new Snore::Notification(*_snoreApplication, alert, title, message, notiIcon, Snore::Notification::defaultTimeout(), static_cast<Snore::Notification::Prioritys>(prio));
 
     // register close event
     connect(_snoreCore, &Snore::SnoreCore::notificationClosed, [&](Snore::Notification noti) {

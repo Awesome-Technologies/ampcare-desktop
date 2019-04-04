@@ -66,6 +66,7 @@ public:
     bool versionOnly(); // only display the version?
     void showVersion();
 
+    void showMessagesWindow();
     void showSettingsDialog();
 
 public slots:
