@@ -5,10 +5,30 @@ addons:
     packages:
       - qt5
       - qtkeychain
+      - ninja
+before_install: |-
+  mkdir -p ~/git
+  cd ~/git
+  git clone -q git://anongit.kde.org/extra-cmake-modules.git
+  git clone -q https://github.com/Snorenotify/SnoreGrowl.git
+  mkdir -p ~/build
+  cd ~/build
+  mkdir -p ~/build/extra-cmake-modules
+  cd ~/build/extra-cmake-modules
+  cmake -G"Ninja" ~/git/extra-cmake-modules -DCMAKE_INSTALL_PREFIX=~/installs/
+  ninja install
+  mkdir -p ~/build/snoregrowl && cd ~/build/snoregrowl
+  cmake -G"Ninja" ~/git/SnoreGrowl -DCMAKE_INSTALL_PREFIX=~/installs/
+  ninja install
+
 install:
   - curl http://s.sudre.free.fr/Software/files/Packages.dmg -o $HOME/Packages.dmg
   - sudo sh -c 'hdiutil attach $HOME/Packages.dmg && installer -package "/Volumes/Packages 1.2.5/Install Packages.pkg" -target /; hdiutil detach "/Volumes/Packages 1.2.5"'
 script:
+  - mkdir $TRAVIS_BUILD_DIR/snore_build && cd $TRAVIS_BUILD_DIR/snore_build
+  - cmake -G"Ninja" .. -DCMAKE_INSTALL_PREFIX=~/installs/ -DCMAKE_PREFIX_PATH=/usr/local/opt/qt5
+  - ninja install
+  - cd $TRAVIS_BUILD_DIR
   - mkdir $TRAVIS_BUILD_DIR/build && cd $TRAVIS_BUILD_DIR/build
   - PATH="/usr/local/opt/qt/bin:$PATH" cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=../install
     -DAPPLICATION_UPDATE_URL="https://updates.amp.care/client/"
@@ -21,6 +41,7 @@ script:
     -DQTKEYCHAIN_LIBRARY=/usr/local/opt/qtkeychain/lib/libqt5keychain.dylib
     -DQTKEYCHAIN_INCLUDE_DIR=/usr/local/opt/qtkeychain/include/qt5keychain
     -DOPENSSL_ROOT_DIR=/usr/local/opt/openssl@1.1
+    -DLibsnoreQt5_DIR=~/installs/lib/cmake/libsnoreQt5
   - cmake --build . --config Release --target all
   - sudo cmake --build . --config Release --target install
   - cd $TRAVIS_BUILD_DIR && sudo ./build/admin/osx/create_mac.sh ./install ./build

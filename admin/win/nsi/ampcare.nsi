@@ -42,7 +42,7 @@
 !define OPENSSL11_PATH "$%OPENSSL11_PATH%"
 !define OPENSSL11_LIBCRYPTO_PATH "$%OPENSSL11_LIBCRYPTO_PATH%"
 !define OPENSSL_DLL_PATH "$%OPENSSL_DLL_PATH%"
-!define SNORENOTIFY_DLL_PATH "$%SNORENOTIFY_ROOT_DIR%\install\bin"
+!define SNORENOTIFY_DLL_PATH "$%SNORENOTIFY_ROOT_DIR%\install"
 
 !define CSYNC_LIBRARY_DIR ""
 !define CSYNC_CONFIG_DIR ""
@@ -346,8 +346,9 @@ Section "${APPLICATION_NAME}" SEC_APPLICATION
     File "${OPENSSL10_PATH}\bin\ssleay32.dll"
     File "${OPENSSL11_LIBCRYPTO_PATH}"
     File "${OPENSSL_DLL_PATH}\msvcr120.dll"
-    File "${SNORENOTIFY_DLL_PATH}\snore-qt5.dll"
-    File "${SNORENOTIFY_DLL_PATH}\snoresettings-qt5.dll"
+    File "${SNORENOTIFY_DLL_PATH}\bin\snore-qt5.dll"
+    File "${SNORENOTIFY_DLL_PATH}\bin\snoresettings-qt5.dll"
+    File "${SNORENOTIFY_DLL_PATH}\lib\plugins\libsnore-qt5\libsnore_backend_snore.dll"
 
 ; translations TODO put the translations under the folder translations
    SetOutPath "$INSTDIR\i18n"
