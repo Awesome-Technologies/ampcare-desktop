@@ -39,7 +39,12 @@ MessageModel::MessageModel(const QString &rootPath, const Sharee &currentUser, Q
 
     // setup notification backend
     _snoreCore = &Snore::SnoreCore::instance();
-    _snoreCore->loadPlugins(Snore::SnorePlugin::Backend);
+    try {
+        _snoreCore->loadPlugins(Snore::SnorePlugin::Backend);
+    } catch (...) {
+        qDebug() << "Exception when loading plugins";
+    }
+
     Snore::Icon appIcon = Snore::Icon(QIcon(":/client/theme/amp/logo.png"));
 
     _snoreCore->setSettingsValue(QStringLiteral("PrimaryBackend"), "Snore", Snore::SettingsType::LocalSetting);

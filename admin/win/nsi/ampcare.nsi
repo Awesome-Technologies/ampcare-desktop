@@ -349,6 +349,7 @@ Section "${APPLICATION_NAME}" SEC_APPLICATION
     File "${SNORENOTIFY_DLL_PATH}\bin\snore-qt5.dll"
     File "${SNORENOTIFY_DLL_PATH}\bin\snoresettings-qt5.dll"
     File "${SNORENOTIFY_DLL_PATH}\lib\plugins\libsnore-qt5\libsnore_backend_snore.dll"
+	File "${SNORENOTIFY_DLL_PATH}\lib\plugins\libsnore-qt5\libsnore_settings_backend_snore.dll"
 
 ; translations TODO put the translations under the folder translations
    SetOutPath "$INSTDIR\i18n"

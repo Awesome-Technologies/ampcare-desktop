@@ -95,8 +95,6 @@ install:
     7z e C:\downloads\NsProcess.7z -o"C:\Program Files (x86)\NSIS\Plugins\x86-unicode" nsProcessW.dll -r | out-null
     7z e C:\downloads\NsProcess.7z -o"C:\Program Files (x86)\NSIS\Include" nsProcess.nsh -r | out-null
 
-    $blockRdp = $true; iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/appveyor/ci/master/scripts/enable-rdp.ps1'))
-
 build_script:
 - cmd: |
     REM Setup QT and MSVC compiler
