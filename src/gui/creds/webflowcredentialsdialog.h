@@ -15,11 +15,14 @@ class WebFlowCredentialsDialog : public QDialog
 {
     Q_OBJECT
 public:
-    WebFlowCredentialsDialog(QWidget *parent = 0);
+    WebFlowCredentialsDialog(QWidget *parent = nullptr);
 
     void setUrl(const QUrl &url);
     void setInfo(const QString &msg);
     void setError(const QString &error);
+
+protected:
+    void closeEvent(QCloseEvent * e) override;
 
 signals:
     void urlCatched(const QString user, const QString pass, const QString host);

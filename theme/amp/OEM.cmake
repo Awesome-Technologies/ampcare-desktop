@@ -20,3 +20,7 @@ set( THEME_INCLUDE          "${OEM_THEME_DIR}/amptheme.h" )
 option( WITH_CRASHREPORTER "Build crashreporter" OFF )
 #set( CRASHREPORTER_SUBMIT_URL "https://crash-reports.amp.care/submit" CACHE string "URL for crash reporter" )
 #set( CRASHREPORTER_ICON ":/amp-icon.png" )
+
+## Theming options
+set( APPLICATION_WIZARD_HEADER_BACKGROUND_COLOR "#0C023B" CACHE string "Hex color of the wizard header background")
+set( APPLICATION_WIZARD_HEADER_TITLE_COLOR "#ffffff" CACHE string "Hex color of the text in the wizard header")

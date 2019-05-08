@@ -63,6 +63,7 @@ public:
     void showHelp();
     void showHint(std::string errorHint);
     bool debugMode();
+    bool backgroundMode() const;
     bool versionOnly(); // only display the version?
     void showVersion();
 
@@ -113,6 +114,7 @@ private:
     bool _logDebug;
     bool _userTriggeredConnect;
     bool _debugMode;
+    bool _backgroundMode;
 
     ClientProxy _proxy;
 
